@@ -1,4 +1,4 @@
-﻿namespace GM.Core.Interfaces.Entities
+﻿namespace GM.EFCore.Interfaces.Entities
 {
     /// <summary>Именованная сущность</summary>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>

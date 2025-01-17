@@ -1,4 +1,4 @@
-﻿namespace GM.Core.Interfaces.Entities
+﻿namespace GM.EFCore.Interfaces.Entities
 {
     /// <summary>Сущность определенная во времени</summary>
     /// <typeparam name="TKey"></typeparam>
