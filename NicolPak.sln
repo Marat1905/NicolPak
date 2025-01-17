@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NP.BreakeService", "NP.BreakeService", "{C24B1FB5-75E5-4027-95C4-89C9E480CEB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NP.PrsService", "NP.PrsService", "{14EFAFEB-04CD-46F7-B636-C2ADE5A24844}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NP.BdmHostService", "NP.BdmHostService", "{FAADF3AE-7FE9-49B8-A974-C14CB2D40FEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NP.PrsHostService", "NP.PrsHostService", "{57930BA4-6209-41C7-A2F3-226FBF34CC0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GM.EFCore", "GM.EFCore", "{260A73ED-4257-4F69-B477-F4523B4A82AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GM.Core.Interfaces.Entities", "GM.Core\GM.Core.Interfaces.Entities\GM.Core.Interfaces.Entities.csproj", "{C81709C4-86BB-4744-9886-4AB2162D4F1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C81709C4-86BB-4744-9886-4AB2162D4F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81709C4-86BB-4744-9886-4AB2162D4F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81709C4-86BB-4744-9886-4AB2162D4F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81709C4-86BB-4744-9886-4AB2162D4F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C81709C4-86BB-4744-9886-4AB2162D4F1A} = {260A73ED-4257-4F69-B477-F4523B4A82AB}
+	EndGlobalSection
+EndGlobal
