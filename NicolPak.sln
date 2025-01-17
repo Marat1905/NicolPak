@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GM.EFCore", "GM.EFCore", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GM.EFCore.Interfaces.Entities", "GM.EFCore\GM.EFCore.Interfaces.Entities\GM.EFCore.Interfaces.Entities.csproj", "{0371BCCC-3C88-4E6B-BA1B-2604BC0B217B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GM.EFCore.Entities.Base", "GM.EFCore\GM.EFCore.Entities.Base\GM.EFCore.Entities.Base.csproj", "{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,11 +27,16 @@ Global
 		{0371BCCC-3C88-4E6B-BA1B-2604BC0B217B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0371BCCC-3C88-4E6B-BA1B-2604BC0B217B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0371BCCC-3C88-4E6B-BA1B-2604BC0B217B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0371BCCC-3C88-4E6B-BA1B-2604BC0B217B} = {260A73ED-4257-4F69-B477-F4523B4A82AB}
+		{DCFC2B5B-E199-4BCD-A1EC-59DE2B9895AB} = {260A73ED-4257-4F69-B477-F4523B4A82AB}
 	EndGlobalSection
 EndGlobal
