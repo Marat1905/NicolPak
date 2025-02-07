@@ -2,6 +2,7 @@
 using GM.EFCore.Entities.Base;
 
 namespace BdmHostService.Domain.Entities;
+
 /// <summary>
 /// Сущность обрывов
 /// </summary>
@@ -24,13 +25,13 @@ public class Break<TKey> : Entity<TKey>
     public double WireSpeed { get; set; }
 
     /// <summary>Фактическая скорость наката</summary>
-    public double ReLeerSpeed { get; set; }
+    public double ReleerSpeed { get; set; }
 
     /// <summary>Время начала обрыва</summary>
-    public DateTime StartBreak { get; set; }
+    public DateTimeOffset StartBreak { get; set; }
 
     /// <summary>Время конца обрыва</summary>
-    public DateTime? EndBreak { get; set; }
+    public DateTimeOffset? EndBreak { get; set; }
 
     /// <summary>Время обрыва</summary>
     public TimeSpan? TimeBreak { get; set; }
