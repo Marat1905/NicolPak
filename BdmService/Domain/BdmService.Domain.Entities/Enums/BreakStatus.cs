@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace BdmHostService.Domain.Entities.Enums
+namespace BdmService.Domain.Entities.Enums
 {
     /// <summary>Статус обрывов </summary>
     public enum BreakStatus

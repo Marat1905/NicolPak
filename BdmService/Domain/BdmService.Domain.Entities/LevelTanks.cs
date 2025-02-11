@@ -1,6 +1,6 @@
 ﻿using GM.EFCore.Entities.Base;
 
-namespace BdmHostService.Domain.Entities
+namespace BdmService.Domain.Entities
 {
     /// <summary>
     /// Сущность уровней в бассейнах

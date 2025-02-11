@@ -1,4 +1,6 @@
-namespace BdmHostService.WebAPI
+using BdmService.Services.Implementations;
+
+namespace BdmService.WebAPI
 {
     public class Program
     {
@@ -8,7 +10,13 @@ namespace BdmHostService.WebAPI
 
             // Add services to the container.
 
+            builder.Services
+                .AddS7PlcServices();
+
+
             builder.Services.AddControllers();
+
+            builder.Services.AddHostedService<PlcHostedService>();
 
             var app = builder.Build();
 

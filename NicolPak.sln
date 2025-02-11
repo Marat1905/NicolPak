@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BdmHostService", "BdmHostService", "{FAADF3AE-7FE9-49B8-A974-C14CB2D40FEE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BdmService", "BdmService", "{FAADF3AE-7FE9-49B8-A974-C14CB2D40FEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GM.EFCore", "GM.EFCore", "{260A73ED-4257-4F69-B477-F4523B4A82AB}"
 EndProject
@@ -31,13 +31,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F2F9570B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmHostService.Tests", "BdmHostService\Tests\BdmHostService.Tests\BdmHostService.Tests.csproj", "{355002B7-6DB6-41D0-A829-C9EC6866CAB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmHostService.Domain.Entities", "BdmHostService\Domain\BdmHostService.Domain.Entities\BdmHostService.Domain.Entities.csproj", "{87CDD2A4-377E-4303-820B-77C56FF3C248}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.Services.Abstractions", "BdmService\Services\BdmService.Services.Abstractions\BdmService.Services.Abstractions.csproj", "{90CCF95E-224F-4D45-8142-AD4FC151D5A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmHostService.WebAPI", "BdmHostService\Hosts\BdmHostService.WebAPI\BdmHostService.WebAPI.csproj", "{D9D1673C-4C2A-4889-9743-15553EA523C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.Domain.Entities", "BdmService\Domain\BdmService.Domain.Entities\BdmService.Domain.Entities.csproj", "{A3340271-D3AC-480B-950B-FA55B10CAEC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmHostService.EntityFramework", "BdmHostService\Infrastructure\BdmHostService.EntityFramework\BdmHostService.EntityFramework.csproj", "{0156582B-84FD-499A-9D1A-6EADEF6E1702}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.WebAPI", "BdmService\Hosts\BdmService.WebAPI\BdmService.WebAPI.csproj", "{3A22193C-D4D7-452E-8B81-E407BE918300}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmHostService.Repositories.Implementations", "BdmHostService\Infrastructure\BdmHostService.Repositories.Implementations\BdmHostService.Repositories.Implementations.csproj", "{494A7792-B6C6-43E9-8355-05AD592D6BB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.EntityFramework", "BdmService\Infrastructure\BdmService.EntityFramework\BdmService.EntityFramework.csproj", "{EF0098DE-732D-4165-B75D-A843E503AC96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.Repositories.Implementations", "BdmService\Infrastructure\BdmService.Repositories.Implementations\BdmService.Repositories.Implementations.csproj", "{3994AF45-F629-48BB-A95A-772AFEBC904B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.Infrastructure.Enums", "BdmService\Infrastructure\BdmService.Infrastructure.Enums\BdmService.Infrastructure.Enums.csproj", "{F2090C93-1131-4DA7-A9C5-B4D428C02D02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BdmService.Services.Implementations", "BdmService\Services\BdmService.Services.Implementations\BdmService.Services.Implementations.csproj", "{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,22 +75,34 @@ Global
 		{355002B7-6DB6-41D0-A829-C9EC6866CAB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{355002B7-6DB6-41D0-A829-C9EC6866CAB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{355002B7-6DB6-41D0-A829-C9EC6866CAB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87CDD2A4-377E-4303-820B-77C56FF3C248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87CDD2A4-377E-4303-820B-77C56FF3C248}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87CDD2A4-377E-4303-820B-77C56FF3C248}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87CDD2A4-377E-4303-820B-77C56FF3C248}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9D1673C-4C2A-4889-9743-15553EA523C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9D1673C-4C2A-4889-9743-15553EA523C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9D1673C-4C2A-4889-9743-15553EA523C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9D1673C-4C2A-4889-9743-15553EA523C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0156582B-84FD-499A-9D1A-6EADEF6E1702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0156582B-84FD-499A-9D1A-6EADEF6E1702}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0156582B-84FD-499A-9D1A-6EADEF6E1702}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0156582B-84FD-499A-9D1A-6EADEF6E1702}.Release|Any CPU.Build.0 = Release|Any CPU
-		{494A7792-B6C6-43E9-8355-05AD592D6BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{494A7792-B6C6-43E9-8355-05AD592D6BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{494A7792-B6C6-43E9-8355-05AD592D6BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{494A7792-B6C6-43E9-8355-05AD592D6BB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90CCF95E-224F-4D45-8142-AD4FC151D5A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90CCF95E-224F-4D45-8142-AD4FC151D5A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90CCF95E-224F-4D45-8142-AD4FC151D5A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90CCF95E-224F-4D45-8142-AD4FC151D5A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3340271-D3AC-480B-950B-FA55B10CAEC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3340271-D3AC-480B-950B-FA55B10CAEC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3340271-D3AC-480B-950B-FA55B10CAEC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3340271-D3AC-480B-950B-FA55B10CAEC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A22193C-D4D7-452E-8B81-E407BE918300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A22193C-D4D7-452E-8B81-E407BE918300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A22193C-D4D7-452E-8B81-E407BE918300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A22193C-D4D7-452E-8B81-E407BE918300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF0098DE-732D-4165-B75D-A843E503AC96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF0098DE-732D-4165-B75D-A843E503AC96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF0098DE-732D-4165-B75D-A843E503AC96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF0098DE-732D-4165-B75D-A843E503AC96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3994AF45-F629-48BB-A95A-772AFEBC904B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3994AF45-F629-48BB-A95A-772AFEBC904B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3994AF45-F629-48BB-A95A-772AFEBC904B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3994AF45-F629-48BB-A95A-772AFEBC904B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2090C93-1131-4DA7-A9C5-B4D428C02D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2090C93-1131-4DA7-A9C5-B4D428C02D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2090C93-1131-4DA7-A9C5-B4D428C02D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2090C93-1131-4DA7-A9C5-B4D428C02D02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,9 +119,12 @@ Global
 		{68026032-3310-498A-BABB-2C3FAF2773CA} = {FAADF3AE-7FE9-49B8-A974-C14CB2D40FEE}
 		{F2F9570B-32B5-416A-8752-DCC88D51BC4A} = {FAADF3AE-7FE9-49B8-A974-C14CB2D40FEE}
 		{355002B7-6DB6-41D0-A829-C9EC6866CAB1} = {F2F9570B-32B5-416A-8752-DCC88D51BC4A}
-		{87CDD2A4-377E-4303-820B-77C56FF3C248} = {8548737A-CBB5-45D5-A50E-A5E0B0B20AEC}
-		{D9D1673C-4C2A-4889-9743-15553EA523C6} = {B774C250-19EB-4CE9-83AD-61F38AA467E0}
-		{0156582B-84FD-499A-9D1A-6EADEF6E1702} = {89563C2F-DF2D-4080-B6E5-D653EDB4BECB}
-		{494A7792-B6C6-43E9-8355-05AD592D6BB0} = {89563C2F-DF2D-4080-B6E5-D653EDB4BECB}
+		{90CCF95E-224F-4D45-8142-AD4FC151D5A4} = {68026032-3310-498A-BABB-2C3FAF2773CA}
+		{A3340271-D3AC-480B-950B-FA55B10CAEC6} = {8548737A-CBB5-45D5-A50E-A5E0B0B20AEC}
+		{3A22193C-D4D7-452E-8B81-E407BE918300} = {B774C250-19EB-4CE9-83AD-61F38AA467E0}
+		{EF0098DE-732D-4165-B75D-A843E503AC96} = {89563C2F-DF2D-4080-B6E5-D653EDB4BECB}
+		{3994AF45-F629-48BB-A95A-772AFEBC904B} = {89563C2F-DF2D-4080-B6E5-D653EDB4BECB}
+		{F2090C93-1131-4DA7-A9C5-B4D428C02D02} = {89563C2F-DF2D-4080-B6E5-D653EDB4BECB}
+		{B7C74A99-A0BE-403C-8CA6-8C28B4163EE6} = {68026032-3310-498A-BABB-2C3FAF2773CA}
 	EndGlobalSection
 EndGlobal

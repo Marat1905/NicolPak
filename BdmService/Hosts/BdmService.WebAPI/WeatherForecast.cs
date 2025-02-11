@@ -1,4 +1,4 @@
-namespace BdmHostService.WebAPI
+namespace BdmService.WebAPI
 {
     public class WeatherForecast
     {

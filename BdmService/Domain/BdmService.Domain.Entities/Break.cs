@@ -1,7 +1,7 @@
-﻿using BdmHostService.Domain.Entities.Enums;
+﻿using BdmService.Domain.Entities.Enums;
 using GM.EFCore.Entities.Base;
 
-namespace BdmHostService.Domain.Entities;
+namespace BdmService.Domain.Entities;
 
 /// <summary>
 /// Сущность обрывов

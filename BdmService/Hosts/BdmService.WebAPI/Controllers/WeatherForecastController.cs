@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BdmHostService.WebAPI.Controllers
+namespace BdmService.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
