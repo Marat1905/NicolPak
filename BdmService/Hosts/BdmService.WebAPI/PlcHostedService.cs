@@ -31,7 +31,10 @@ namespace BdmService.WebAPI
             {
                 if (_s7Plc.ConnectionState == ConnectionStates.Offline)
                 {
-                    _s7Plc.Connect("", 0, 2);
+                    CancellationTokenSource tokenSource = new CancellationTokenSource();
+                    _s7Plc.Disconnect();
+                    _s7Plc.Connect("", 0, 2, tokenSource);
+                   // _s7Plc.Disconnect();
                 }
                 Debug.WriteLine($"Запись {DateTime.Now}");
                 await Task.Delay(5000);

@@ -13,7 +13,7 @@ namespace BdmService.Services.Implementations
         private readonly ILogger<S7PlcService> _logger;
         private readonly S7Client _client;
         private volatile object _locker = new object();
-        private readonly CancellationTokenSource _cts;
+        private  CancellationTokenSource _cts;
 
         public ConnectionStates ConnectionState { get; private set; }
 
@@ -25,8 +25,9 @@ namespace BdmService.Services.Implementations
 
         }
 
-        public void Connect(string ipAddress, int rack, int slot)
+        public void Connect(string ipAddress, int rack, int slot,CancellationTokenSource tokenSource)
         {
+            _cts=tokenSource;
             try
             {
                 ConnectionState = ConnectionStates.Connecting;
@@ -40,6 +41,8 @@ namespace BdmService.Services.Implementations
                 {
                     _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
                     ConnectionState = ConnectionStates.Offline;
+                    Task.Run(() => ReadTag(1000, _cts.Token));
+                    
                 }
             }
             catch
@@ -48,16 +51,17 @@ namespace BdmService.Services.Implementations
             }
         }
 
-        public async Task ConnectAsync(string ipAddress, int rack, int slot)
+        public async Task ConnectAsync(string ipAddress, int rack, int slot, CancellationTokenSource tokenSource)
         {
-           await Task.Run(() => {Connect(ipAddress, rack, slot); },_cts.Token);
+           await Task.Run(() => {Connect(ipAddress, rack, slot, tokenSource); });
         }
 
         public void Disconnect()
         {
+            if(!_cts.IsCancellationRequested)
+                _cts.Cancel();
             if (_client.Connected)
             {
-                _cts.Cancel();
                 _client.Disconnect();
                 ConnectionState = ConnectionStates.Offline;
                 _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection disconnect: ");
@@ -72,14 +76,15 @@ namespace BdmService.Services.Implementations
 
         private async Task ReadTag(int TimeRead , CancellationToken cancellationToken = default)
         {
-            while (cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 lock (_locker)
                 {
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Чтение данных: ");       
+                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Чтение данных: " + Thread.CurrentThread.ManagedThreadId);       
                 }
                 await Task.Delay(TimeRead);
             }
+            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Завершение чтения: " + Thread.CurrentThread.ManagedThreadId);
         }
     }
 }
