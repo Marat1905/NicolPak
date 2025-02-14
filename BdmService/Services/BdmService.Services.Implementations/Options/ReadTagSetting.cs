@@ -11,6 +11,9 @@
         /// <summary>Метод для чтения</summary>
         public required string MethodRead { get; set; }
 
+        /// <summary>Датаблок</summary>
+        public int DataBlock { get; set; }
+
         /// <summary>Старт байт</summary>
         public int StartByte { get; set; }
 

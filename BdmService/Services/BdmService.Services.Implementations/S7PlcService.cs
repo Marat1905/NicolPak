@@ -8,6 +8,7 @@ using BdmService.Services.Implementations.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sharp7;
+using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -20,11 +21,12 @@ namespace BdmService.Services.Implementations
         private volatile object _locker = new object();
         private CancellationToken _cts;
         private readonly Timer _timer;
-        private readonly Dictionary<string, ReadTagSetting> _tagSettings;
+        private readonly Dictionary<int, Dictionary<string, ReadTagSetting>> _tagSettings;
         private readonly Dictionary<string, MethodInfo> _methodsS7;
         private readonly Read _read;
+        private ConnectionStates _connectionStates;
 
-        public ConnectionStates ConnectionState { get; private set; }
+        public ConnectionStates ConnectionState => _connectionStates;
 
         public S7PlcService(ILogger<S7PlcService> logger)
         {
@@ -33,7 +35,13 @@ namespace BdmService.Services.Implementations
             //_cts = token;
             _timer = new Timer(ReadTag,null,0,1000);
 
-            _tagSettings = CommonConfigurationManager.Configuration.GetSection(ReadTagSetting.Position).Get<List<ReadTagSetting>>().ToDictionary(x=>x.ColumnName,x=>x);
+            _tagSettings = CommonConfigurationManager.Configuration
+                .GetSection(ReadTagSetting.Position)
+                .Get<List<ReadTagSetting>>()
+                .ToDictionary(x=>x.ColumnName,x=>x)
+                .GroupBy(o => o.Value.DataBlock)
+                .ToDictionary(group => group.Key, group => group.ToDictionary());
+
             _methodsS7 = ReadMethodS7();
             _read = new Read();
         }
@@ -42,16 +50,16 @@ namespace BdmService.Services.Implementations
 
         public void Connect(string ipAddress, int rack, int slot)
         {
-            ConnectionState = ConnectionStates.Connecting;
-            if(ConnectionState != ConnectionStates.Online)
+            _connectionStates = ConnectionStates.Connecting;
+            if(_connectionStates != ConnectionStates.Online)
             {
                 int result = _client.ConnectTo(ipAddress, rack, slot);
                 if (result == 0)
-                    ConnectionState = ConnectionStates.Online;
+                    _connectionStates = ConnectionStates.Online;
                 else
                 {
                     _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
-                    ConnectionState = ConnectionStates.Offline;
+                    _connectionStates = ConnectionStates.Offline;
                 }
             }
         }
@@ -80,31 +88,41 @@ namespace BdmService.Services.Implementations
         
         private void ReadTag(object? state)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            if (ConnectionState == ConnectionStates.Online)
-            {
-                sw.Start();
-                byte[] bufer_Recv = new byte[468];
-                var result = _client.DBRead(691, 0, bufer_Recv.Length - 1, bufer_Recv);
-                if (result != 0)
-                {
-                    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
-                    ConnectionState = ConnectionStates.ErrorRead;
-                }
-                else
-                {
-                   
-                  
-                    sw.Start();
-                    ReadTagsToModel(_tagSettings, _methodsS7, _read,bufer_Recv);
-                    sw.Stop();
-                    //Debug.WriteLine(DateTime.Now.ToString(" Потраченное время на отправку в модель: " + sw.ElapsedMilliseconds));
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Чтение данных: " + _read.ToString());
-                }
-                 
-            }
+            ReadDB(_tagSettings, ref _connectionStates);
         }
 
+        private void ReadDB(Dictionary<int, Dictionary<string, ReadTagSetting>> tagSettings, ref ConnectionStates State)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            if (State == ConnectionStates.Online)
+            {
+                foreach (var data in tagSettings)
+                {
+                    //Ищем максимальный стартовый байт и прибавляем к нему 4 байта
+                    var MaxStartByte = data.Value.Max(x => x.Value.StartByte) + 4;
+                    // создаем буфер
+                    byte[] bufer_Recv = new byte[MaxStartByte];
+                    // считываем данные с контроллера из ДБ по которой сгруппирован словарь
+                    var result = _client.DBRead(data.Key, 0, bufer_Recv.Length - 1, bufer_Recv);
+
+                    if (result != 0)
+                    {
+                        _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
+                        State = ConnectionStates.ErrorRead;
+                    }
+                    else
+                    {
+                        sw.Start();
+                        ReadTagsToModel(data.Value, _methodsS7, _read, bufer_Recv);
+                        sw.Stop();
+                        //Debug.WriteLine(DateTime.Now.ToString(" Потраченное время на отправку в модель: " + sw.ElapsedMilliseconds));
+                        Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Чтение данных: " + _read.ToString());
+                    }
+
+                }
+            }
+                
+        }
 
         /// <summary>Чтение данных из буфера в модель</summary>
         /// <typeparam name="T"> Тип модели класса</typeparam>
