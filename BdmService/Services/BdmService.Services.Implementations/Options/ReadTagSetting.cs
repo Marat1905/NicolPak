@@ -1,0 +1,20 @@
+﻿namespace BdmService.Services.Implementations.Options
+{
+    public class ReadTagSetting
+    {
+        /// <summary>Путь к настройкам </summary>
+        public const string Position = "ReadTags:Tag";
+
+        /// <summary>Имя свойства</summary>
+        public required string ColumnName { get; set; }
+
+        /// <summary>Метод для чтения</summary>
+        public required string MethodRead { get; set; }
+
+        /// <summary>Старт байт</summary>
+        public int StartByte { get; set; }
+
+        /// <summary>Слот</summary>
+        public int Bit { get; set; }
+    }
+}

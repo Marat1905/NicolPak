@@ -14,13 +14,13 @@ namespace BdmService.Services.Abstractions
         /// <param name="ipAddress">IP-адрес</param>
         /// <param name="rack">Рак</param>
         /// <param name="slot">Слот</param>
-        public void Connect(string ipAddress, int rack, int slot, CancellationTokenSource tokenSource);
+        public void Connect(string ipAddress, int rack, int slot);
 
         /// <summary> Подключение к ПЛК </summary>
         /// <param name="ipAddress">IP-адрес</param>
         /// <param name="rack">Рак</param>
         /// <param name="slot">Слот</param>
-        public Task ConnectAsync(string ipAddress, int rack, int slot, CancellationTokenSource tokenSource);
+        public Task ConnectAsync(string ipAddress, int rack, int slot);
 
         /// <summary>Отключение от ПЛК</summary>
         public void Disconnect();

@@ -93,21 +93,29 @@ namespace Sharp7
                 while ((SizeAvail < Size) && (!Expired))
                 {
                     Thread.Sleep(2);
-                    SizeAvail = TCPSocket.Available;
-                    Expired = Environment.TickCount - Elapsed > Timeout;
-                    // If timeout we clean the buffer
-                    if (Expired && (SizeAvail > 0))
+                    if (TCPSocket != null)
                     {
-                        try
+                        SizeAvail = TCPSocket.Available;
+                        Expired = Environment.TickCount - Elapsed > Timeout;
+                        // If timeout we clean the buffer
+                        if (Expired && (SizeAvail > 0))
                         {
-                            byte[] Flush = new byte[SizeAvail];
-                            TCPSocket.Receive(Flush, 0, SizeAvail, SocketFlags.None);
-                        }
-                        catch
-                        {
-                            LastError = S7Consts.errTCPDataReceive;
+                            try
+                            {
+                                byte[] Flush = new byte[SizeAvail];
+                                TCPSocket.Receive(Flush, 0, SizeAvail, SocketFlags.None);
+                            }
+                            catch
+                            {
+                                LastError = S7Consts.errTCPDataReceive;
+                            }
                         }
                     }
+                    else
+                    {
+                        LastError = S7Consts.errTCPDataReceive;
+                    }
+                    
                 }
             }
             catch

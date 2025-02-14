@@ -2,9 +2,8 @@
 
 using BdmService.Infrastructure.Enums;
 using BdmService.Services.Abstractions;
-using Microsoft.Extensions.Hosting;
-using System.Data;
-using System.Diagnostics;
+using BdmService.Services.Implementations.Configurations;
+using BdmService.Services.Implementations.Options;
 
 namespace BdmService.WebAPI
 {
@@ -12,11 +11,13 @@ namespace BdmService.WebAPI
     {
         private readonly ILogger<PlcHostedService> _logger;
         private readonly IS7PlcService _s7Plc;
+        private readonly ConnectPlcSetting _settings;
 
         public PlcHostedService(ILogger<PlcHostedService> logger, IS7PlcService s7Plc)
         {
             _logger = logger;
             _s7Plc = s7Plc;
+            _settings = CommonConfigurationManager.Configuration.GetSection(ConnectPlcSetting.Position).Get<ConnectPlcSetting>();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -29,14 +30,12 @@ namespace BdmService.WebAPI
         {
             while(!cancellationToken.IsCancellationRequested)
             {
-                if (_s7Plc.ConnectionState == ConnectionStates.Offline)
+                if (_s7Plc.ConnectionState != ConnectionStates.Online)
                 {
-                    CancellationTokenSource tokenSource = new CancellationTokenSource();
                     _s7Plc.Disconnect();
-                    _s7Plc.Connect("", 0, 2, tokenSource);
-                   // _s7Plc.Disconnect();
+                    _s7Plc.Connect(_settings.IpAddress, _settings.Rack, _settings.Slot);
+                    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Подключение............");
                 }
-                Debug.WriteLine($"Запись {DateTime.Now}");
                 await Task.Delay(5000);
             }         
         }
