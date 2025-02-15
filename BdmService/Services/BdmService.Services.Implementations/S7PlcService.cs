@@ -157,8 +157,8 @@ namespace BdmService.Services.Implementations
                     else
                         throw new Exception($"{tagSetting.MethodRead} - Такой метод не существует в S7");
                 }
-                else
-                    throw new Exception($"Для свойства {property.Name} не найдена конфигурация для чтения" );
+               // else
+                //    throw new Exception($"Для свойства {property.Name} не найдена конфигурация для чтения" );
             }
         } 
 
