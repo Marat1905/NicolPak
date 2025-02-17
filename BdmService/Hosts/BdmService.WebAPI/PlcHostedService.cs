@@ -1,9 +1,9 @@
 ﻿// Ignore Spelling: Plc
 
-using BdmService.Infrastructure.Enums;
 using BdmService.Services.Abstractions;
 using BdmService.Services.Implementations.Configurations;
-using BdmService.Services.Implementations.Options;
+using Sharp7.Extensions.Enums;
+using Sharp7.Extensions.Options;
 
 namespace BdmService.WebAPI
 {

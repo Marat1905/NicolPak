@@ -1,14 +1,13 @@
 ﻿// Ignore Spelling: Plc Bdm
 
-using BdmService.Infrastructure.Enums;
 using BdmService.Services.Abstractions;
 using BdmService.Services.Implementations.Configurations;
 using BdmService.Services.Implementations.Model;
-using BdmService.Services.Implementations.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sharp7;
-using System.Data;
+using Sharp7.Extensions.Enums;
+using Sharp7.Extensions.Options;
 using System.Diagnostics;
 using System.Reflection;
 

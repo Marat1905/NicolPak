@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Lib\Sharp7.Extensions\Sharp7.Extensions.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Enums
-
-namespace BdmService.Infrastructure.Enums
+﻿namespace Sharp7.Extensions.Enums
 {
     /// <summary>Статус подключения к ПЛК</summary>
     public enum ConnectionStates

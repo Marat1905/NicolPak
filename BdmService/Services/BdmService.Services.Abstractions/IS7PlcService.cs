@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Bdm
 
-using BdmService.Infrastructure.Enums;
+using Sharp7.Extensions.Enums;
 
 namespace BdmService.Services.Abstractions
 {

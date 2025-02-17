@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Lib\Sharp7.Extensions\Sharp7.Extensions.csproj" />
     <ProjectReference Include="..\..\..\Lib\Sharp7\Sharp7.csproj" />
     <ProjectReference Include="..\BdmService.Services.Abstractions\BdmService.Services.Abstractions.csproj" />
   </ItemGroup>

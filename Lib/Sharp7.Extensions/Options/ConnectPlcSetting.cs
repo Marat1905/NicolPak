@@ -1,4 +1,4 @@
-﻿namespace BdmService.Services.Implementations.Options
+﻿namespace Sharp7.Extensions.Options
 {
     public class ConnectPlcSetting
     {
