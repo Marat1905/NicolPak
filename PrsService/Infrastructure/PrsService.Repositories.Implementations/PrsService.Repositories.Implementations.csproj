@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\PrsService.Domain.Entities\PrsService.Domain.Entities.csproj" />
+    <ProjectReference Include="..\..\Services\PrsService.Services.Repositories.Abstractions\PrsService.Services.Repositories.Abstractions.csproj" />
+    <ProjectReference Include="..\PrsService.Infrastructure.EntityFramework\PrsService.Infrastructure.EntityFramework.csproj" />
+  </ItemGroup>
+
 </Project>

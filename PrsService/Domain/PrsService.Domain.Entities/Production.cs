@@ -4,10 +4,10 @@ using GM.EFCore.Entities.Base;
 
 namespace PrsService.Domain.Entities
 {
-    public class Production<TKey> : TimedEntity<TKey>
+    public class Production<TKey> : Entity<TKey>
     {
         /// <summary>Тип продукта</summary>
-        public required string  Product {  get; set; }
+        public string  Product {  get; set; }
 
         /// <summary>Смена</summary>
         public int Shift { get; set; }
@@ -36,11 +36,11 @@ namespace PrsService.Domain.Entities
         /// <summary>Диаметр втулки</summary>
         public int Core { get; set; }
 
-        public required TKey TamburPrsId {  get; set; }
+        public  TKey TamburPrsId {  get; set; }
 
-        public required TamburPrs TamburPrs { get; set; }
+        public  TamburPrs TamburPrs { get; set; }
 
-        public required virtual ICollection<Roll> Rolls { get; set; }
+        public  virtual ICollection<Roll> Rolls { get; set; }
 
 
     }

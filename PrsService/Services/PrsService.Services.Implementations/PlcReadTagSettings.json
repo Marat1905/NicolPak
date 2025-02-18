@@ -8,24 +8,108 @@
   "ReadTags": {
     "Tag": [
       {
-        "ColumnName": "PrintSendStatus",
-        "MethodRead": "GetIntAt",
-        "DataBlock": 691,
-        "StartByte": 364,
+        "ColumnName": "Product",
+        "MethodRead": "GetStringAt",
+        "DataBlock": 500,
+        "StartByte": 18,
         "Bit": 0
       },
       {
-        "ColumnName": "PrintStatus",
+        "ColumnName": "Shift",
         "MethodRead": "GetIntAt",
-        "DataBlock": 691,
-        "StartByte": 366,
+        "DataBlock": 500,
+        "StartByte": 16,
         "Bit": 0
       },
       {
-        "ColumnName": "Xay",
+        "ColumnName": "PaperWeight",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 24,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "AverageSpeed",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 28,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "AverageTension",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 32,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "SetLength",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 36,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "FactLength",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 40,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "SetDiameter",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 44,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "FactDiameter",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 48,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Core",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 92,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "IsTamburSet",
+        "MethodRead": "GetBitAt",
+        "DataBlock": 500,
+        "StartByte": 128,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "IsProductionSet",
+        "MethodRead": "GetBitAt",
+        "DataBlock": 500,
+        "StartByte": 128,
+        "Bit": 1
+      },
+      {
+        "ColumnName": "CountRoll",
         "MethodRead": "GetIntAt",
-        "DataBlock": 690,
-        "StartByte": 10,
+        "DataBlock": 500,
+        "StartByte": 130,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "RollWidth",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 500,
+        "StartByte": 54,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "RollId",
+        "MethodRead": "GetDIntAt",
+        "DataBlock": 500,
+        "StartByte": 76,
         "Bit": 0
       }
     ]

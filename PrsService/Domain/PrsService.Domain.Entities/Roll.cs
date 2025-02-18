@@ -12,9 +12,9 @@ namespace PrsService.Domain.Entities
         /// <summary>Ширина рулона </summary>
         public double Width { get; set; }
 
-        public required TKey ProductionId { get; set; }
+        public  TKey? ProductionId { get; set; }
 
-        public required Production Production { get; set; }
+        public  Production? Production { get; set; }
     }
     public class Roll : Roll<Guid> { }
 }
