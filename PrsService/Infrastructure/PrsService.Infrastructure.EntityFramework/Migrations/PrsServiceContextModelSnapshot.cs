@@ -32,6 +32,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<int>("Core")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("FactDiameter")
                         .HasColumnType("REAL");
 
@@ -70,6 +73,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("IdIntRoll")
                         .HasColumnType("INTEGER");
 
@@ -92,7 +98,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Create")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

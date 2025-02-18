@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\GM.EFCore\GM.EFCore.Interfaces.Repositories\GM.EFCore.Interfaces.Repositories.csproj" />
     <ProjectReference Include="..\..\Domain\PrsService.Domain.Entities\PrsService.Domain.Entities.csproj" />
   </ItemGroup>
 

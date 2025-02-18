@@ -4,7 +4,7 @@ using GM.EFCore.Entities.Base;
 
 namespace PrsService.Domain.Entities
 {
-    public class Roll<TKey>: Entity<TKey>
+    public class Roll<TKey>: TimedEntity<TKey>
     {
         /// <summary>Идентификатор переданный из ПЛК</summary>
         public int IdIntRoll { get; set; }

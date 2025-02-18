@@ -7,7 +7,7 @@ namespace GM.EFCore.Entities.Base
     public abstract class NamedEntity<TKey> : Entity<TKey>, INamedEntity<TKey>
     {
         /// <summary>Имя</summary>
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
     }
 

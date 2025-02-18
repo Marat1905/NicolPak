@@ -4,7 +4,7 @@ using GM.EFCore.Entities.Base;
 
 namespace PrsService.Domain.Entities
 {
-    public class Production<TKey> : Entity<TKey>
+    public class Production<TKey> : TimedEntity<TKey>
     {
         /// <summary>Тип продукта</summary>
         public string  Product {  get; set; }

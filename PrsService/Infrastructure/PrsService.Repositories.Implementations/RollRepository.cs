@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GM.EFCore.Repositories.Base;
+using Microsoft.Extensions.Logging;
 using PrsService.Domain.Entities;
 using PrsService.Infrastructure.EntityFramework.Context;
 using PrsService.Services.Repositories.Abstractions;
@@ -6,9 +7,9 @@ using PrsService.Services.Repositories.Abstractions;
 namespace PrsService.Repositories.Implementations
 {
     /// <summary><inheritdoc cref="IRollRepository"/></summary>
-    public class RollRepository : Repository<Roll, Guid>, IRollRepository
+    public class RollRepository : TimedRepository<PrsServiceContext, Roll, Guid>, IRollRepository
     {
-        public RollRepository(PrsServiceContext context) : base(context)
+        public RollRepository(PrsServiceContext db, ILogger<TimedRepository<PrsServiceContext, Roll, Guid>> Logger) : base(db, Logger)
         {
         }
     }

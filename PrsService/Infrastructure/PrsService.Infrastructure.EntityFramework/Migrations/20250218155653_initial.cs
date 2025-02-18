@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class initial1 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Create = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreateAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,6 +28,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Product = table.Column<string>(type: "TEXT", nullable: false),
                     Shift = table.Column<int>(type: "INTEGER", nullable: false),
                     PaperWeight = table.Column<double>(type: "REAL", nullable: false),
@@ -56,6 +57,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IdIntRoll = table.Column<int>(type: "INTEGER", nullable: false),
                     Width = table.Column<double>(type: "REAL", nullable: false),
                     ProductionId = table.Column<Guid>(type: "TEXT", nullable: false)

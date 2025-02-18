@@ -11,8 +11,8 @@ using PrsService.Infrastructure.EntityFramework.Context;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     [DbContext(typeof(PrsServiceContext))]
-    [Migration("20250218053230_initial1")]
-    partial class initial1
+    [Migration("20250218155653_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
 
                     b.Property<int>("Core")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("FactDiameter")
                         .HasColumnType("REAL");
@@ -73,6 +76,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("IdIntRoll")
                         .HasColumnType("INTEGER");
 
@@ -95,7 +101,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Create")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

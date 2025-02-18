@@ -92,7 +92,7 @@ namespace PrsService.Services.Implementations
         }
 
         int count = 0;
-        private void ReadTag(object? state)
+        private async void ReadTag(object? state)
         {
             //Stopwatch sw = Stopwatch.StartNew();
            // sw.Start();
@@ -103,11 +103,12 @@ namespace PrsService.Services.Implementations
             using (var scope = _scopeFactory.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
-                var t = db.GetAll().ToList();
-                if (count < t.Count)
+                var t = await db.GetAll();
+                var listCount = t.ToList().Count;
+                if (count < listCount)
                 {
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Данных в БД: "+t.Count);
-                    count=t.Count;
+                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Данных в БД: "+ listCount);
+                    count= listCount;
                 }
             }
             // sw.Stop();
@@ -127,9 +128,8 @@ namespace PrsService.Services.Implementations
                     {
                         var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
 
-                        var entity = new TamburPrs() { Create = DateTime.Now };
+                        var entity = new TamburPrs() { CreateAt = DateTime.Now };
                         db.Add(entity);
-                        db.SaveChanges();
                         Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись данных в БД: ");
                     }
                     temp=false;
