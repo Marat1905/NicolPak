@@ -1,9 +1,8 @@
-﻿using GM.EFCore.Interfaces.Repositories;
+﻿using GM.EFCore.Repositories.Base;
+using Microsoft.Extensions.Logging;
 using PrsService.Domain.Entities;
 using PrsService.Infrastructure.EntityFramework.Context;
 using PrsService.Services.Repositories.Abstractions;
-using GM.EFCore.Repositories.Base;
-using Microsoft.Extensions.Logging;
 
 namespace PrsService.Repositories.Implementations
 {

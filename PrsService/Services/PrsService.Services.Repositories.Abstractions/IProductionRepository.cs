@@ -1,7 +1,4 @@
-﻿
-
-using GM.EFCore.Interfaces.Entities;
-using GM.EFCore.Interfaces.Repositories;
+﻿using GM.EFCore.Interfaces.Repositories;
 using PrsService.Domain.Entities;
 
 namespace PrsService.Services.Repositories.Abstractions
