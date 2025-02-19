@@ -8,7 +8,7 @@ namespace PrsService.Infrastructure.EntityFramework.Context
     {
         public PrsServiceContext(DbContextOptions<PrsServiceContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
+           // Database.EnsureDeleted();
             Database.EnsureCreatedAsync();
         }
 

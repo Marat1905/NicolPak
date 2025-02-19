@@ -1,7 +1,7 @@
-using PrsService.Services.Implementations;
 using PrsService.WebAPI.BackgroundServices;
 using PrsService.Infrastructure.EntityFramework;
 using PrsService.Repositories.Implementations;
+using PrsService.Services.Implementations.Extensions;
 
 namespace PrsService.WebAPI
 {
@@ -12,6 +12,8 @@ namespace PrsService.WebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services
                 .AddS7PlcServices()

@@ -109,7 +109,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
             modelBuilder.Entity("PrsService.Domain.Entities.Production", b =>
                 {
                     b.HasOne("PrsService.Domain.Entities.TamburPrs", "TamburPrs")
-                        .WithMany()
+                        .WithMany("Productions")
                         .HasForeignKey("TamburPrsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -131,6 +131,11 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
             modelBuilder.Entity("PrsService.Domain.Entities.Production", b =>
                 {
                     b.Navigation("Rolls");
+                });
+
+            modelBuilder.Entity("PrsService.Domain.Entities.TamburPrs", b =>
+                {
+                    b.Navigation("Productions");
                 });
 #pragma warning restore 612, 618
         }

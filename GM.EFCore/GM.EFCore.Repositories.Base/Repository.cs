@@ -125,7 +125,7 @@ namespace GM.EFCore.Repositories.Base
                 return null;
             }
             _db.Add(item);
-            if (AutoSaveChanges) await SaveChanges(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges) await SaveChanges(Cancel);
 
             _Logger.LogInformation("Добавление {0} в репозиторий выполнено с id: {1}", item, item.Id);
 

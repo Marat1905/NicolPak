@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PrsService.Domain.Entities;
 using PrsService.Services.Abstractions;
+using PrsService.Services.Contracts.DataBlock;
 using PrsService.Services.Contracts.Production;
+using PrsService.Services.Contracts.TamburPrs;
 using PrsService.Services.Implementations.Configurations;
-using PrsService.Services.Repositories.Abstractions;
 using Sharp7;
 using Sharp7.Extensions.Enums;
 using Sharp7.Extensions.Options;
@@ -17,7 +17,9 @@ namespace PrsService.Services.Implementations
     public class S7PlcService : IS7PlcService
     {
         private readonly ILogger<S7PlcService> _logger;
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ITamburService _tamburService;
+        private readonly IProductionService _productionService;
+        private readonly IMapper _mapper;
         private readonly S7Client _client;
         private volatile object _locker = new object();
         private CancellationToken _cts;
@@ -26,14 +28,54 @@ namespace PrsService.Services.Implementations
         private readonly Dictionary<string, MethodInfo> _methodsS7;
         private ConnectionStates _connectionStates;
 
-        private ProductionDto _product;
+        private DataBlockDto _db;
+
+        /// <summary>Снятие тамбура</summary>
+        private bool _isTamburChange;
+
+        /// <summary>Снятие тамбура</summary>
+        public bool IsTamburChange
+        {
+            get { return _isTamburChange; }
+            set 
+            {
+                if (_isTamburChange == true && value ==false)
+                {
+                    Task.Run(async () => await _tamburService.AddAsync(new CreatingTamburDto()));
+                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
+                }
+                _isTamburChange = value;
+            }
+        }
+
+        private bool _isRollChange;
+
+        public bool IsRollChange
+        {
+            get { return _isRollChange; }
+            set 
+            {
+                if (_isRollChange == true && value == false)
+                {
+                    var prod = _mapper.Map<CreatingProductionDto>(_db);
+                    Task.Run(async () => await _productionService.AddAsync(prod));
+                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
+                }
+                _isRollChange = value; 
+            }
+        }
+
 
         public ConnectionStates ConnectionState => _connectionStates;
 
-        public S7PlcService(ILogger<S7PlcService> logger, IServiceScopeFactory scopeFactory)
+        public S7PlcService(ILogger<S7PlcService> logger,ITamburService tamburService, IProductionService productionService, IMapper mapper)
         {
             _logger = logger;
-            _scopeFactory = scopeFactory;
+            _tamburService = tamburService;
+            _productionService = productionService;
+            _mapper = mapper;
+            _methodsS7 = ReadMethodS7();
+            _db = new DataBlockDto();
             _client = new S7Client();
             //_cts = token;
             _timer = new Timer(ReadTag, null, 0, 2000);
@@ -44,10 +86,11 @@ namespace PrsService.Services.Implementations
                 .ToDictionary(x => x.ColumnName, x => x)
                 .GroupBy(o => o.Value.DataBlock)
                 .ToDictionary(group => group.Key, group => group.ToDictionary());
+            //tamburService.AddAsync(new CreatingTamburDto());
 
-            _methodsS7 = ReadMethodS7();
+            //var prod = _mapper.Map<CreatingProductionDto>(_db);
+            //Task.Run(async () => await _productionService.AddAsync(prod));
 
-            _product = new ProductionDto();
         }
 
 
@@ -57,8 +100,6 @@ namespace PrsService.Services.Implementations
             _connectionStates = ConnectionStates.Connecting;
             if (_connectionStates != ConnectionStates.Online)
             {
-                //_client.Disconnect();
-              
                 int result = _client.ConnectTo(ipAddress, rack, 2);
                 if (result == 0)
                     _connectionStates = ConnectionStates.Online;
@@ -78,12 +119,6 @@ namespace PrsService.Services.Implementations
         public void Disconnect()
         {
             _client.Disconnect();
-            //if (_client.Connected)
-            //{
-            //    _client.Disconnect();
-            //    ConnectionState = ConnectionStates.Offline;
-            //    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection disconnect: ");
-            //}
         }
 
         public async Task DisconnectAsync()
@@ -94,49 +129,12 @@ namespace PrsService.Services.Implementations
         int count = 0;
         private async void ReadTag(object? state)
         {
-            //Stopwatch sw = Stopwatch.StartNew();
-           // sw.Start();
-            ReadDB(_product,_tagSettings, ref _connectionStates);
-            SetBD(_product);
-
-
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
-                var t = await db.GetAll();
-                var listCount = t.ToList().Count;
-                if (count < listCount)
-                {
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Данных в БД: "+ listCount);
-                    count= listCount;
-                }
-            }
-            // sw.Stop();
-            //Debug.WriteLine(DateTime.Now.ToString(" Потраченное время на отправку в модель: " + sw.ElapsedMilliseconds));
+            ReadDB(_db, _tagSettings, ref _connectionStates);
+            IsTamburChange=_db.IsTamburSet;
+            IsRollChange=_db.IsProductionSet;
         }
 
-        bool temp = false;
-        private void SetBD(ProductionDto product)
-        {
-            if (_product != null) 
-            { 
-                if (product.IsTamburSet == true && temp==false)
-                    temp = true;
-                if (temp == true && product.IsTamburSet==false)
-                {
-                    using (var scope = _scopeFactory.CreateScope())
-                    {
-                        var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
-
-                        var entity = new TamburPrs() { CreateAt = DateTime.Now };
-                        db.Add(entity);
-                        Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись данных в БД: ");
-                    }
-                    temp=false;
-                }
-            }
-
-        }
+      
 
         /// <summary>Метод записи данных в класс</summary>
         /// <typeparam name="T">Класс</typeparam>
@@ -172,9 +170,6 @@ namespace PrsService.Services.Implementations
                        // sw.Start();
                         ReadTagsToModel(data.Value, _methodsS7, model, bufer_Recv);
                         sw.Stop();
-                       // Debug.WriteLine(DateTime.Now.ToString(" Потраченное время на отправку в модель: " + sw.ElapsedMilliseconds));
-                        //Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Чтение данных: " + model.ToString());
-
                     }
                 }
             }

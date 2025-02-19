@@ -10,6 +10,7 @@ namespace PrsService.Infrastructure.EntityFramework.Configurations
         public void Configure(EntityTypeBuilder<Roll> builder)
         {
             builder.ToTable("Rolls").HasKey(x => x.Id);
+            builder.Property(p => p.Id).ValueGeneratedOnAdd();
         }
     }
 }

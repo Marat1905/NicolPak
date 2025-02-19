@@ -1,13 +1,12 @@
-﻿// Ignore Spelling: Prs Tambur
+﻿using GM.EFCore.Entities.Base;
+using System.Runtime.CompilerServices;
 
-using GM.EFCore.Entities.Base;
-
-namespace PrsService.Domain.Entities
+namespace PrsService.Services.Contracts.Production
 {
-    public class Production<TKey> : TimedEntity<TKey>
+    public class CreatingProductionDto<TKey> 
     {
         /// <summary>Тип продукта</summary>
-        public string  Product {  get; set; }
+        public string Product { get; set; }
 
         /// <summary>Смена</summary>
         public int Shift { get; set; }
@@ -16,7 +15,7 @@ namespace PrsService.Domain.Entities
         public double PaperWeight { get; set; }
 
         /// <summary>Средняя скорость намотки </summary>
-        public  double AverageSpeed {  get; set; }
+        public double AverageSpeed { get; set; }
 
         /// <summary>Средняя натяжка </summary>
         public double AverageTension { get; set; }
@@ -36,13 +35,9 @@ namespace PrsService.Domain.Entities
         /// <summary>Диаметр втулки</summary>
         public int Core { get; set; }
 
-        public  TKey TamburPrsId {  get; set; }
-
-        public  TamburPrs? TamburPrs { get; set; }
-
-        public  virtual ICollection<Roll>? Rolls { get; set; }
-
+        /// <summary>Время создания продукта</summary>
+        public DateTime CreateAt { get; set; } = DateTime.Now;
 
     }
-    public class Production : Production<Guid> {}
+    public class CreatingProductionDto : CreatingProductionDto<Guid> { }
 }

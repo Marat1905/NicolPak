@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Lib\Sharp7.Extensions\Sharp7.Extensions.csproj" />
+    <ProjectReference Include="..\PrsService.Services.Contracts\PrsService.Services.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
