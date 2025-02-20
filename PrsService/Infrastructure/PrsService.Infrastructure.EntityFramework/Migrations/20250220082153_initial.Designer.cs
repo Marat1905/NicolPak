@@ -11,7 +11,7 @@ using PrsService.Infrastructure.EntityFramework.Context;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     [DbContext(typeof(PrsServiceContext))]
-    [Migration("20250219112249_initial")]
+    [Migration("20250220082153_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -79,13 +79,13 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdIntRoll")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("ProductionId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Width")
+                    b.Property<int>("RollID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("RollWidth")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");

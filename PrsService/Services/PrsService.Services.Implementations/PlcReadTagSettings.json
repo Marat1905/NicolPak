@@ -12,6 +12,7 @@
         "MethodRead": "GetStringAt",
         "DataBlock": 500,
         "StartByte": 18,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -19,6 +20,7 @@
         "MethodRead": "GetIntAt",
         "DataBlock": 500,
         "StartByte": 16,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -26,6 +28,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 24,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -33,6 +36,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 28,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -40,6 +44,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 32,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -47,6 +52,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 36,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -54,6 +60,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 40,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -61,6 +68,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 44,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -68,6 +76,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 48,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -75,6 +84,7 @@
         "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 92,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -82,6 +92,7 @@
         "MethodRead": "GetBitAt",
         "DataBlock": 500,
         "StartByte": 128,
+        "Offset": 0,
         "Bit": 0
       },
       {
@@ -89,6 +100,7 @@
         "MethodRead": "GetBitAt",
         "DataBlock": 500,
         "StartByte": 128,
+        "Offset": 0,
         "Bit": 1
       },
       {
@@ -100,9 +112,10 @@
       },
       {
         "ColumnName": "RollWidth",
-        "MethodRead": "GetIntAt",
+        "MethodRead": "GetRealAt",
         "DataBlock": 500,
         "StartByte": 54,
+        "Offset": 6,
         "Bit": 0
       },
       {
@@ -110,6 +123,7 @@
         "MethodRead": "GetDIntAt",
         "DataBlock": 500,
         "StartByte": 76,
+        "Offset": 4,
         "Bit": 0
       }
     ]

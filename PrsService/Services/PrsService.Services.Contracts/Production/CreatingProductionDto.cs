@@ -1,4 +1,5 @@
 ﻿using GM.EFCore.Entities.Base;
+using PrsService.Services.Contracts.Roll;
 using System.Runtime.CompilerServices;
 
 namespace PrsService.Services.Contracts.Production
@@ -37,6 +38,8 @@ namespace PrsService.Services.Contracts.Production
 
         /// <summary>Время создания продукта</summary>
         public DateTime CreateAt { get; set; } = DateTime.Now;
+
+        public List<CreatingRollDto>? Rolls { get; set; }
 
     }
     public class CreatingProductionDto : CreatingProductionDto<Guid> { }

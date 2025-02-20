@@ -58,8 +58,8 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    IdIntRoll = table.Column<int>(type: "INTEGER", nullable: false),
-                    Width = table.Column<double>(type: "REAL", nullable: false),
+                    RollID = table.Column<int>(type: "INTEGER", nullable: false),
+                    RollWidth = table.Column<double>(type: "REAL", nullable: false),
                     ProductionId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

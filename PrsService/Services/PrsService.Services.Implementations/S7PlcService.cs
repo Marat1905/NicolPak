@@ -39,11 +39,8 @@ namespace PrsService.Services.Implementations
             get { return _isTamburChange; }
             set 
             {
-                if (_isTamburChange == true && value ==false)
-                {
-                    Task.Run(async () => await _tamburService.AddAsync(new CreatingTamburDto()));
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
-                }
+                if (_isTamburChange == true && value == false)
+                    TamburChange();
                 _isTamburChange = value;
             }
         }
@@ -56,12 +53,9 @@ namespace PrsService.Services.Implementations
             set 
             {
                 if (_isRollChange == true && value == false)
-                {
-                    var prod = _mapper.Map<CreatingProductionDto>(_db);
-                    Task.Run(async () => await _productionService.AddAsync(prod));
-                    Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
-                }
-                _isRollChange = value; 
+                    RollChange();
+
+                _isRollChange = value;
             }
         }
 
@@ -86,11 +80,6 @@ namespace PrsService.Services.Implementations
                 .ToDictionary(x => x.ColumnName, x => x)
                 .GroupBy(o => o.Value.DataBlock)
                 .ToDictionary(group => group.Key, group => group.ToDictionary());
-            //tamburService.AddAsync(new CreatingTamburDto());
-
-            //var prod = _mapper.Map<CreatingProductionDto>(_db);
-            //Task.Run(async () => await _productionService.AddAsync(prod));
-
         }
 
 
@@ -130,11 +119,23 @@ namespace PrsService.Services.Implementations
         private async void ReadTag(object? state)
         {
             ReadDB(_db, _tagSettings, ref _connectionStates);
-            IsTamburChange=_db.IsTamburSet;
+            //var prod = _mapper.Map<CreatingProductionDto>(_db);
+            IsTamburChange =_db.IsTamburSet;
             IsRollChange=_db.IsProductionSet;
         }
 
-      
+        private async Task TamburChange()
+        {
+            await _tamburService.AddAsync(new CreatingTamburDto());
+            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
+        }
+
+        private async Task RollChange()
+        {
+            var prod = _mapper.Map<CreatingProductionDto>(_db);
+            await _productionService.AddAsync(prod);
+            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
+        }
 
         /// <summary>Метод записи данных в класс</summary>
         /// <typeparam name="T">Класс</typeparam>
@@ -157,8 +158,7 @@ namespace PrsService.Services.Implementations
                     Stopwatch sw = Stopwatch.StartNew();
                     sw.Start();                 
                     var result = _client.DBRead(data.Key, 0, bufer_Recv.Length - 1, bufer_Recv);
-                    sw.Stop();
-                   // Debug.WriteLine(DateTime.Now.ToString(" Потраченное время на получение данных: " + sw.ElapsedMilliseconds));
+
                     if (result != 0)
                     {
                         _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
@@ -166,16 +166,15 @@ namespace PrsService.Services.Implementations
                     }
                     else
                     {
-                       // Stopwatch sw = Stopwatch.StartNew();
-                       // sw.Start();
                         ReadTagsToModel(data.Value, _methodsS7, model, bufer_Recv);
-                        sw.Stop();
+                        AddValueCollection(data.Value, _methodsS7, model, bufer_Recv);
                     }
                 }
             }
 
         }
 
+        #region Вынести в отдельное место Extension
         /// <summary>Чтение данных из буфера в модель</summary>
         /// <typeparam name="T"> Тип модели класса</typeparam>
         /// <param name="setting">Конфигурация с JSON PlcReadTagSettings.json</param>
@@ -186,31 +185,99 @@ namespace PrsService.Services.Implementations
         private static void ReadTagsToModel<T>(Dictionary<string, ReadTagSetting> setting, Dictionary<string, MethodInfo> methodsS7, T model, byte[] buffer) where T : class
         {
             //получаем все свойства класса
-            PropertyInfo[] properties = typeof(T).GetProperties();
+            PropertyInfo[] properties = model.GetType().GetProperties();
             //В цикле считываем по одному свойству
             foreach (PropertyInfo property in properties)
             {
-                //Проверяем есть ли для этого свойства настройки
-                if (setting.TryGetValue(property.Name, out ReadTagSetting tagSetting))
+                SetValue(setting, methodsS7, model, buffer, property);
+            }
+        }
+        public static bool IsIList(Type type)
+        {
+            return type.GetInterfaces().Contains(typeof(System.Collections.IList));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="setting"></param>
+        /// <param name="methodsS7"></param>
+        /// <param name="model"></param>
+        /// <param name="buffer"></param>
+        public void AddValueCollection<T>(Dictionary<string, ReadTagSetting> setting, Dictionary<string, MethodInfo> methodsS7, T model, byte[] buffer)
+        {
+            PropertyInfo[] properties = typeof(T).GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.PropertyType.IsGenericType && IsIList(property.PropertyType))
                 {
-                    //var method = typeof(S7).GetMethod(tagSetting.MethodRead);
-                    //if(method!=null)
-                    // Проверяем полученное имя метода из json файла для конвертации в классе S7 
-                    if (methodsS7.TryGetValue(tagSetting.MethodRead, out MethodInfo method))
+                    var type = property.PropertyType;
+                    var name = property.Name;
+
+                    var elementType = property.PropertyType.GetGenericArguments().First();
+                    var listType = typeof(List<>);
+                    Type[] IListParam = { type };
+                    var constructedListType = listType.MakeGenericType(elementType);
+                    var list = Activator.CreateInstance(constructedListType);
+                    //Установить new
+                    property.SetValue(model, list);
+
+                    PropertyInfo[] propertiesList = property.PropertyType.GetProperties();
+
+                    foreach (var prop in propertiesList)
                     {
-                        List<object> args = new List<object>() { buffer, tagSetting.StartByte };
-                        if (method.GetParameters().Length == 3)
-                            args.Add(tagSetting.Bit);
-                        // передаем параметры в метод
-                        var result = method.Invoke(typeof(S7), args.ToArray());
-                        //Устанавливаем в тот класс куда надо было передать инфу
-                        property.SetValue(model, Convert.ChangeType(result, property.PropertyType));
+                        if (prop.PropertyType.Name is nameof(RollDbDto))
+                        {
+                            for (var i = 0; i < 4; i++)
+                            {
+                                //Создаем объект
+                                var instance = Activator.CreateInstance(prop.PropertyType);
+                                foreach (var prop2 in instance.GetType().GetProperties())
+                                {
+                                    if (prop2.Name == "RollId")
+                                    {
+                                        setting.TryGetValue(prop2.Name, out var value);
+                                        SetValue(setting, methodsS7, instance, buffer, prop2, i * value.Offset);
+                                        var myValue = prop2.GetValue(instance, null);
+                                        if (myValue != null && (int)myValue == 0)
+                                            return;
+                                    }
+                                    else if (prop2.Name == "RollWidth")
+                                    {
+                                        setting.TryGetValue(prop2.Name, out var value);
+                                        SetValue(setting, methodsS7, instance, buffer, prop2, i * value.Offset);
+                                    }
+                                }
+                                //Укладываем в list
+                                list.GetType().GetMethod("Add").Invoke(list, new object[] { instance });
+                            }
+
+                        }
                     }
-                    else
-                        throw new Exception($"{tagSetting.MethodRead} - Такой метод не существует в S7");
                 }
-                // else
-                //    throw new Exception($"Для свойства {property.Name} не найдена конфигурация для чтения" );
+            }
+        }
+
+        private static void SetValue<T>(Dictionary<string, ReadTagSetting> setting, Dictionary<string, MethodInfo> methodsS7, T model, byte[] buffer, PropertyInfo property, int offset = 0) where T : class
+        {
+            //Проверяем есть ли для этого свойства настройки
+            if (setting.TryGetValue(property.Name, out ReadTagSetting tagSetting))
+            {
+                // Проверяем полученное имя метода из json файла для конвертации в классе S7 
+                if (methodsS7.TryGetValue(tagSetting.MethodRead, out MethodInfo method))
+                {
+                    int start = tagSetting.StartByte + offset;
+                    List<object> args = new List<object>() { buffer, start };
+                    if (method.GetParameters().Length == 3)
+                        args.Add(tagSetting.Bit);
+                    // передаем параметры в метод
+                    var result = method.Invoke(typeof(S7), args.ToArray());
+                    //Устанавливаем в тот класс куда надо было передать инфу
+                    property.SetValue(model, Convert.ChangeType(result, property.PropertyType));
+                }
+                else
+                    throw new Exception($"{tagSetting.MethodRead} - Такой метод не существует в S7");
             }
         }
 
@@ -227,5 +294,9 @@ namespace PrsService.Services.Implementations
             }
             return dict;
         }
+        #endregion
+
+
+
     }
 }

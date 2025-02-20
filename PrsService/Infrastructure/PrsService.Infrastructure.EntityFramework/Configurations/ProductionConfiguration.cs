@@ -12,6 +12,12 @@ namespace PrsService.Infrastructure.EntityFramework.Configurations
             builder.ToTable("Productions").HasKey(x => x.Id);
 
             builder.Property(p=>p.Id).ValueGeneratedOnAdd();
+
+            //Связь с таблицей Roll один к многим
+            builder.HasMany(x => x.Rolls)
+                   .WithOne(x => x.Production)
+                   .HasForeignKey(x => x.ProductionId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

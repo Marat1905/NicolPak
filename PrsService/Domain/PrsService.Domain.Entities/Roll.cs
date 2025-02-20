@@ -7,10 +7,10 @@ namespace PrsService.Domain.Entities
     public class Roll<TKey>: TimedEntity<TKey>
     {
         /// <summary>Идентификатор переданный из ПЛК</summary>
-        public int IdIntRoll { get; set; }
+        public int RollID { get; set; }
 
         /// <summary>Ширина рулона </summary>
-        public double Width { get; set; }
+        public double RollWidth { get; set; }
 
         public  TKey? ProductionId { get; set; }
 

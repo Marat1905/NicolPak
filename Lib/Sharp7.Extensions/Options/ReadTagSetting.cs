@@ -17,6 +17,9 @@
         /// <summary>Старт байт</summary>
         public int StartByte { get; set; }
 
+        /// <summary>Смещение</summary>
+        public int Offset { get; set; }
+
         /// <summary>Слот</summary>
         public int Bit { get; set; }
     }

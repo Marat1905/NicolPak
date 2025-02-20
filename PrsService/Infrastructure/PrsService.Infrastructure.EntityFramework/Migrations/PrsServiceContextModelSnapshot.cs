@@ -76,13 +76,13 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdIntRoll")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("ProductionId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Width")
+                    b.Property<int>("RollID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("RollWidth")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");

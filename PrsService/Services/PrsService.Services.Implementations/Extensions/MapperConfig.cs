@@ -11,7 +11,8 @@ namespace PrsService.Services.Implementations.Extensions
             {
                 cfg.AddProfile<TamburMappingsProfile>();
                 cfg.AddProfile<ProductionMappingsProfile>();
-                
+                cfg.AddProfile<RollMappingsProfile>();
+
             });
             //configuration.AssertConfigurationIsValid();
             return configuration;

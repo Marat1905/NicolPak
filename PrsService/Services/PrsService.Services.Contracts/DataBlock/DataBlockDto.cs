@@ -49,7 +49,7 @@ namespace PrsService.Services.Contracts.DataBlock
 
         public TamburPrsDto TamburPrs { get; set; }
 
-        public virtual ICollection<RollDto> Rolls { get; set; }
+        public  List<RollDbDto> Rolls { get; set; }
 
         public override string ToString()
         {
