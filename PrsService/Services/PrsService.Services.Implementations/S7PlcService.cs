@@ -40,7 +40,7 @@ namespace PrsService.Services.Implementations
             set 
             {
                 if (_isTamburChange == true && value == false)
-                    TamburChange();
+                    Task.Run(()=>TamburChange().Wait());
                 _isTamburChange = value;
             }
         }
@@ -53,7 +53,7 @@ namespace PrsService.Services.Implementations
             set 
             {
                 if (_isRollChange == true && value == false)
-                    RollChange();
+                    Task.Run(() => RollChange().Wait());
 
                 _isRollChange = value;
             }
@@ -71,7 +71,6 @@ namespace PrsService.Services.Implementations
             _methodsS7 = ReadMethodS7();
             _db = new DataBlockDto();
             _client = new S7Client();
-            //_cts = token;
             _timer = new Timer(ReadTag, null, 0, 2000);
 
             _tagSettings = CommonConfigurationManager.Configuration
