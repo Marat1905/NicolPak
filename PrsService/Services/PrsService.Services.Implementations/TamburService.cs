@@ -5,7 +5,6 @@ using PrsService.Domain.Entities;
 using PrsService.Services.Abstractions;
 using PrsService.Services.Contracts.TamburPrs;
 using PrsService.Services.Repositories.Abstractions;
-using System.Security.Principal;
 
 namespace PrsService.Services.Implementations
 {
@@ -41,6 +40,26 @@ namespace PrsService.Services.Implementations
                 
                 return _mapper.Map<CreatingTamburDto>(tambur);
             }
+        }
+
+        public async Task<TamburDto?> AddEndTimeTambur()
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
+
+                var tamburAll = await db.GetAll();
+                var tambur = tamburAll.OrderByDescending(x => x.CreateAt).ToList().FirstOrDefault();
+                if (tambur != null)
+                {
+                    if (tambur.End == null)
+                    {
+                        tambur.End = DateTime.Now;                    
+                        return _mapper.Map<TamburDto>(await db.Update(tambur));
+                    }      
+                }
+            }
+            return default;
         }
     }
 }

@@ -11,8 +11,8 @@ using PrsService.Infrastructure.EntityFramework.Context;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     [DbContext(typeof(PrsServiceContext))]
-    [Migration("20250220082153_initial")]
-    partial class initial
+    [Migration("20250305050747_UpdateTambur")]
+    partial class UpdateTambur
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,6 +102,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreateAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("End")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

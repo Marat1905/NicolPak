@@ -47,7 +47,7 @@ namespace PrsService.Services.Contracts.DataBlock
 
         public TKey TamburPrsId { get; set; }
 
-        public TamburPrsDto TamburPrs { get; set; }
+        public TamburDto TamburPrs { get; set; }
 
         public  List<RollDbDto> Rolls { get; set; }
 

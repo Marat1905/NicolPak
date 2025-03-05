@@ -8,6 +8,8 @@ namespace PrsService.Domain.Entities
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>
     public class TamburPrs<TKey>: TimedEntity<TKey>
     {
+        /// <summary>Время снятия тамбура </summary>
+        public DateTime? End {  get; set; }
         public virtual ICollection<Production>? Productions { get; set; }
     }
 

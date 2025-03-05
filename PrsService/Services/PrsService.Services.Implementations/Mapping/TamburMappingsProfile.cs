@@ -14,6 +14,7 @@ namespace PrsService.Services.Implementations.Mapping
                 .ForMember(account => account.Id, memberConfiguration => memberConfiguration.Ignore())
                 .ReverseMap();
 
+            CreateMap<TamburDto,TamburPrs>().ReverseMap();
         }
     }
 }

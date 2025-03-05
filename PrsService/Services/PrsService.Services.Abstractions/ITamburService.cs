@@ -10,5 +10,9 @@ namespace PrsService.Services.Abstractions
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Добавленная в репозиторий сущность</returns>
         Task<CreatingTamburDto> AddAsync(CreatingTamburDto item, CancellationToken Cancel = default);
+
+        /// <summary>Добавить последнему тамбуру что его скинули</summary>
+        /// <returns></returns>
+        Task<TamburDto?> AddEndTimeTambur();
     }
 }

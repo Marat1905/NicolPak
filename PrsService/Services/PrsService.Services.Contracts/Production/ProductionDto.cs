@@ -47,7 +47,7 @@ namespace PrsService.Services.Contracts.Production
 
         public  TKey TamburPrsId { get; set; }
 
-        public  TamburPrsDto TamburPrs { get; set; }
+        public  TamburDto TamburPrs { get; set; }
 
         public  virtual ICollection<RollDto> Rolls { get; set; }
 

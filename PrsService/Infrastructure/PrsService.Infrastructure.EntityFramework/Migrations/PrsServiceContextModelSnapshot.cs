@@ -101,6 +101,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Tamburs", (string)null);
