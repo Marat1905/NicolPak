@@ -129,14 +129,12 @@ namespace PrsService.Services.Implementations
         {
             await _tamburService.AddAsync(new CreatingTamburDto());
             _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
-            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
         }
 
         private async Task TamburEnd()
         {
             await _tamburService.AddEndTimeTambur();
             _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись конца тамбура в БД: ");
-            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись конца тамбура в БД: ");
         }
 
         private async Task RollChange()
@@ -144,7 +142,6 @@ namespace PrsService.Services.Implementations
             var prod = _mapper.Map<CreatingProductionDto>(_db);
             await _productionService.AddAsync(prod);
             _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
-            Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
         }
 
         /// <summary>Метод записи данных в класс</summary>
