@@ -22,12 +22,26 @@ namespace PrsService.WebAPI
 
 
             builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            //builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddHostedService<PlcHostedService>();
+            builder.Services.AddSwaggerGen();
+            //builder.Services.AddHostedService<PlcHostedService>();
+            builder.Services.AddHostedService<PLCBackgroundService>();
+
+
+
+
+
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseHttpsRedirection();
 

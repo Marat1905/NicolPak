@@ -1,31 +1,22 @@
 ﻿
+using BdmService.Services.Implementations.Configurations;
 using PrsService.Services.Abstractions;
-using PrsService.Services.Implementations.Configurations;
 using Sharp7.Extensions.Enums;
 using Sharp7.Extensions.Options;
 
 namespace PrsService.WebAPI.BackgroundServices
 {
-    public class PlcHostedService : IHostedService, IDisposable
+    public class PLCBackgroundService : BackgroundService
     {
         private readonly ILogger<PlcHostedService> _logger;
         private readonly IS7PlcService _s7Plc;
         private readonly ConnectPlcSetting _settings;
 
-        public PlcHostedService(ILogger<PlcHostedService> logger, IS7PlcService s7Plc)
+        public PLCBackgroundService(ILogger<PlcHostedService> logger, IS7PlcService s7Plc)
         {
             _logger = logger;
             _s7Plc = s7Plc;
             _settings = CommonConfigurationManager.Configuration.GetSection(ConnectPlcSetting.Position).Get<ConnectPlcSetting>();
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            return Task.Run(async () =>
-            {
-                _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Timed Hosted Service running. ");
-                await Connecting(cancellationToken);
-            }, cancellationToken);  
         }
 
         public async Task Connecting(CancellationToken cancellationToken)
@@ -43,14 +34,15 @@ namespace PrsService.WebAPI.BackgroundServices
             }
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _s7Plc.DisconnectAsync();
-            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Timed Hosted Service is stopping. ");
-        }
-
-        public void Dispose()
-        {
+            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Timed Hosted Service running. ");
+            await Connecting(stoppingToken);
+            //return Task.Run(async () =>
+            //{
+            //    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Timed Hosted Service running. ");
+            //    await Connecting(stoppingToken);
+            //}, stoppingToken);
         }
     }
 }
