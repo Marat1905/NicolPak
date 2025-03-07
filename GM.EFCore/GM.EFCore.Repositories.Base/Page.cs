@@ -4,7 +4,7 @@ namespace GM.EFCore.Repositories.Base
 {
     /// <summary> Реализация интерфейса постраничных данных </summary>
     /// <typeparam name="T">Тип данных</typeparam>
-    internal record Page<T>(IEnumerable<T> Items, int TotalCount, int PageNumber, int PageSize) : IPage<T>
+    public record Page<T>(IEnumerable<T> Items, int TotalCount, int PageNumber, int PageSize) : IPage<T>
     {
         /// <summary>Полное число страниц в выдаче</summary>
         public int TotalPagesCount => PageSize <= 0 ? TotalCount : (int)Math.Ceiling((double)TotalCount / PageSize);

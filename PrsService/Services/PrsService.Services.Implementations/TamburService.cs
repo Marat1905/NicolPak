@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using GM.EFCore.Interfaces.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PrsService.Domain.Entities;
 using PrsService.Services.Abstractions;
 using PrsService.Services.Contracts.TamburPrs;
 using PrsService.Services.Repositories.Abstractions;
+using GM.EFCore.Repositories.Base;
 
 namespace PrsService.Services.Implementations
 {
@@ -25,8 +27,8 @@ namespace PrsService.Services.Implementations
         {
             if (item is null)
             {
-                _logger.LogError($"Попытка передать null в аргумент 'item' при создании нового счета: {item}");
-                throw new ArgumentNullException(nameof(item), "Переданный объект account не может быть null.");
+                _logger.LogError($"Попытка передать null в аргумент 'item' при создании нового тамбура: {item}");
+                throw new ArgumentNullException(nameof(item), "Переданный объект CreatingTamburDto не может быть null.");
             }
 
             var newTambur = _mapper.Map<TamburPrs>(item);
@@ -60,6 +62,28 @@ namespace PrsService.Services.Implementations
                 }
             }
             return default;
+        }
+
+        public async Task<TamburDto?> GetByIdAsync(Guid id)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
+
+                var tambur = await db.GetById(id);
+                return tambur is null ? null : _mapper.Map<TamburDto>(tambur);
+            }
+        }
+
+        public async Task<IPage<TamburDto>> GetPageAsync(int PageNumber, int PageSize, CancellationToken Cancel = default)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
+
+                var tamburPage = await db.GetPage(PageNumber,PageSize,Cancel);
+                return tamburPage is null ? null : _mapper.Map<Page<TamburDto>>(tamburPage);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\GM.EFCore\GM.EFCore.Interfaces.Repositories\GM.EFCore.Interfaces.Repositories.csproj" />
     <ProjectReference Include="..\..\..\Lib\Sharp7.Extensions\Sharp7.Extensions.csproj" />
     <ProjectReference Include="..\PrsService.Services.Contracts\PrsService.Services.Contracts.csproj" />
   </ItemGroup>

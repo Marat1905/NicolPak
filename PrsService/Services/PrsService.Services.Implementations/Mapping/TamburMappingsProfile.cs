@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GM.EFCore.Repositories.Base;
 using PrsService.Domain.Entities;
 using PrsService.Services.Contracts.TamburPrs;
 
@@ -15,6 +16,7 @@ namespace PrsService.Services.Implementations.Mapping
                 .ReverseMap();
 
             CreateMap<TamburDto,TamburPrs>().ReverseMap();
+            CreateMap<Page<TamburDto>, Page<TamburPrs>>().ReverseMap();
         }
     }
 }

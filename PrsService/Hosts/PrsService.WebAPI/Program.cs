@@ -2,6 +2,7 @@ using PrsService.WebAPI.BackgroundServices;
 using PrsService.Infrastructure.EntityFramework;
 using PrsService.Repositories.Implementations;
 using PrsService.Services.Implementations.Extensions;
+using System.Reflection;
 
 namespace PrsService.WebAPI
 {
@@ -25,7 +26,15 @@ namespace PrsService.WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xml = $"{Assembly.GetAssembly(typeof(UserDto)).GetName().Name}.xml";
+                opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName), includeControllerXmlComments: true);
+                //opt.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xml));
+                opt.SupportNonNullableReferenceTypes();
+            });
+
             //builder.Services.AddHostedService<PlcHostedService>();
             builder.Services.AddHostedService<PLCBackgroundService>();
 

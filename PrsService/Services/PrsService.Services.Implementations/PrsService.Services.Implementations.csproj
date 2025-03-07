@@ -27,6 +27,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\GM.EFCore\GM.EFCore.Repositories.Base\GM.EFCore.Repositories.Base.csproj" />
     <ProjectReference Include="..\..\..\Lib\Sharp7\Sharp7.csproj" />
     <ProjectReference Include="..\PrsService.Services.Abstractions\PrsService.Services.Abstractions.csproj" />
     <ProjectReference Include="..\PrsService.Services.Contracts\PrsService.Services.Contracts.csproj" />
