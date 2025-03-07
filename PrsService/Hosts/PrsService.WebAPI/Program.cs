@@ -1,7 +1,9 @@
-using PrsService.WebAPI.BackgroundServices;
+using Microsoft.Extensions.Options;
 using PrsService.Infrastructure.EntityFramework;
 using PrsService.Repositories.Implementations;
 using PrsService.Services.Implementations.Extensions;
+using PrsService.WebAPI.BackgroundServices;
+using PrsService.WebAPI.SchemaFilters;
 using System.Reflection;
 
 namespace PrsService.WebAPI
@@ -17,17 +19,24 @@ namespace PrsService.WebAPI
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services
-                .AddS7PlcServices()
+                 .AddS7PlcServices()
                  .AddDatabase(builder.Configuration.GetSection("Database"))
-                 .AddRepositories();
+                 .AddRepositories()
+                 .AddControllers()
+                 .AddJsonOptions(options =>
+                 {
+                    // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 });
+            ;
 
 
-            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGen(opt =>
             {
+                opt.SchemaFilter<EnumSchemaFilter>();
+                //opt.MapType<DateOnly>(() => new OpenApiSchema { Type = "string", Format = "date" });
                 var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //var xml = $"{Assembly.GetAssembly(typeof(UserDto)).GetName().Name}.xml";
                 opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName), includeControllerXmlComments: true);

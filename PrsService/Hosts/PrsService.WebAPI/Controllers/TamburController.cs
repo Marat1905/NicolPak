@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrsService.Services.Abstractions;
 using PrsService.Services.Contracts.TamburPrs;
+using PrsService.WebAPI.Enums;
+using PrsService.WebAPI.Models;
 using PrsService.WebAPI.Models.Tambur;
+using System;
 
 namespace PrsService.WebAPI.Controllers
 {
@@ -53,7 +56,7 @@ namespace PrsService.WebAPI.Controllers
         [HttpGet("page/{PageNumber:int}/{PageSize:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public virtual async Task<ActionResult<IPage<TamburResponse>>> GetPage(int PageNumber, int PageSize)
+        public async Task<ActionResult<IPage<TamburResponse>>> GetPage(int PageNumber, int PageSize)
         {
             var result = await _service.GetPageAsync(PageNumber, PageSize);
             return result.Items.Any()
@@ -61,5 +64,41 @@ namespace PrsService.WebAPI.Controllers
                 : NotFound(result);
         }
 
+        /// <summary>Получить коллекцию тамбуров за смену</summary>
+        /// <param name="smena">Модель для получения смены</param>
+        /// <returns>Коллекция тамбуров</returns>
+        [HttpGet]
+        [Route("GetSmena")]
+        [ProducesResponseType<TamburResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSmena([FromQuery] SmenaReqest smena)
+        {
+            if (smena != null)
+            {
+                DateTimeStartEnd(smena, out DateTime start, out DateTime end);
+
+               var tamburPeriod= await _service.GetPeriod(start, end);
+                return Ok(_mapper.Map<IEnumerable<TamburResponse>>(tamburPeriod));
+            }
+            return BadRequest();
+
+        }
+
+        
+        private void DateTimeStartEnd(SmenaReqest smena, out DateTime start, out DateTime end)
+        {
+            if (smena.Shift == Smena.Day)
+            {
+                TimeOnly timeStart = new TimeOnly(08, 00, 00);
+                start = smena.Date.ToDateTime(timeStart);
+                end = start.AddHours(12);
+            }
+            else
+            {
+                TimeOnly timeStart = new TimeOnly(20, 00, 00);
+                start = smena.Date.ToDateTime(timeStart);
+                end = start.AddHours(12);
+            }
+        }
     }
 }

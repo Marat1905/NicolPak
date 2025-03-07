@@ -41,9 +41,9 @@ namespace GM.EFCore.Repositories.Base
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TTimedEntity>> GetAllInTimeInterval(DateTimeOffset StartTime, DateTimeOffset EndTime, CancellationToken Cancel = default)
+        public async Task<IEnumerable<TTimedEntity>?> GetAllInTimeInterval(DateTime StartTime, DateTime EndTime, CancellationToken Cancel = default)
         {
-            throw new NotImplementedException();
+            return await Items.Where(t=>t.CreateAt>=StartTime && t.CreateAt<=EndTime).ToListAsync().ConfigureAwait(false);
         }
 
         public Task<IEnumerable<TTimedEntity>> GetAllLessThenTime(DateTimeOffset ReferenceTime, CancellationToken Cancel = default)

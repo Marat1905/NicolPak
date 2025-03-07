@@ -27,5 +27,12 @@ namespace PrsService.Services.Abstractions
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Страница с тамбурами из репозитория</returns>
         Task<IPage<TamburDto>> GetPageAsync(int PageNumber, int PageSize, CancellationToken Cancel = default);
+
+        /// <summary>Получить коллекцию тамбуров за выбранный период</summary>
+        /// <param name="start">Начало периода</param>
+        /// <param name="end">Конец периода</param>
+        /// <param name="Cancel">Признак отмены асинхронной операции</param>
+        /// <returns>Коллекция тамбуров за выбранный период</returns>
+        Task<IEnumerable<TamburDto>?> GetPeriod(DateTime start, DateTime end, CancellationToken Cancel = default);
     }
 }

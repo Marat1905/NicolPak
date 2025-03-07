@@ -80,7 +80,7 @@ namespace GM.EFCore.Interfaces.Repositories
         /// <param name="EndTime">Время конца интервала поиска</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Перечисление всех сущностей, время которых попадает в указанный интервал</returns>
-        Task<IEnumerable<T>> GetAllInTimeInterval(DateTimeOffset StartTime, DateTimeOffset EndTime, CancellationToken Cancel = default);
+        Task<IEnumerable<T>?> GetAllInTimeInterval(DateTime StartTime, DateTime EndTime, CancellationToken Cancel = default);
 
         /// <summary>Получить страницу с сущностями, время которых попадает в указанный интервал</summary>
         /// <param name="StartTime">Время начала интервала поиска</param>

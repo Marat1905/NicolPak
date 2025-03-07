@@ -85,5 +85,16 @@ namespace PrsService.Services.Implementations
                 return tamburPage is null ? null : _mapper.Map<Page<TamburDto>>(tamburPage);
             }
         }
+
+        public async Task<IEnumerable<TamburDto>?> GetPeriod(DateTime start, DateTime end, CancellationToken Cancel = default)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
+
+                var tamburPeriod = await db.GetAllInTimeInterval(start, end, Cancel);
+                return tamburPeriod is null ? null : _mapper.Map<IEnumerable<TamburDto>>(tamburPeriod);
+            }
+        }
     }
 }
