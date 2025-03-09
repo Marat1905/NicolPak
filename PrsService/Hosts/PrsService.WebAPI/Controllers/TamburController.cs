@@ -6,11 +6,9 @@ using GM.EFCore.Repositories.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrsService.Services.Abstractions;
-using PrsService.Services.Contracts.TamburPrs;
 using PrsService.WebAPI.Enums;
 using PrsService.WebAPI.Models;
 using PrsService.WebAPI.Models.Tambur;
-using System;
 
 namespace PrsService.WebAPI.Controllers
 {
@@ -84,7 +82,26 @@ namespace PrsService.WebAPI.Controllers
 
         }
 
-        
+        /// <summary>Получить коллекцию тамбуров за период </summary>
+        /// <param name="Start" example="2025-03-05 08:20:00">Начальный диапазон</param>
+        /// <param name="End"  example="2025-03-18 20:00:00">Конечный диапазон</param>
+        /// <returns>Коллекция тамбуров</returns>
+        [HttpGet]
+        [Route("GetPeriod")]
+        [ProducesResponseType<TamburResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPeriod([FromQuery] DateTime Start, [FromQuery] DateTime End)
+        {
+            if (Start<End)
+            {
+                var tamburPeriod = await _service.GetPeriod(Start, End);
+                return Ok(_mapper.Map<IEnumerable<TamburResponse>>(tamburPeriod));
+            }
+            return BadRequest("Не правильно задан период");
+
+        }
+
+
         private void DateTimeStartEnd(SmenaReqest smena, out DateTime start, out DateTime end)
         {
             if (smena.Shift == Smena.Day)
