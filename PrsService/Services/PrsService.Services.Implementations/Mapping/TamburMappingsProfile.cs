@@ -12,11 +12,14 @@ namespace PrsService.Services.Implementations.Mapping
         public TamburMappingsProfile()
         {
             CreateMap<CreatingTamburDto, TamburPrs>()
-                .ForMember(account => account.Id, memberConfiguration => memberConfiguration.Ignore())
+                .ForMember(a => a.Id, memberConfiguration => memberConfiguration.Ignore())
                 .ReverseMap();
 
             CreateMap<TamburDto,TamburPrs>().ReverseMap();
             CreateMap<Page<TamburDto>, Page<TamburPrs>>().ReverseMap();
+
+            CreateMap<Func<CreatingTamburDto,bool> , Func<TamburPrs, bool>>()
+                ;
         }
     }
 }

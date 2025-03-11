@@ -11,7 +11,7 @@ namespace PrsService.WebAPI.Models.Tambur
         /// <summary>Время установки тамбура на ПРС</summary>
         public DateTime CreateAt { get; set; }
 
-        /// <summary>Время снятия тамбура с ПРСа</summary>
-        public DateTime End { get; set; }
+        /// <summary>Порядковый номер тамбура</summary>
+        public int TamburContPrs { get; set; }
     }
 }

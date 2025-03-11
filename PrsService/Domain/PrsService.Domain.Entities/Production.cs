@@ -36,6 +36,9 @@ namespace PrsService.Domain.Entities
         /// <summary>Диаметр втулки</summary>
         public int Core { get; set; }
 
+        /// <summary>Время намотки тамбура</summary>
+        public int Time { get; set; }
+
         public  TKey TamburPrsId {  get; set; }
 
         public  TamburPrs? TamburPrs { get; set; }

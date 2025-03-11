@@ -10,7 +10,7 @@ namespace PrsService.Services.Contracts.TamburPrs
         /// <summary>Создание тамбура</summary>
         public DateTime CreateAt { get; set; }
 
-        /// <summary>Конец перемотки</summary>
-        public DateTime End {  get; set; }
+        /// <summary>Порядковый номер тамбура</summary>
+        public int TamburContPrs { get; set; }
     }
 }

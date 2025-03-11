@@ -7,6 +7,7 @@ using PrsService.Services.Abstractions;
 using PrsService.Services.Contracts.TamburPrs;
 using PrsService.Services.Repositories.Abstractions;
 using GM.EFCore.Repositories.Base;
+using System.Threading.Channels;
 
 namespace PrsService.Services.Implementations
 {
@@ -94,6 +95,17 @@ namespace PrsService.Services.Implementations
 
                 var tamburPeriod = await db.GetAllInTimeInterval(start, end, Cancel);
                 return tamburPeriod is null ? null : _mapper.Map<IEnumerable<TamburDto>>(tamburPeriod);
+            }
+        }
+
+        public async Task<bool> ExistTambur (int countTambur, int limit = 30, CancellationToken Cancel = default)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ITamburRepository>();
+                var tamburAll = await db.GetAll();
+                return tamburAll.OrderByDescending(x => x.CreateAt).ToList().Take(limit).Any(x=>x.TamburContPrs==countTambur);
+
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using GM.EFCore.Entities.Base;
-using PrsService.Services.Contracts.Roll;
 using PrsService.Services.Contracts.TamburPrs;
 
 namespace PrsService.Services.Contracts.DataBlock
@@ -42,8 +41,11 @@ namespace PrsService.Services.Contracts.DataBlock
         /// <summary>Сохранить данные о рулонах</summary>
         public bool IsProductionSet { get; set; }
 
-        /// <summary>Установить тамбур</summary>
-        public bool IsTamburSet { get; set; }
+        /// <summary>Счетчик тамбура</summary>
+        public int TamburContPrs { get; set; }
+
+        /// <summary>Время намотки</summary>
+        public int Time { get; set; }
 
         public TKey TamburPrsId { get; set; }
 

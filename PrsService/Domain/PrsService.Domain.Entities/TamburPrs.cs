@@ -10,6 +10,9 @@ namespace PrsService.Domain.Entities
     {
         /// <summary>Время снятия тамбура </summary>
         public DateTime? End {  get; set; }
+
+        /// <summary>Порядковый номер тамбура тамбура</summary>
+        public int TamburContPrs { get; set; }
         public virtual ICollection<Production>? Productions { get; set; }
     }
 

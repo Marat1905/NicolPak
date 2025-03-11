@@ -60,6 +60,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<Guid>("TamburPrsId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Time")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TamburPrsId");
@@ -103,6 +106,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
 
                     b.Property<DateTime?>("End")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TamburContPrs")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

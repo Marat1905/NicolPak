@@ -11,8 +11,8 @@ using PrsService.Infrastructure.EntityFramework.Context;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     [DbContext(typeof(PrsServiceContext))]
-    [Migration("20250305050747_UpdateTambur")]
-    partial class UpdateTambur
+    [Migration("20250311085058_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     b.Property<Guid>("TamburPrsId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Time")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TamburPrsId");
@@ -106,6 +109,9 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
 
                     b.Property<DateTime?>("End")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TamburContPrs")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

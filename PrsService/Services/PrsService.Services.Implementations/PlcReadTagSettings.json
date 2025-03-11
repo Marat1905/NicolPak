@@ -88,27 +88,12 @@
         "Bit": 0
       },
       {
-        "ColumnName": "IsTamburSet",
-        "MethodRead": "GetBitAt",
-        "DataBlock": 500,
-        "StartByte": 128,
-        "Offset": 0,
-        "Bit": 0
-      },
-      {
         "ColumnName": "IsProductionSet",
         "MethodRead": "GetBitAt",
         "DataBlock": 500,
         "StartByte": 128,
         "Offset": 0,
         "Bit": 1
-      },
-      {
-        "ColumnName": "CountRoll",
-        "MethodRead": "GetIntAt",
-        "DataBlock": 500,
-        "StartByte": 130,
-        "Bit": 0
       },
       {
         "ColumnName": "RollWidth",
@@ -124,6 +109,22 @@
         "DataBlock": 500,
         "StartByte": 76,
         "Offset": 4,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Time",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 500,
+        "StartByte": 14,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "TamburContPrs",
+        "MethodRead": "GetDIntAt",
+        "DataBlock": 500,
+        "StartByte": 130,
+        "Offset": 0,
         "Bit": 0
       }
     ]

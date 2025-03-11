@@ -31,19 +31,21 @@ namespace PrsService.Services.Implementations
         private DataBlockDto _db;
 
         /// <summary>Снятие тамбура</summary>
-        private bool _isTamburChange;
+        private int _tamburChangeCount;
 
         /// <summary>Снятие тамбура</summary>
-        public bool IsTamburChange
+        public int TamburChangeCount
         {
-            get { return _isTamburChange; }
+            get { return _tamburChangeCount; }
             set 
             {
-                if (_isTamburChange == false && value == true)
-                    Task.Run(()=>TamburChange().Wait());
-                else if (_isTamburChange == true && value == false)
-                    Task.Run(() => TamburEnd().Wait());
-                _isTamburChange = value;
+                if(_tamburChangeCount!= value)
+                {
+                    if (value != 0)
+                        Task.Run(() => TamburChange().Wait());
+                }
+                _tamburChangeCount = value;
+               
             }
         }
 
@@ -95,7 +97,7 @@ namespace PrsService.Services.Implementations
                     _connectionStates = ConnectionStates.Online;
                 else
                 {
-                    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
+                    _logger.LogError(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
                     _connectionStates = ConnectionStates.Offline;
                 }
             }
@@ -121,27 +123,34 @@ namespace PrsService.Services.Implementations
         {
             ReadDB(_db, _tagSettings, ref _connectionStates);
             //var prod = _mapper.Map<CreatingProductionDto>(_db);
-            IsTamburChange =_db.IsTamburSet;
+            TamburChangeCount = _db.TamburContPrs;
             IsRollChange=_db.IsProductionSet;
         }
 
         private async Task TamburChange()
         {
-            await _tamburService.AddAsync(new CreatingTamburDto());
-            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись тамбура в БД: ");
+           
+            if (!await _tamburService.ExistTambur(_db.TamburContPrs))
+            {
+                var tamburNew = _mapper.Map<CreatingTamburDto>(_db);
+                await _tamburService.AddAsync(tamburNew);
+                _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись тамбура в БД: ");
+            }
+            else
+                _logger.LogWarning($"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} \t Тамбур с порядковым номером {_db.TamburContPrs} уже существует  в БД: ");
         }
 
         private async Task TamburEnd()
         {
             await _tamburService.AddEndTimeTambur();
-            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись конца тамбура в БД: ");
+            _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись конца тамбура в БД: ");
         }
 
         private async Task RollChange()
         {
             var prod = _mapper.Map<CreatingProductionDto>(_db);
             await _productionService.AddAsync(prod);
-            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Запись продукта в БД: ");
+            _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись продукта в БД: ");
         }
 
         /// <summary>Метод записи данных в класс</summary>
@@ -157,18 +166,18 @@ namespace PrsService.Services.Implementations
                 foreach (var data in tagSettings)
                 {
                     //Ищем максимальный стартовый байт и прибавляем к нему  байта
-                    var MaxStartByte = data.Value.Max(x => x.Value.StartByte+2);
+                    var MaxStartByte = data.Value.Max(x => x.Value.StartByte+4);
                    //TODO сделать расчет
                     // создаем буфер
                     byte[] bufer_Recv = new byte[MaxStartByte];
                     // считываем данные с контроллера из ДБ по которой сгруппирован словарь
                     Stopwatch sw = Stopwatch.StartNew();
                     sw.Start();                 
-                    var result = _client.DBRead(data.Key, 0, bufer_Recv.Length - 1, bufer_Recv);
+                    var result = _client.DBRead(data.Key, 0, bufer_Recv.Length, bufer_Recv);
 
                     if (result != 0)
                     {
-                        _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
+                        _logger.LogError(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Connection error: " + _client.ErrorText(result));
                         State = ConnectionStates.ErrorRead;
                     }
                     else

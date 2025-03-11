@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PrsService.Infrastructure.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateTambur : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,8 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    End = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    End = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    TamburContPrs = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,6 +41,7 @@ namespace PrsService.Infrastructure.EntityFramework.Migrations
                     SetDiameter = table.Column<double>(type: "REAL", nullable: false),
                     FactDiameter = table.Column<double>(type: "REAL", nullable: false),
                     Core = table.Column<int>(type: "INTEGER", nullable: false),
+                    Time = table.Column<int>(type: "INTEGER", nullable: false),
                     TamburPrsId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

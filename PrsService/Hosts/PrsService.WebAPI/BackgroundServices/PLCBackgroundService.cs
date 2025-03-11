@@ -28,7 +28,7 @@ namespace PrsService.WebAPI.BackgroundServices
                     _s7Plc.Disconnect();
                     Thread.Sleep(5000);
                     _s7Plc.Connect(_settings.IpAddress, _settings.Rack, _settings.Slot);
-                    _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Подключение............");
+                    _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Подключение............");
                 }
                 await Task.Delay(5000);
             }
@@ -36,7 +36,7 @@ namespace PrsService.WebAPI.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(DateTime.Now.ToString("HH:mm:ss") + "\t Timed Hosted Service running. ");
+            _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Timed Hosted Service running. ");
             await Connecting(stoppingToken);
             //return Task.Run(async () =>
             //{

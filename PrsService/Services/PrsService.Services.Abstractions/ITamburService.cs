@@ -34,5 +34,13 @@ namespace PrsService.Services.Abstractions
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Коллекция тамбуров за выбранный период</returns>
         Task<IEnumerable<TamburDto>?> GetPeriod(DateTime start, DateTime end, CancellationToken Cancel = default);
+
+
+        /// <summary>Проверка есть ли тамбур с таким порядковым номером</summary>
+        /// <param name="countTambur">Порядковый номер тамбура</param>
+        /// <param name="limit">лимит выборки</param>
+        /// /// <param name="Cancel">Признак отмены асинхронной операции</param>
+        /// <returns> Истина если существует</returns>
+        Task<bool> ExistTambur(int countTambur, int limit =30, CancellationToken Cancel = default);
     }
 }

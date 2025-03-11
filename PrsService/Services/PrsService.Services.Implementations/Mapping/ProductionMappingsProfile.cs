@@ -2,6 +2,7 @@
 using PrsService.Domain.Entities;
 using PrsService.Services.Contracts.DataBlock;
 using PrsService.Services.Contracts.Production;
+using PrsService.Services.Contracts.TamburPrs;
 
 namespace PrsService.Services.Implementations.Mapping
 {
@@ -18,6 +19,10 @@ namespace PrsService.Services.Implementations.Mapping
             CreateMap<DataBlockDto, CreatingProductionDto>()
                  .ForMember(x => x.CreateAt,  memberConfiguration => memberConfiguration.Ignore())
                 ;
+
+            CreateMap<DataBlockDto, CreatingTamburDto>()
+                .ForMember(x => x.CreateAt, memberConfiguration => memberConfiguration.Ignore())
+               ;
 
         }
     }

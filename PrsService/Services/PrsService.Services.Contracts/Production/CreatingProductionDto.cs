@@ -36,6 +36,9 @@ namespace PrsService.Services.Contracts.Production
         /// <summary>Диаметр втулки</summary>
         public int Core { get; set; }
 
+        /// <summary>Время намотки Тамбура в минутах</summary>
+        public int Time { get; set; }
+
         /// <summary>Время создания продукта</summary>
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
