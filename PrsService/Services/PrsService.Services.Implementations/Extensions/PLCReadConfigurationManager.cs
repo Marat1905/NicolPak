@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace PrsService.Services.Implementations.Configurations
+namespace PrsService.Services.Implementations.Extensions
 {
-    public static class CommonConfigurationManager
+    public static class PLCReadConfigurationManager
     {
         public static readonly IConfigurationRoot Configuration;
 
-        static CommonConfigurationManager()
+        static PLCReadConfigurationManager()
         {
             Configuration = new ConfigurationBuilder().AddJsonFile("PlcReadTagSettings.json").Build();
         }

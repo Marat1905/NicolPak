@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PrsService.Services.Abstractions;
 using PrsService.Services.Contracts.DataBlock;
 using PrsService.Services.Contracts.Production;
 using PrsService.Services.Contracts.TamburPrs;
-using PrsService.Services.Implementations.Configurations;
 using Sharp7;
 using Sharp7.Extensions.Enums;
 using Sharp7.Extensions.Options;
@@ -20,6 +18,7 @@ namespace PrsService.Services.Implementations
         private readonly ITamburService _tamburService;
         private readonly IProductionService _productionService;
         private readonly IMapper _mapper;
+        private readonly DataBlockDto _dataBlock;
         private readonly S7Client _client;
         private volatile object _locker = new object();
         private CancellationToken _cts;
@@ -27,8 +26,6 @@ namespace PrsService.Services.Implementations
         private readonly Dictionary<int, Dictionary<string, ReadTagSetting>> _tagSettings;
         private readonly Dictionary<string, MethodInfo> _methodsS7;
         private ConnectionStates _connectionStates;
-
-        private DataBlockDto _db;
 
         /// <summary>Снятие тамбура</summary>
         private int _tamburChangeCount;
@@ -66,23 +63,19 @@ namespace PrsService.Services.Implementations
 
         public ConnectionStates ConnectionState => _connectionStates;
 
-        public S7PlcService(ILogger<S7PlcService> logger,ITamburService tamburService, IProductionService productionService, IMapper mapper)
+        public S7PlcService(ILogger<S7PlcService> logger,ITamburService tamburService, 
+                            IProductionService productionService, IMapper mapper, 
+                            DataBlockDto dataBlock, Dictionary<int, Dictionary<string, ReadTagSetting>> tagSettings)
         {
             _logger = logger;
             _tamburService = tamburService;
             _productionService = productionService;
             _mapper = mapper;
+            _dataBlock = dataBlock;
             _methodsS7 = ReadMethodS7();
-            _db = new DataBlockDto();
             _client = new S7Client();
             _timer = new Timer(ReadTag, null, 0, 2000);
-
-            _tagSettings = CommonConfigurationManager.Configuration
-                .GetSection(ReadTagSetting.Position)
-                .Get<List<ReadTagSetting>>()
-                .ToDictionary(x => x.ColumnName, x => x)
-                .GroupBy(o => o.Value.DataBlock)
-                .ToDictionary(group => group.Key, group => group.ToDictionary());
+            _tagSettings = tagSettings;
         }
 
 
@@ -121,34 +114,28 @@ namespace PrsService.Services.Implementations
         int count = 0;
         private async void ReadTag(object? state)
         {
-            ReadDB(_db, _tagSettings, ref _connectionStates);
+            ReadDB(_dataBlock, _tagSettings, ref _connectionStates);
             //var prod = _mapper.Map<CreatingProductionDto>(_db);
-            TamburChangeCount = _db.TamburContPrs;
-            IsRollChange=_db.IsProductionSet;
+            TamburChangeCount = _dataBlock.TamburContPrs;
+            IsRollChange= _dataBlock.IsProductionSet;
         }
 
         private async Task TamburChange()
         {
            
-            if (!await _tamburService.ExistTambur(_db.TamburContPrs))
+            if (!await _tamburService.ExistTambur(_dataBlock.TamburContPrs))
             {
-                var tamburNew = _mapper.Map<CreatingTamburDto>(_db);
+                var tamburNew = _mapper.Map<CreatingTamburDto>(_dataBlock);
                 await _tamburService.AddAsync(tamburNew);
                 _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись тамбура в БД: ");
             }
             else
-                _logger.LogWarning($"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} \t Тамбур с порядковым номером {_db.TamburContPrs} уже существует  в БД: ");
-        }
-
-        private async Task TamburEnd()
-        {
-            await _tamburService.AddEndTimeTambur();
-            _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись конца тамбура в БД: ");
+                _logger.LogWarning($"{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} \t Тамбур с порядковым номером {_dataBlock.TamburContPrs} уже существует  в БД: ");
         }
 
         private async Task RollChange()
         {
-            var prod = _mapper.Map<CreatingProductionDto>(_db);
+            var prod = _mapper.Map<CreatingProductionDto>(_dataBlock);
             await _productionService.AddAsync(prod);
             _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Запись продукта в БД: ");
         }

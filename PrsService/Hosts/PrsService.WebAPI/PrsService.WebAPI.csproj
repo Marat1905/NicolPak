@@ -18,7 +18,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BdmService\Services\BdmService.Services.Implementations\BdmService.Services.Implementations.csproj" />
     <ProjectReference Include="..\..\Infrastructure\PrsService.Infrastructure.EntityFramework\PrsService.Infrastructure.EntityFramework.csproj" />
     <ProjectReference Include="..\..\Infrastructure\PrsService.Repositories.Implementations\PrsService.Repositories.Implementations.csproj" />
     <ProjectReference Include="..\..\Services\PrsService.Services.Abstractions\PrsService.Services.Abstractions.csproj" />

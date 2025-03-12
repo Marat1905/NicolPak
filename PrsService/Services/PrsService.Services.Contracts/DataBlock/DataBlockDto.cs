@@ -3,6 +3,8 @@ using PrsService.Services.Contracts.TamburPrs;
 
 namespace PrsService.Services.Contracts.DataBlock
 {
+    /// <summary>Модель для чтения данных с контроллера</summary>
+    /// <typeparam name="TKey">Тип ключа</typeparam>
     public class DataBlockDto<TKey> : TimedEntity<TKey>
     {
         /// <summary>Тип продукта</summary>
@@ -59,5 +61,6 @@ namespace PrsService.Services.Contracts.DataBlock
         }
     }
 
+    /// <summary><inheritdoc/> </summary>
     public class DataBlockDto : DataBlockDto<Guid> { }
 }

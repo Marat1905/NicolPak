@@ -1,9 +1,9 @@
 ﻿using GM.EFCore.Interfaces.Repositories;
 using PrsService.Services.Contracts.TamburPrs;
-using System.Data;
 
 namespace PrsService.Services.Abstractions
 {
+    /// <summary>Сервис для работы с тамбурами</summary>
     public interface ITamburService
     {
         /// <summary>Добавление Тамбура</summary>

@@ -4,6 +4,7 @@ using PrsService.Repositories.Implementations;
 using PrsService.Services.Implementations.Extensions;
 using PrsService.WebAPI.BackgroundServices;
 using PrsService.WebAPI.SchemaFilters;
+using Sharp7.Extensions.Options;
 using System.Reflection;
 
 namespace PrsService.WebAPI
@@ -18,7 +19,10 @@ namespace PrsService.WebAPI
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            var ConnectSettingPlc = PLCReadConfigurationManager.Configuration.GetSection(ConnectPlcSetting.Position).Get<ConnectPlcSetting>();
+
             builder.Services
+                 .AddSingleton(ConnectSettingPlc)
                  .AddS7PlcServices()
                  .AddDatabase(builder.Configuration.GetSection("Database"))
                  .AddRepositories()

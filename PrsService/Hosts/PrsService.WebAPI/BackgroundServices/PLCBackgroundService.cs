@@ -1,6 +1,4 @@
-﻿
-using BdmService.Services.Implementations.Configurations;
-using PrsService.Services.Abstractions;
+﻿using PrsService.Services.Abstractions;
 using Sharp7.Extensions.Enums;
 using Sharp7.Extensions.Options;
 
@@ -8,15 +6,15 @@ namespace PrsService.WebAPI.BackgroundServices
 {
     public class PLCBackgroundService : BackgroundService
     {
-        private readonly ILogger<PlcHostedService> _logger;
+        private readonly ILogger<PLCBackgroundService> _logger;
         private readonly IS7PlcService _s7Plc;
-        private readonly ConnectPlcSetting _settings;
+        private readonly ConnectPlcSetting _connectSettingPlc;
 
-        public PLCBackgroundService(ILogger<PlcHostedService> logger, IS7PlcService s7Plc)
+        public PLCBackgroundService(ILogger<PLCBackgroundService> logger, IS7PlcService s7Plc, ConnectPlcSetting connectSettingPlc)
         {
             _logger = logger;
             _s7Plc = s7Plc;
-            _settings = CommonConfigurationManager.Configuration.GetSection(ConnectPlcSetting.Position).Get<ConnectPlcSetting>();
+            _connectSettingPlc = connectSettingPlc;
         }
 
         public async Task Connecting(CancellationToken cancellationToken)
@@ -27,7 +25,7 @@ namespace PrsService.WebAPI.BackgroundServices
                 {
                     _s7Plc.Disconnect();
                     Thread.Sleep(5000);
-                    _s7Plc.Connect(_settings.IpAddress, _settings.Rack, _settings.Slot);
+                    _s7Plc.Connect(_connectSettingPlc.IpAddress, _connectSettingPlc.Rack, _connectSettingPlc.Slot);
                     _logger.LogInformation(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") + "\t Подключение............");
                 }
                 await Task.Delay(5000);
