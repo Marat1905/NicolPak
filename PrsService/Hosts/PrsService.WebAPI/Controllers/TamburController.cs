@@ -23,6 +23,10 @@ namespace PrsService.WebAPI.Controllers
         private readonly ITamburService _service;
         private readonly IMapper _mapper;
 
+        /// <summary><inheritdoc cref="TamburController"/></summary>
+        /// <param name="logger">Логгер</param>
+        /// <param name="service">Сервис для работы с тамбурами</param>
+        /// <param name="mapper">Автомаппер</param>
         public TamburController(ILogger<TamburController> logger,ITamburService service, IMapper mapper)
         {
             _logger = logger;
