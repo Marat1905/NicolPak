@@ -16,6 +16,5 @@
     <Folder Include="src\component\pages\" />
     <Folder Include="src\component\control\" />
     <Folder Include="src\hooks\" />
-    <Folder Include="src\utility\" />
   </ItemGroup>
 </Project>
