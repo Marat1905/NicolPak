@@ -1,0 +1,33 @@
+{
+  "PlcSettings": {
+    "ipAddress": "10.0.9.6",
+    "rack": 0,
+    "slot": 2
+  },
+
+  "ReadTags": {
+    "Tag": [
+      {
+        "ColumnName": "PrintSendStatus",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 691,
+        "StartByte": 364,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "PrintStatus",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 691,
+        "StartByte": 366,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Xay",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 690,
+        "StartByte": 10,
+        "Bit": 0
+      }
+    ]
+  }
+}

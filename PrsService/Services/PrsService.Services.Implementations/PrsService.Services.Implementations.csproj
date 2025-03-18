@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="PlcReadTagSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="PlcReadTagSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\GM.EFCore\GM.EFCore.Repositories.Base\GM.EFCore.Repositories.Base.csproj" />
+    <ProjectReference Include="..\..\..\Lib\Sharp7\Sharp7.csproj" />
+    <ProjectReference Include="..\PrsService.Services.Abstractions\PrsService.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\PrsService.Services.Contracts\PrsService.Services.Contracts.csproj" />
+    <ProjectReference Include="..\PrsService.Services.Repositories.Abstractions\PrsService.Services.Repositories.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

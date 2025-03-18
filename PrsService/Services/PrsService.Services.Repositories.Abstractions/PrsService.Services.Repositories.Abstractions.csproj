@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\GM.EFCore\GM.EFCore.Interfaces.Repositories\GM.EFCore.Interfaces.Repositories.csproj" />
+    <ProjectReference Include="..\..\Domain\PrsService.Domain.Entities\PrsService.Domain.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

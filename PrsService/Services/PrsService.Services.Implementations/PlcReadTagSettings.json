@@ -1,0 +1,132 @@
+{
+  "PlcSettings": {
+    "ipAddress": "10.0.9.11",
+    "rack": 0,
+    "slot": 2
+  },
+
+  "ReadTags": {
+    "Tag": [
+      {
+        "ColumnName": "Product",
+        "MethodRead": "GetStringAt",
+        "DataBlock": 500,
+        "StartByte": 18,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Shift",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 500,
+        "StartByte": 16,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "PaperWeight",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 24,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "AverageSpeed",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 28,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "AverageTension",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 32,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "SetLength",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 36,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "FactLength",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 40,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "SetDiameter",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 44,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "FactDiameter",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 48,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Core",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 92,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "IsProductionSet",
+        "MethodRead": "GetBitAt",
+        "DataBlock": 500,
+        "StartByte": 128,
+        "Offset": 0,
+        "Bit": 1
+      },
+      {
+        "ColumnName": "RollWidth",
+        "MethodRead": "GetRealAt",
+        "DataBlock": 500,
+        "StartByte": 54,
+        "Offset": 6,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "RollId",
+        "MethodRead": "GetDIntAt",
+        "DataBlock": 500,
+        "StartByte": 76,
+        "Offset": 4,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "Time",
+        "MethodRead": "GetIntAt",
+        "DataBlock": 500,
+        "StartByte": 14,
+        "Offset": 0,
+        "Bit": 0
+      },
+      {
+        "ColumnName": "TamburContPrs",
+        "MethodRead": "GetDIntAt",
+        "DataBlock": 500,
+        "StartByte": 130,
+        "Offset": 0,
+        "Bit": 0
+      }
+    ]
+  }
+}
