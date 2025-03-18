@@ -108,6 +108,21 @@ namespace PrsService.WebAPI.Controllers
         }
 
 
+        /// <summary>Получить коллекцию тамбуров за смену</summary>
+        /// <param name="smena">Модель для получения смены</param>
+        /// <returns>Коллекция тамбуров</returns>
+        [HttpGet]
+        [ProducesResponseType<TamburResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<TamburResponse>>> GetAll()
+        {
+            DateTime start = new DateTime(2025, 01, 01, 00, 00, 00);
+            DateTime end = new DateTime(2025, 12, 31, 23, 59, 59);
+            var tamburPeriod = await _service.GetInTimeInterval(start, end);
+            return Ok(_mapper.Map<IEnumerable<TamburResponse>>(tamburPeriod));
+
+        }
+
         private void DateTimeStartEnd(SmenaReqest smena, out DateTime start, out DateTime end)
         {
             if (smena.Shift == Smena.Day)

@@ -20,6 +20,7 @@ namespace PrsService.WebAPI
             var ConnectSettingPlc = PLCReadConfigurationManager.Configuration.GetSection(ConnectPlcSetting.Position).Get<ConnectPlcSetting>();
 
             builder.Services
+                 .AddCors()
                  .AddSingleton(ConnectSettingPlc)
                  .AddS7PlcServices()
                  .AddDatabase(builder.Configuration.GetSection("Database"))
@@ -52,6 +53,7 @@ namespace PrsService.WebAPI
 
             app.UseAuthorization();
 
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:62301"));
 
             app.MapControllers();
 

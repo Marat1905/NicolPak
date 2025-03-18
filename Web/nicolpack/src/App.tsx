@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 import { makeStyles, CssBaseline, createTheme, ThemeProvider } from '@material-ui/core';
+import { AllTambur } from '../src/component/pages';
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+
 
 
 const theme = createTheme({
@@ -44,7 +47,13 @@ function App() {
   return (
       <ThemeProvider theme={theme}>
           <div className={classes.appMain}>
-          <h1></h1>
+              <Router>
+                  <div>
+                      <Routes>
+                          <Route path="/" element={<AllTambur />} />
+                      </Routes>
+                  </div>
+              </Router>
           </div>
           <CssBaseline />
       </ThemeProvider>
