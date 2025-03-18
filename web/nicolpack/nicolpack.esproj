@@ -13,8 +13,6 @@
     <TypeScriptConfiguration Remove="src\component\hooks\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\component\pages\" />
     <Folder Include="src\component\control\" />
-    <Folder Include="src\hooks\" />
   </ItemGroup>
 </Project>
