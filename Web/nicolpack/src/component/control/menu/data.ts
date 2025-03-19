@@ -49,6 +49,12 @@ export const menu = [
             },
             {
                 isLink: true,
+                url: '/AllTamburs',
+                icon: HiOutlineCube,
+                label: 'AllTamburs',
+            },
+            {
+                isLink: true,
                 url: '/orders',
                 icon: HiOutlineClipboardDocumentList,
                 label: 'orders',

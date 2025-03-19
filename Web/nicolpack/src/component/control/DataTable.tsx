@@ -34,41 +34,41 @@ const DataTable: React.FC<DataTableProps> = ({
     headerName: 'Action',
     minWidth: 200,
     flex: 1,
-    //renderCell: (params) => {
-    //  return (
-    //    <div className="flex items-center">
-    //      {/* <div to={`/${props.slug}/${params.row.id}`}> */}
-    //      <button
-    //        onClick={() => {
-    //          navigate(`/${slug}/${params.row.id}`);
-    //        }}
-    //        className="btn btn-square btn-ghost"
-    //      >
-    //        <HiOutlineEye />
-    //      </button>
-    //      <button
-    //        onClick={() => {
-    //          toast('Jangan diedit!', {
-    //            icon: '😠',
-    //          });
-    //        }}
-    //        className="btn btn-square btn-ghost"
-    //      >
-    //        <HiOutlinePencilSquare />
-    //      </button>
-    //      <button
-    //        onClick={() => {
-    //          toast('Jangan dihapus!', {
-    //            icon: '😠',
-    //          });
-    //        }}
-    //        className="btn btn-square btn-ghost"
-    //      >
-    //        <HiOutlineTrash />
-    //      </button>
-    //    </div>
-    //  );
-    //},
+    renderCell: (params) => {
+      return (
+        <div className="flex items-center">
+          {/* <div to={`/${props.slug}/${params.row.id}`}> */}
+          <button
+            onClick={() => {
+              navigate(`/${slug}/${params.row.id}`);
+            }}
+            className="btn btn-square btn-ghost"
+          >
+            <HiOutlineEye />
+          </button>
+          <button
+            onClick={() => {
+              toast('Jangan diedit!', {
+                icon: '😠',
+              });
+            }}
+            className="btn btn-square btn-ghost"
+          >
+            <HiOutlinePencilSquare />
+          </button>
+          <button
+            onClick={() => {
+              toast('Jangan dihapus!', {
+                icon: '😠',
+              });
+            }}
+            className="btn btn-square btn-ghost"
+          >
+            <HiOutlineTrash />
+          </button>
+        </div>
+      );
+    },
   };
 
   if (includeActionColumn === true) {
