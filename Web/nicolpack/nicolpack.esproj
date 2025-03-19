@@ -12,7 +12,4 @@
     <None Remove="src\component\hooks\**" />
     <TypeScriptConfiguration Remove="src\component\hooks\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\component\control\" />
-  </ItemGroup>
 </Project>

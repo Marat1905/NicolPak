@@ -94,7 +94,7 @@ export const AllTambur = () => {
                                             <TableCell>{record.id}</TableCell>
                                             <TableCell>{record.tamburContPrs}</TableCell>
                                             <TableCell>{moment(new Date(record.createAt != undefined ? record.createAt! : ''))
-                                                .utc(true)
+                                                .utc(false)
                                                 .local()
                                                 .format("DD/MM/YYYY hh:mm:ss")}
                                             </TableCell>
