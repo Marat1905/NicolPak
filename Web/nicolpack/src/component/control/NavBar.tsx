@@ -95,7 +95,7 @@ const Navbar = () => {
                 {/* search */}
                 <button
                     onClick={() =>
-                        toast('Gaboleh cari!', {
+                        toast('Не могу найти!', {
                             icon: '😠',
                         })
                     }
@@ -119,7 +119,7 @@ const Navbar = () => {
                 {/* notification */}
                 <button
                     onClick={() =>
-                        toast('Gaada notif!', {
+                        toast('Нет уведомлений!', {
                             icon: '😠',
                         })
                     }

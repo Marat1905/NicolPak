@@ -8,7 +8,7 @@ const Footer = () => {
                 ООО "Завод Николь-Пак"
             </span>
             <div className="flex gap-1 items-center">
-                <span className="text-sm">Г.М.Ф Admin Dashboard</span>
+                <span className="text-sm">Г.М.Ф - 2025г.</span>
                 <DiReact className="text-2xl xl:text-xl 2xl:text-2xl text-primary animate-spin-slow" />
             </div>
         </div>
