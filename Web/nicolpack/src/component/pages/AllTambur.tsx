@@ -25,11 +25,11 @@ interface Column {
 }
 
 const columns: Column[] = [
-    { id: 'id', label: 'id', minWidth: 100 },
-    { id: 'TamburContPrs', label: 'TamburContPrs', minWidth: 100 },
+    { id: 'id', label: 'Идентификатор', minWidth: 100 },
+    { id: 'TamburContPrs', label: 'Идентификатор по ПРС', minWidth: 100 },
     {
         id: 'CreateAt',
-        label: 'CreateAt',
+        label: 'Время создания',
         minWidth: 100
     },
 
@@ -70,7 +70,7 @@ export const AllTambur = () => {
     return (
         <>
             <Container>
-                <h1>Tambur Information</h1>
+                <h1>Информация по тамбурам</h1>
                 <Paper className={classes.root}>
                     <TableContainer className={classes.container}>
                         <Table stickyHeader aria-label="sticky table">
@@ -88,9 +88,9 @@ export const AllTambur = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record: ITambur) => {
+                                {tamburs.map((record: ITambur) => {
                                     return (
-                                        <TableRow key={record.id }>
+                                        <TableRow key={record.id}>
                                             <TableCell>{record.id}</TableCell>
                                             <TableCell>{record.tamburContPrs}</TableCell>
                                             <TableCell>{moment(new Date(record.createAt != undefined ? record.createAt! : ''))
@@ -101,18 +101,31 @@ export const AllTambur = () => {
                                         </TableRow>
                                     );
                                 })}
+                                {/*{filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record: ITambur) => {*/}
+                                {/*    return (*/}
+                                {/*        <TableRow key={record.id }>*/}
+                                {/*            <TableCell>{record.id}</TableCell>*/}
+                                {/*            <TableCell>{record.tamburContPrs}</TableCell>*/}
+                                {/*            <TableCell>{moment(new Date(record.createAt != undefined ? record.createAt! : ''))*/}
+                                {/*                .utc(true)*/}
+                                {/*                .local()*/}
+                                {/*                .format("DD/MM/YYYY hh:mm:ss")}*/}
+                                {/*            </TableCell>*/}
+                                {/*        </TableRow>*/}
+                                {/*    );*/}
+                                {/*})}*/}
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={tamburs.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+                    {/*<TablePagination*/}
+                    {/*    rowsPerPageOptions={[10, 25, 100]}*/}
+                    {/*    component="div"*/}
+                    {/*    count={tamburs.length}*/}
+                    {/*    rowsPerPage={rowsPerPage}*/}
+                    {/*    page={page}*/}
+                    {/*    onPageChange={handleChangePage}*/}
+                    {/*    onRowsPerPageChange={handleChangeRowsPerPage}*/}
+                    {/*/>*/}
                 </Paper>
             </Container>
         </>
