@@ -6,8 +6,7 @@ import {
     ScrollRestoration,
 } from 'react-router-dom';
 
-import { AllTambur } from '../src/component/pages';
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { Tamburs } from '../src/component/pages';
 import ToasterProvider from './component/control/ToasterProvider'
 import Footer from './component/control/Footer'
 import Navbar from './component/control/NavBar'
@@ -42,12 +41,12 @@ function App() {
         {
             path: '/',
             element: <Layout />,
-            //children: [
-            //    {
-            //        path: '/',
-            //        element: <Home />,
-            //    },
-            //],
+            children: [
+                {
+                    path: '/tamburs',
+                    element: <Tamburs />,
+                },
+            ],
             //errorElement: <Error />,
         },
         {

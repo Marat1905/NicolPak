@@ -43,9 +43,9 @@ export const menu = [
             },
             {
                 isLink: true,
-                url: '/products',
+                url: '/tamburs',
                 icon: HiOutlineCube,
-                label: 'products',
+                label: 'tambur',
             },
             {
                 isLink: true,
