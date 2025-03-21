@@ -45,7 +45,7 @@ export default function AllTamburs() {
                                 Тамбура
                             </h2>
                             {tamburs && tamburs.length > 0 && (
-                                <span className="text-neutral dark:text-neutral-content font-medium text-base">
+                                <span className="text-neutral dark:text-neutral-200 font-medium text-base">
                                     Найдено {tamburs.length} тамбуров
                                 </span>
                             )}

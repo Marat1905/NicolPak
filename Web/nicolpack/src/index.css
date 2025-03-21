@@ -835,3 +835,40 @@ span.flatpickr-weekday,
 .simplebar-scrollbar.simplebar-visible:before {
     @apply opacity-100;
 }
+
+.dataGrid span, .dataGrid svg, .dataGrid button {
+    @apply dark:text-gray-400;
+}
+
+.dataGrid .MuiDataGrid-columnHeaders {
+    @apply dark:text-gray-400 ;
+}
+
+.dataGrid .MuiDataGrid-virtualScroller {
+    @apply dark:text-gray-400 ;
+}
+
+.dataGrid .MuiDataGrid-row .MuiDataGrid-cell .MuiSvgIcon-root {
+    @apply dark:text-gray-400;
+}
+
+.dataGrid .MuiDataGrid-footerContainer {
+    @apply dark:text-gray-400;
+}
+
+    .dataGrid .MuiDataGrid-footerContainer p {
+        @apply dark:text-gray-400 ;
+    }
+
+.dataGrid .MuiDataGrid-toolbarContainer {
+    @apply flex-row-reverse;
+}
+
+    .dataGrid .MuiDataGrid-toolbarContainer input {
+        @apply  dark:text-gray-400;
+    }
+
+    .dataGrid .MuiDataGrid-toolbarContainer ::placeholder {
+        @apply dark:text-gray-400;
+    }
+
