@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import { DiReact } from 'react-icons/di';
 
 // Assume these icons are imported from an icon library
 import {
@@ -28,13 +29,18 @@ type NavItem = {
 const navItems: NavItem[] = [
     {
         icon: <GridIcon />,
-        name: "Dashboard",
-        subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+        name: "Главная",
+        subItems: [{ name: "Работа БДМ", path: "/", pro: false }],
     },
     {
         icon: <CalenderIcon />,
-        name: "Calendar",
-        path: "/calendar",
+        name: "ПРС",
+        path: "/Tamburs",
+        subItems: [
+            { name: "Все тамбура", path: "/Tamburs", pro: false },
+            { name: "Продукция", path: "/", pro: false },
+        ],
+
     },
     {
         icon: <UserCircleIcon />,
@@ -288,35 +294,17 @@ const AppSidebar: React.FC = () => {
             onMouseEnter={() => !isExpanded && setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div
-                className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-                    }`}
-            >
-                <Link to="/">
+            <div className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"}`}>
+                <Link to="/" className="flex items-center gap-1 xl:gap-2">
                     {isExpanded || isHovered || isMobileOpen ? (
                         <>
-                            <img
-                                className="dark:hidden"
-                                src="/images/logo/logo.svg"
-                                alt="Logo"
-                                width={150}
-                                height={40}
-                            />
-                            <img
-                                className="hidden dark:block"
-                                src="/images/logo/logo-dark.svg"
-                                alt="Logo"
-                                width={150}
-                                height={40}
-                            />
+                            <DiReact className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-6xl text-primary animate-spin-slow" />
+                            <span className="text-[16px] leading-[1.2] sm:text-lg xl:text-xl 2xl:text-2xl font-semibold text-base-content dark:text-neutral-200">
+                                ООО "Завод Николь-Пак"
+                            </span>
                         </>
                     ) : (
-                        <img
-                            src="/images/logo/logo-icon.svg"
-                            alt="Logo"
-                            width={32}
-                            height={32}
-                        />
+                            <DiReact className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-6xl text-primary animate-spin-slow" />
                     )}
                 </Link>
             </div>

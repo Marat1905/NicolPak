@@ -27,7 +27,7 @@ const DataTable: React.FC<DataTableProps> = ({
   slug,
   includeActionColumn,
 }) => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const actionColumn: GridColDef = {
     field: 'action',
@@ -38,14 +38,14 @@ const DataTable: React.FC<DataTableProps> = ({
       return (
         <div className="flex items-center">
           {/* <div to={`/${props.slug}/${params.row.id}`}> */}
-          <button
-            onClick={() => {
-              navigate(`/${slug}/${params.row.id}`);
-            }}
-            className="btn btn-square btn-ghost"
-          >
-            <HiOutlineEye />
-          </button>
+          {/*<button*/}
+          {/*  onClick={() => {*/}
+          {/*    navigate(`/${slug}/${params.row.id}`);*/}
+          {/*  }}*/}
+          {/*  className="btn btn-square btn-ghost"*/}
+          {/*>*/}
+          {/*  <HiOutlineEye />*/}
+          {/*</button>*/}
           <button
             onClick={() => {
               toast('Jangan diedit!', {
@@ -105,7 +105,7 @@ const DataTable: React.FC<DataTableProps> = ({
   } else {
     return (
         <div className="w-full bg-base-100 text-base-content"
-        style={{ width: '98%' }}        >
+           >
         <DataGrid
           className="dataGrid p-0 xl:p-3 w-full bg-base-100 text-white"
           rows={rows}
