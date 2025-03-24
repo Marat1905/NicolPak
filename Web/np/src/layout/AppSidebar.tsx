@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
         name: "Энергоучет",
         path: "/calendar",
         subItems: [
-            { name: "Вода", path: "/"},
+            { name: "Вода", path: "/water"},
             { name: "Котлы", path: "/analytics"},
             { name: "Пар", path: "/marketing"},
             { name: "Отопление", path: "/crm"},
@@ -59,7 +59,7 @@ const navItems: NavItem[] = [
         icon: <UserCircleIcon />,
         name: "АСКУЭ",
         subItems: [
-            { name: "Мощность", path: "/" },
+            { name: "Мощность", path: "/wat" },
             { name: "Энергия", path: "/analytics" },
         ],
     },
