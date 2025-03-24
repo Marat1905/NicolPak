@@ -104,7 +104,15 @@ const othersItems: NavItem[] = [
             { name: "Выпущенная продукция", path: "/bar-chart", pro: true },
             { name: "Затраты энергоресурсов", path: "/pie-chart", pro: true },
         ],
-    }
+    },
+    {
+        name: "ПРС",
+        icon: <BoxCubeIcon />,
+        subItems: [
+            { name: "Тамбура", path: "/AllTamburs" },
+            { name: "Выпущенная продукция", path: "/AllRolls" },
+        ],
+    },
 ];
 
 const supportItems: NavItem[] = [
