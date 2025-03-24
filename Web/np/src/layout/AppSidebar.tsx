@@ -21,11 +21,13 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 
+type SubItem = { name: string; path: string; pro?: boolean; new?: boolean, subChildren?: SubItem[] }
+
 type NavItem = {
     name: string;
     icon: React.ReactNode;
     path?: string;
-    subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+    subItems?: SubItem[];
 };
 
 const navItems: NavItem[] = [
@@ -33,11 +35,11 @@ const navItems: NavItem[] = [
         icon: <GridIcon />,
         name: "Домашняя",
         subItems: [
-            { name: "Главная страница", path: "/", pro: false },
-            { name: "Простои по службам", path: "/analytics", pro: false },
-            { name: "Анализ работы смен", path: "/marketing", pro: false },
-            { name: "График работы сменного персонала", path: "/crm", pro: false },
-            { name: "Дни рождения сотрудников", path: "/stocks", new: false, pro: false },
+            { name: "Главная страница", path: "/"},
+            { name: "Простои по службам", path: "/analytics" },
+            { name: "Анализ работы смен", path: "/marketing" },
+            { name: "График работы сменного персонала", path: "/crm" },
+            { name: "Дни рождения сотрудников", path: "/stocks" },
         ],
     },
     {
@@ -45,112 +47,64 @@ const navItems: NavItem[] = [
         name: "Энергоучет",
         path: "/calendar",
         subItems: [
-            { name: "Главная страница", path: "/", pro: false },
-            { name: "Простои по службам", path: "/analytics", pro: false },
-            { name: "Анализ работы смен", path: "/marketing", pro: false },
-            { name: "График работы сменного персонала", path: "/crm", pro: false },
-            { name: "Дни рождения сотрудников", path: "/stocks", new: false, pro: false },
+            { name: "Вода", path: "/"},
+            { name: "Котлы", path: "/analytics"},
+            { name: "Пар", path: "/marketing"},
+            { name: "Отопление", path: "/crm"},
+            { name: "Очистные сооружения", path: "/stocks" },
+            { name: "Отчеты", path: "/stocks" },
         ],
     },
     {
         icon: <UserCircleIcon />,
-        name: "User Profile",
-        path: "/profile",
+        name: "АСКУЭ",
+        subItems: [
+            { name: "Мощность", path: "/" },
+            { name: "Энергия", path: "/analytics" },
+        ],
     },
     {
-        name: "Task",
+        name: "Журналы",
         icon: <TaskIcon />,
         subItems: [
-            { name: "List", path: "/task-list", pro: true },
-            { name: "Kanban", path: "/task-kanban", pro: true },
+            { name: "Журнал технологов", path: "/task-list"},
+            { name: "Журнал РПО", path: "/task-kanban"},
+            { name: "Журнал лаборатория", path: "/task-kanban" },
         ],
     },
     {
-        name: "Forms",
+        name: "Отчеты",
         icon: <ListIcon />,
         subItems: [
-            { name: "Form Elements", path: "/form-elements", pro: false },
-            { name: "Form Layout", path: "/form-layout", pro: true },
+            { name: "Отчеты БДМ", path: "/form-elements"},
+            { name: "Отчеты котельная", path: "/form-layout"},
+            { name: "Отчеты ОС", path: "/form-layout" },
+            { name: "Отчеты по электроэнергии", path: "/form-layout"},
         ],
     },
     {
-        name: "Tables",
+        name: "Работы по службам",
         icon: <TableIcon />,
         subItems: [
-            { name: "Basic Tables", path: "/basic-tables", pro: false },
-            { name: "Data Tables", path: "/data-tables", pro: true },
+            { name: "Электрослужба", path: "/basic-tables" },
+            { name: "Мехслужба", path: "/data-tables" },
+            { name: "Энергослужба", path: "/data-tables" },
+            { name: "служба ОС", path: "/data-tables" },
         ],
     },
-    {
-        name: "Pages",
-        icon: <PageIcon />,
-        subItems: [
-            { name: "File Manager", path: "/file-manager", pro: true },
-            { name: "Pricing Tables", path: "/pricing-tables", pro: true },
-            { name: "Faqs", path: "/faq", pro: true },
-            { name: "Blank Page", path: "/blank", pro: false },
-            { name: "404 Error", path: "/error-404", pro: false },
-            { name: "500 Error", path: "/error-500", pro: true },
-            { name: "503 Error", path: "/error-503", pro: true },
-            { name: "Coming Soon", path: "/coming-soon", pro: true },
-            { name: "Maintenance", path: "/maintenance", pro: true },
-            { name: "Success", path: "/success", pro: true },
-        ],
-    },
+    
 ];
 
 const othersItems: NavItem[] = [
     {
         icon: <PieChartIcon />,
-        name: "Charts",
+        name: "Производство",
         subItems: [
-            { name: "Line Chart", path: "/line-chart", pro: true },
-            { name: "Bar Chart", path: "/bar-chart", pro: true },
-            { name: "Pie Chart", path: "/pie-chart", pro: true },
+            { name: "План производства", path: "/line-chart", pro: true },
+            { name: "Выпущенная продукция", path: "/bar-chart", pro: true },
+            { name: "Затраты энергоресурсов", path: "/pie-chart", pro: true },
         ],
-    },
-    {
-        icon: <BoxCubeIcon />,
-        name: "UI Elements",
-        subItems: [
-            { name: "Alerts", path: "/alerts", pro: false },
-            { name: "Avatar", path: "/avatars", pro: false },
-            { name: "Badge", path: "/badge", pro: false },
-            { name: "Breadcrumb", path: "/breadcrumb", pro: true },
-            { name: "Buttons", path: "/buttons", pro: false },
-            { name: "Buttons Group", path: "/buttons-group", pro: true },
-            { name: "Cards", path: "/cards", pro: true },
-            { name: "Carousel", path: "/carousel", pro: true },
-            { name: "Dropdowns", path: "/dropdowns", pro: true },
-            { name: "Images", path: "/images", pro: false },
-            { name: "Links", path: "/links", pro: true },
-            { name: "List", path: "/list", pro: true },
-            { name: "Modals", path: "/modals", pro: true },
-            { name: "Notification", path: "/notifications", pro: true },
-            { name: "Pagination", path: "/pagination", pro: true },
-            { name: "Popovers", path: "/popovers", pro: true },
-            { name: "Progressbar", path: "/progress-bar", pro: true },
-            { name: "Ribbons", path: "/ribbons", pro: true },
-            { name: "Spinners", path: "/spinners", pro: true },
-            { name: "Tabs", path: "/tabs", pro: true },
-            { name: "Tooltips", path: "/tooltips", pro: true },
-            { name: "Videos", path: "/videos", pro: false },
-        ],
-    },
-    {
-        icon: <PlugInIcon />,
-        name: "Authentication",
-        subItems: [
-            { name: "Sign In", path: "/signin", pro: false },
-            { name: "Sign Up", path: "/signup", pro: false },
-            { name: "Reset Password", path: "/reset-password", pro: true },
-            {
-                name: "Two Step Verification",
-                path: "/two-step-verification",
-                pro: true,
-            },
-        ],
-    },
+    }
 ];
 
 const supportItems: NavItem[] = [
@@ -158,20 +112,7 @@ const supportItems: NavItem[] = [
         icon: <ChatIcon />,
         name: "Chat",
         path: "/chat",
-    },
-    {
-        icon: <MailIcon />,
-        name: "Email",
-        subItems: [
-            { name: "Inbox", path: "/inbox" },
-            { name: "Details", path: "/inbox-details" },
-        ],
-    },
-    {
-        icon: <DocsIcon />,
-        name: "Invoice",
-        path: "/invoice",
-    },
+    }
 ];
 
 const AppSidebar: React.FC = () => {
@@ -440,7 +381,7 @@ const AppSidebar: React.FC = () => {
                                     }`}
                             >
                                 {isExpanded || isHovered || isMobileOpen ? (
-                                    "Menu"
+                                    "Главное"
                                 ) : (
                                     <HorizontaLDots className="size-6" />
                                 )}
@@ -455,7 +396,7 @@ const AppSidebar: React.FC = () => {
                                     }`}
                             >
                                 {isExpanded || isHovered || isMobileOpen ? (
-                                    "Support"
+                                    "Поддержка"
                                 ) : (
                                     <HorizontaLDots />
                                 )}
@@ -470,7 +411,7 @@ const AppSidebar: React.FC = () => {
                                     }`}
                             >
                                 {isExpanded || isHovered || isMobileOpen ? (
-                                    "Others"
+                                    "Отчеты по выпускаемой продукции"
                                 ) : (
                                     <HorizontaLDots />
                                 )}
