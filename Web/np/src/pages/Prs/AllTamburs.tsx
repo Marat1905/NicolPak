@@ -112,6 +112,15 @@ export default function DataTables() {
             date: "12 Dec, 2027",
             salary: "$70,000",
         },
+        {
+            id: 11,
+            name: "Mia Garcia1",
+            position: "Content Strategist1",
+            location: "Denver1",
+            age: 271,
+            date: "12 Dec, 2028",
+            salary: "$70,0001",
+        },
     ];
 
     const columns: Array<IColumn<Data>> = [
@@ -157,10 +166,10 @@ export default function DataTables() {
 
                 <ComponentCard title="Все тамбура">
                     <>
-                        {/*<div>*/}
-                        {/*    <Table data={tableRowData} columns={columns} />*/}
-                        {/*</div>*/}
-                        <DataTable />
+                        <div>
+                            <Table data={tableRowData} columns={columns} />
+                        </div>
+                      {/*  <DataTable />*/}
                     </>
                 </ComponentCard>
 
