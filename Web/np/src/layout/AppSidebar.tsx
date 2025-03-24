@@ -20,7 +20,6 @@ import {
     UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
     name: string;
@@ -32,20 +31,26 @@ type NavItem = {
 const navItems: NavItem[] = [
     {
         icon: <GridIcon />,
-        name: "Dashboard",
+        name: "Домашняя",
         subItems: [
-            { name: "Ecommerce", path: "/", pro: false },
-            { name: "Analytics", path: "/analytics", pro: true },
-            { name: "Marketing", path: "/marketing", pro: true },
-            { name: "CRM", path: "/crm", pro: true },
-            { name: "Stocks", path: "/stocks", new: true, pro: true },
-            { name: "SaaS", path: "/saas", new: true, pro: true },
+            { name: "Главная страница", path: "/", pro: false },
+            { name: "Простои по службам", path: "/analytics", pro: false },
+            { name: "Анализ работы смен", path: "/marketing", pro: false },
+            { name: "График работы сменного персонала", path: "/crm", pro: false },
+            { name: "Дни рождения сотрудников", path: "/stocks", new: false, pro: false },
         ],
     },
     {
         icon: <CalenderIcon />,
-        name: "Calendar",
+        name: "Энергоучет",
         path: "/calendar",
+        subItems: [
+            { name: "Главная страница", path: "/", pro: false },
+            { name: "Простои по службам", path: "/analytics", pro: false },
+            { name: "Анализ работы смен", path: "/marketing", pro: false },
+            { name: "График работы сменного персонала", path: "/crm", pro: false },
+            { name: "Дни рождения сотрудников", path: "/stocks", new: false, pro: false },
+        ],
     },
     {
         icon: <UserCircleIcon />,
@@ -383,6 +388,7 @@ const AppSidebar: React.FC = () => {
                 <Link to="/">
                     {isExpanded || isHovered || isMobileOpen ? (
                         <>
+                            { /*когда светлая тема*/}
                             <img
                                 className="dark:hidden"
                                 src="/images/logo/logo.svg"
@@ -390,6 +396,7 @@ const AppSidebar: React.FC = () => {
                                 width={150}
                                 height={40}
                             />
+                            {/*когда темная тема*/}
                             <img
                                 className="hidden dark:block"
                                 src="/images/logo/logo-dark.svg"
@@ -399,12 +406,26 @@ const AppSidebar: React.FC = () => {
                             />
                         </>
                     ) : (
-                        <img
-                            src="/images/logo/logo-icon.svg"
-                            alt="Logo"
-                            width={32}
-                            height={32}
-                        />
+                            <>
+                                {/*когда темная тема*/}
+                                <img
+                                    className="hidden dark:block"
+                                    src="/images/logo/logo-icon-dark.svg"
+                                    alt="Logo"
+                                    width={40}
+                                    height={40}
+                                />
+                                { /*когда светлая тема*/}
+                                <img
+                                    className="dark:hidden"
+                                    src="/images/logo/logo-icon.svg"
+                                    alt="Logo"
+                                    width={40}
+                                    height={40}
+                                />
+                        </>
+                            
+
                     )}
                 </Link>
             </div>
@@ -458,7 +479,7 @@ const AppSidebar: React.FC = () => {
                         </div>
                     </div>
                 </nav>
-                {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+               
             </div>
         </aside>
     );
