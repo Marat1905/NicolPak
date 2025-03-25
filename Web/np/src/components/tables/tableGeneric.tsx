@@ -44,7 +44,12 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
 
     const filteredAndSortedData = useMemo(() => {
         return data
-           
+            .filter((item) => genericSearch<T>(item, columns, searchTerm))
+            .sort((a, b) => {
+                return sortOrder === "asc"
+                    ? String(a[sortKey]).localeCompare(String(b[sortKey]))
+                    : String(b[sortKey] ).localeCompare(String(a[sortKey]));
+            });
     }, [sortKey, sortOrder, searchTerm]);
 
 
