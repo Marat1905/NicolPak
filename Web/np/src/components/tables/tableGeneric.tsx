@@ -5,6 +5,27 @@ import { Table, TableCell, TableRow, TableHeader, TableBody } from "../ui/table"
 import { PencilIcon, TrashBinIcon } from "../../icons";
 
 
+// case insensitive search of n-number properties of type T
+// returns true if at least one of the property values includes the query value
+export function genericSearch<T>(
+    object: T,
+    properties: Array<IColumn<T>>,
+    query: string
+): boolean {
+
+    if (query === "") {
+        return true;
+    }
+
+    return properties.some((property) => {
+        const value = object[property.key];
+        if (typeof value === "string" || typeof value === "number") {
+            return value.toString().toLowerCase().includes(query.toLowerCase());
+        }
+        return false;
+    });
+}
+
 type Props<T> = {
     columns: Array<IColumn<T>>;
     data: T[];
@@ -23,22 +44,23 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
 
     const filteredAndSortedData = useMemo(() => {
         return data
-            .filter(x => !searchTerm || Object.values(x).some(
-                (value) =>
-                    typeof value === "string" &&
-                    value.toLowerCase().includes(searchTerm.toLowerCase()
-                    )
-        ))
-            //.sort((a, b) => {
-            //    //if (sortKey === "salary") {
-            //    //    const salaryA = Number.parseInt(a[sortKey].replace(/\$|,/g, ""));
-            //    //    const salaryB = Number.parseInt(b[sortKey].replace(/\$|,/g, ""));
-            //    //    return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
-            //    //}
-            //    return sortOrder === "asc"
-            //        ? String(a[sortKey]).localeCompare(String(b[sortKey]))
-            //        : String(b[sortKey]).localeCompare(String(a[sortKey]));
-            //});
+            .filter((item) => genericSearch<T>(item, columns, searchTerm))
+
+        //.filter(x => !searchTerm || Object.values(x).some(
+            //    (value) => {
+            //        if (typeof value === "string") {
+            //            value.toLowerCase().includes(searchTerm.toLowerCase())
+            //        }
+            //        if (typeof value === "number") {
+            //            return value.toString().includes(searchTerm.toLowerCase())
+            //        }
+            //    }
+            //))
+            .sort((a, b) => {
+                return sortOrder === "asc"
+                    ? String(a[sortKey] as const).localeCompare(String(b[sortKey]))
+                    : String(b[sortKey] as const).localeCompare(String(a[sortKey]));
+            });
     }, [sortKey, sortOrder, searchTerm]);
 
 
