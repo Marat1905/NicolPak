@@ -53,7 +53,7 @@ namespace PrsService.WebAPI
 
             app.UseAuthorization();
 
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:62301"));
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:62081"));
 
             app.MapControllers();
 

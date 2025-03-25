@@ -19,7 +19,7 @@ type Data = {
 
 
 export default function DataTables() {
-    //const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
+    const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
 
     const tableRowData = [
         {
@@ -129,28 +129,12 @@ export default function DataTables() {
             title: 'Идентификатор',
         },
         {
-            key: 'name',
-            title: 'Имя',
+            key: 'tamburContPrs',
+            title: 'Идентификатор в ПЛК',
         },
         {
-            key: 'position',
-            title: 'Позиция',
-        },
-        {
-            key: 'location',
-            title: 'Местонахождение',
-        },
-        {
-            key: 'age',
-            title: 'возраст',
-        },
-        {
-            key: 'date',
-            title: 'Дата',
-        },
-        {
-            key: 'salary',
-            title: 'Зарплата',
+            key: 'createAt',
+            title: 'Время создания',
         },
     ];
 
@@ -167,7 +151,7 @@ export default function DataTables() {
                 <ComponentCard title="Все тамбура">
                     <>
                         <div>
-                            <Table data={tableRowData} columns={columns} />
+                            <Table data={tamburs} columns={columns} />
                         </div>
                       {/*  <DataTable />*/}
                     </>

@@ -44,23 +44,7 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
 
     const filteredAndSortedData = useMemo(() => {
         return data
-            .filter((item) => genericSearch<T>(item, columns, searchTerm))
-
-        //.filter(x => !searchTerm || Object.values(x).some(
-            //    (value) => {
-            //        if (typeof value === "string") {
-            //            value.toLowerCase().includes(searchTerm.toLowerCase())
-            //        }
-            //        if (typeof value === "number") {
-            //            return value.toString().includes(searchTerm.toLowerCase())
-            //        }
-            //    }
-            //))
-            .sort((a, b) => {
-                return sortOrder === "asc"
-                    ? String(a[sortKey] as const).localeCompare(String(b[sortKey]))
-                    : String(b[sortKey] as const).localeCompare(String(a[sortKey]));
-            });
+           
     }, [sortKey, sortOrder, searchTerm]);
 
 
