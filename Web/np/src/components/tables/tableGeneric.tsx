@@ -1,86 +1,74 @@
 import { useState, useMemo } from "react";
 import { IColumn } from '../../interface/IColumn';
 import PaginationWithButton from "./PaginationWithButton";
-//import {
-//    Table,
-//    TableBody,
-//    TableCell,
-//    TableHeader,
-//    TableRow,
-//} from "../ui/table";
+import { Table, TableCell, TableRow, TableHeader, TableBody } from "../ui/table";
+import { PencilIcon, TrashBinIcon } from "../../icons";
 
 
 type Props<T> = {
     columns: Array<IColumn<T>>;
-    data?: T[];
+    data: T[];
 };
+
+type SortOrder = "asc" | "desc";
+type SortKey = "name";
 
 const TableGen = <T,>({ data, columns }: Props<T>) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    //const [sortKey, setSortKey] = useState<SortKey>("name");
-    //const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+    const [sortKey, setSortKey] = useState<SortKey>("name");
+    const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
     const [searchTerm, setSearchTerm] = useState("");
 
+    const filteredAndSortedData = useMemo(() => {
+        return data
+            .filter(x => !searchTerm || Object.values(x).some(
+                (value) =>
+                    typeof value === "string" &&
+                    value.toLowerCase().includes(searchTerm.toLowerCase()
+                    )
+        ))
+            //.sort((a, b) => {
+            //    //if (sortKey === "salary") {
+            //    //    const salaryA = Number.parseInt(a[sortKey].replace(/\$|,/g, ""));
+            //    //    const salaryB = Number.parseInt(b[sortKey].replace(/\$|,/g, ""));
+            //    //    return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
+            //    //}
+            //    return sortOrder === "asc"
+            //        ? String(a[sortKey]).localeCompare(String(b[sortKey]))
+            //        : String(b[sortKey]).localeCompare(String(a[sortKey]));
+            //});
+    }, [sortKey, sortOrder, searchTerm]);
 
-    const headers = columns.map((column, index) => {
-        return (
-            <th key={`headCell-${index}`} className="!z-0">
-                {column.title}
-            </th>
-        );
-    });
 
-    const rows = !data?.length ? (
-        <tr>
-            <td colSpan={columns.length} className="text-center">
-                No data
-            </td>
-        </tr>
-    ) : (
-        data?.map((row, index) => {
-            return (
-                <tr key={`row-${index}`}>
-                    {columns.map((column, index2) => {
-                        const value = column.render
-                            ? column.render(column, row as T)
-                            : (row[column.key as keyof typeof row] as string);
 
-                        return <td key={`cell-${index2}`}>{value}</td>;
-                    })}
-                </tr>
-            );
-        })
-    );
 
-    const totalItems = data?.length ? data.length : 0;
+    const totalItems = filteredAndSortedData?.length ? filteredAndSortedData.length : 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 
+    const handleSort = (key: SortKey) => {
+        if (sortKey === key) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortKey(key);
+            setSortOrder("asc");
+        }
+    };
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-    const currentData = data?.slice(startIndex, endIndex);
+    const currentData = filteredAndSortedData?.slice(startIndex, endIndex);
 
     return (
-        //<div className="overflow-x-auto">
-        //    <table className="table w-full">
-        //        <thead className="bg-slate-400 text-black">
-        //            <tr>{headers}</tr>
-        //        </thead>
-
-        //        <tbody>{rows}</tbody>
-        //    </table>
-        //</div>
-
         <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
             <div className="flex flex-col gap-2 px-4 py-4 border border-b-0 border-gray-100 dark:border-white/[0.05] rounded-t-xl sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
-                    <span className="text-gray-500 dark:text-gray-400"> Show </span>
+                    <span className="text-gray-500 dark:text-gray-400"> Показывать по </span>
                     <div className="relative z-20 bg-transparent">
                         <select
                             className="w-full py-2 pl-3 pr-8 text-sm text-gray-800 bg-transparent border border-gray-300 rounded-lg appearance-none dark:bg-dark-900 h-9 bg-none shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
@@ -116,7 +104,7 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
                             </svg>
                         </span>
                     </div>
-                    <span className="text-gray-500 dark:text-gray-400"> entries </span>
+                    <span className="text-gray-500 dark:text-gray-400"> записей </span>
                 </div>
 
                 <div className="relative">
@@ -141,122 +129,113 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search..."
+                        placeholder="Искать..."
                         className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-11 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[300px]"
                     />
                 </div>
             </div>
+            <div className="max-w-full overflow-x-auto custom-scrollbar">
+                <div>
+                    <Table>
+                        <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
+                            <TableRow>
+                                {
+                                    columns.map((column, index) => {
+                                        return (
+                                            <TableCell key={column.key}
+                                                isHeader
+                                                className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]">
+                                                <div
+                                                    className="flex items-center justify-between cursor-pointer"
+                                                    onClick={() => handleSort(column.key as SortKey)}
+                                                    >
+                                                    <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
+                                                        {column.title}
+                                                    </p>
+                                                    <button className="flex flex-col gap-0.5">
+                                                        <svg
+                                                            className={`text-gray-300 dark:text-gray-700  ${sortKey === column.key && sortOrder === "asc"
+                                                                    ? "text-brand-500"
+                                                                    : ""
+                                                                }`}
+                                                            width="8"
+                                                            height="5"
+                                                            viewBox="0 0 8 5"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"
+                                                                fill="currentColor"
+                                                            />
+                                                        </svg>
+                                                        <svg
+                                                            className={`text-gray-300 dark:text-gray-700  ${sortKey === column.key && sortOrder === "desc"
+                                                                    ? "text-brand-500"
+                                                                    : ""
+                                                                }`}
+                                                            width="8"
+                                                            height="5"
+                                                            viewBox="0 0 8 5"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"
+                                                                fill="currentColor"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </TableCell>
+                                        )
+                                    })}
+                                <TableCell
+                                    isHeader
+                                    className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]"
+                                >
+                                    <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
+                                        Action
+                                    </p>
+                                </TableCell>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {
+                                currentData?.map((row, index) => {
+                                    return (
+                                        <TableRow key={index}>
+                                            
+                                                {columns.map((column, index2) => {
+                                                    const value = column.render
+                                                        ? column.render(column, row as T)
+                                                        : (row[column.key as keyof typeof row] as string);
 
-            {/*<div className="max-w-full overflow-x-auto custom-scrollbar">*/}
-            {/*    <div>*/}
-            {/*        <Table>*/}
-            {/*            <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">*/}
-            {/*                <TableRow>*/}
-            {/*                    {[*/}
-            {/*                        { key: "name", label: "User" },*/}
-            {/*                        { key: "position", label: "Position" },*/}
-            {/*                        { key: "location", label: "Office" },*/}
-            {/*                        { key: "age", label: "Age" },*/}
-            {/*                        { key: "date", label: "Start Date" },*/}
-            {/*                        { key: "salary", label: "Salary" },*/}
-            {/*                    ].map(({ key, label }) => (*/}
-            {/*                        <TableCell*/}
-            {/*                            key={key}*/}
-            {/*                            isHeader*/}
-            {/*                            className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]"*/}
-            {/*                        >*/}
-            {/*                            <div*/}
-            {/*                                className="flex items-center justify-between cursor-pointer"*/}
-            {/*                                //onClick={() => handleSort(key as SortKey)}*/}
-            {/*                            >*/}
-            {/*                                <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">*/}
-            {/*                                    {label}*/}
-            {/*                                </p>*/}
-            {/*                                <button className="flex flex-col gap-0.5">*/}
-            {/*                                    <svg*/}
-            {/*                                        className={`text-gray-300 dark:text-gray-700  ${sortKey === key && sortOrder === "asc"*/}
-            {/*                                                ? "text-brand-500"*/}
-            {/*                                                : ""*/}
-            {/*                                            }`}*/}
-            {/*                                        width="8"*/}
-            {/*                                        height="5"*/}
-            {/*                                        viewBox="0 0 8 5"*/}
-            {/*                                        fill="none"*/}
-            {/*                                        xmlns="http://www.w3.org/2000/svg"*/}
-            {/*                                    >*/}
-            {/*                                        <path*/}
-            {/*                                            d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"*/}
-            {/*                                            fill="currentColor"*/}
-            {/*                                        />*/}
-            {/*                                    </svg>*/}
-            {/*                                    <svg*/}
-            {/*                                        className={`text-gray-300 dark:text-gray-700  ${sortKey === key && sortOrder === "desc"*/}
-            {/*                                                ? "text-brand-500"*/}
-            {/*                                                : ""*/}
-            {/*                                            }`}*/}
-            {/*                                        width="8"*/}
-            {/*                                        height="5"*/}
-            {/*                                        viewBox="0 0 8 5"*/}
-            {/*                                        fill="none"*/}
-            {/*                                        xmlns="http://www.w3.org/2000/svg"*/}
-            {/*                                    >*/}
-            {/*                                        <path*/}
-            {/*                                            d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"*/}
-            {/*                                            fill="currentColor"*/}
-            {/*                                        />*/}
-            {/*                                    </svg>*/}
-            {/*                                </button>*/}
-            {/*                            </div>*/}
-            {/*                        </TableCell>*/}
-            {/*                    ))}*/}
-            {/*                    <TableCell*/}
-            {/*                        isHeader*/}
-            {/*                        className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]"*/}
-            {/*                    >*/}
-            {/*                        <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">*/}
-            {/*                            Action*/}
-            {/*                        </p>*/}
-            {/*                    </TableCell>*/}
-            {/*                </TableRow>*/}
-            {/*            </TableHeader>*/}
-            {/*            <TableBody>*/}
-            {/*                {currentData.map((item, i) => (*/}
-            {/*                    <TableRow key={i + 1}>*/}
-            {/*                        <TableCell className="px-4 py-4 font-medium text-gray-800 border border-gray-100 dark:border-white/[0.05] dark:text-white text-theme-sm whitespace-nowrap ">*/}
-            {/*                            {item.name}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">*/}
-            {/*                            {item.position}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">*/}
-            {/*                            {item.location}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border dark:border-white/[0.05] border-gray-100 text-theme-sm dark:text-gray-400 whitespace-nowrap ">*/}
-            {/*                            {item.age}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100  dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">*/}
-            {/*                            {item.date}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100  dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">*/}
-            {/*                            {item.salary}*/}
-            {/*                        </TableCell>*/}
-            {/*                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap ">*/}
-            {/*                            <div className="flex items-center w-full gap-2">*/}
-            {/*                                <button className="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">*/}
-            {/*                                    <TrashBinIcon className="size-5" />*/}
-            {/*                                </button>*/}
-            {/*                                <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">*/}
-            {/*                                    <PencilIcon className="size-5" />*/}
-            {/*                                </button>*/}
-            {/*                            </div>*/}
-            {/*                        </TableCell>*/}
-            {/*                    </TableRow>*/}
-            {/*                ))}*/}
-            {/*            </TableBody>*/}
-            {/*        </Table>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-
+                                                    return (
+                                                        <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap">
+                                                            {value}
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap ">
+                                                <div className="flex items-center w-full gap-2">
+                                                    <button className="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">
+                                                        <TrashBinIcon className="size-5" />
+                                                    </button>
+                                                    <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
+                                                        <PencilIcon className="size-5" />
+                                                    </button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                   </Table>
+                </div>
+            </div>
+            
             <div className="border border-t-0 rounded-b-xl border-gray-100 py-4 pl-[18px] pr-4 dark:border-white/[0.05]">
                 <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between">
                     {/* Left side: Showing entries */}
@@ -268,7 +247,7 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
                     />
                     <div className="pt-3 xl:pt-0">
                         <p className="pt-3 text-sm font-medium text-center text-gray-500 border-t border-gray-100 dark:border-gray-800 dark:text-gray-400 xl:border-t-0 xl:pt-0 xl:text-left">
-                            Showing {startIndex + 1} to {endIndex} of {totalItems} entries
+                            Показано с {startIndex + 1} по {endIndex} из {totalItems} записей
                         </p>
                     </div>
                 </div>
