@@ -38,11 +38,13 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
         return data
             .filter((item) => genericSearch(item, columns.filter((column) => column.filter).map(col => col.key), searchTerm))
             //.sort((a, b) => genericSort(a, b, activeSorter))
-            //.sort((a, b) => {
-            //    return sortOrder === "asc"
-            //        ? String(a[sortKey ]).localeCompare(String(b[sortKey]))
-            //        : String(b[sortKey] ).localeCompare(String(a[sortKey]));
-            //});
+            .sort((a, b) => {
+                    const reverse = sortOrder === "asc" ? 1 : -1;
+                    if(a[sortKey] <b[sortKey]) 
+                       return -1 * reverse;
+                    if(a[sortKey] > b[sortKey]) return 1 * reverse;
+                    return 0;              
+            });
     }, [sortKey, sortOrder, searchTerm]);
 
 
@@ -64,6 +66,13 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
             setSortOrder("asc");
         }
     };
+    //const handleSort = (column: IColumn<T, K>, isDescending: boolean) => {
+    //    var c = column.key
+    //    setActiveSorter({
+    //        property: Object.keys(column).map((key =>c)),
+    //        isDescending
+    //    })
+    //};
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
@@ -152,7 +161,8 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
                                                 className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]">
                                                 <div
                                                     className="flex items-center justify-between cursor-pointer"
-                                                    onClick={() => handleSort(column.key as SortKey)}                                                  >
+                                                    onClick={() => handleSort(column.key as SortKey)}
+                                                  >
                                                     <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
                                                         {column.title}
                                                     </p>
