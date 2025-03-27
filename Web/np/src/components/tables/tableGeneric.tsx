@@ -3,56 +3,50 @@ import { IColumn } from '../../interface/IColumn';
 import PaginationWithButton from "./PaginationWithButton";
 import { Table, TableCell, TableRow, TableHeader, TableBody } from "../ui/table";
 import { PencilIcon, TrashBinIcon } from "../../icons";
+import { genericSearch } from '../../utility/tables/genericSearch'
+import ISorter from "../../interface/Tables/ISorter";
+import { genericSort } from "../../utility/tables/genericSort";
+import { IData } from "../../interface/IData";
 
 
-// case insensitive search of n-number properties of type T
-// returns true if at least one of the property values includes the query value
-export function genericSearch<T>(
-    object: T,
-    properties: Array<IColumn<T>>,
-    query: string
-): boolean {
 
-    if (query === "") {
-        return true;
-    }
-
-    return properties.some((property) => {
-        const value = object[property.key];
-        if (typeof value === "string" || typeof value === "number") {
-            return value.toString().toLowerCase().includes(query.toLowerCase());
-        }
-        return false;
-    });
+type TableRowsProps<T, K extends keyof T> = {
+    data: Array<T>;
+    columns: Array<IColumn<T, K>>;
 }
 
-type Props<T> = {
-    columns: Array<IColumn<T>>;
-    data: T[];
-};
 
 type SortOrder = "asc" | "desc";
 type SortKey = "name";
 
-const TableGen = <T,>({ data, columns }: Props<T>) => {
+const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [sortKey, setSortKey] = useState<SortKey>("name");
     const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
     const [searchTerm, setSearchTerm] = useState("");
+    const [activeSorter, setActiveSorter] = useState<ISorter<IColumn<T,K>>>({
+        property: "key",
+        isDescending: true,
+    });
+
+    const col = columns.filter((column) => column.filter).map(col => col.key);
 
     const filteredAndSortedData = useMemo(() => {
+
         return data
-            .filter((item) => genericSearch<T>(item, columns, searchTerm))
-            .sort((a, b) => {
-                return sortOrder === "asc"
-                    ? String(a[sortKey]).localeCompare(String(b[sortKey]))
-                    : String(b[sortKey] ).localeCompare(String(a[sortKey]));
-            });
+            .filter((item) => genericSearch(item, columns.filter((column) => column.filter).map(col => col.key), searchTerm))
+            //.sort((a, b) => genericSort(a, b, activeSorter))
+            //.sort((a, b) => {
+            //    return sortOrder === "asc"
+            //        ? String(a[sortKey ]).localeCompare(String(b[sortKey]))
+            //        : String(b[sortKey] ).localeCompare(String(a[sortKey]));
+            //});
     }, [sortKey, sortOrder, searchTerm]);
 
 
+    
 
 
     const totalItems = filteredAndSortedData?.length ? filteredAndSortedData.length : 0;
@@ -153,13 +147,12 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
                                 {
                                     columns.map((column, index) => {
                                         return (
-                                            <TableCell key={column.key}
+                                            <TableCell key={column.key.toString()}
                                                 isHeader
                                                 className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]">
                                                 <div
                                                     className="flex items-center justify-between cursor-pointer"
-                                                    onClick={() => handleSort(column.key as SortKey)}
-                                                    >
+                                                    onClick={() => handleSort(column.key as SortKey)}                                                  >
                                                     <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
                                                         {column.title}
                                                     </p>
@@ -219,7 +212,7 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
                                             
                                                 {columns.map((column, index2) => {
                                                     const value = column.render
-                                                        ? column.render(column, row as T)
+                                                        ? column.render(column)
                                                         : (row[column.key as keyof typeof row] as string);
 
                                                     return (
@@ -268,4 +261,4 @@ const TableGen = <T,>({ data, columns }: Props<T>) => {
     );
 };
 
-export default TableGen;
+export default TableRows;

@@ -6,22 +6,15 @@ import DataTable from "../../components/tables/DataTable";
 import { TamburHook } from '../../hooks';
 import { IColumn } from '../../interface/IColumn'
 import Table  from '../../components/tables/tableGeneric'
+import { IData } from "../../interface/IData";
 
-type Data = {
-    id: number;
-    name: string;
-    position: string;
-    location: string;
-    age: number;
-    date: string;
-    salary: string;
-};
+
 
 
 export default function DataTables() {
-    const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
+    //const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
 
-    const tableRowData = [
+    const tableRowData: IData[] = [
         {
             id: 1,
             name: "Abram Schleifer",
@@ -123,20 +116,56 @@ export default function DataTables() {
         },
     ];
 
-    const columns: Array<IColumn<Data>> = [
+    const columns: IColumn<IData, keyof IData>[] = [
         {
             key: 'id',
             title: 'Идентификатор',
+            filter: true
         },
         {
-            key: 'tamburContPrs',
-            title: 'Идентификатор в ПЛК',
+            key: 'name',
+            title: 'Имя',
+            filter: true
         },
         {
-            key: 'createAt',
-            title: 'Время создания',
+            key: 'position',
+            title: 'Позиция',
+            filter: true
         },
-    ];
+        {
+            key: 'location',
+            title: 'Местонахождение',
+        },
+        {
+            key: 'age',
+            title: 'возраст',
+            filter: true
+        },
+        {
+            key: 'date',
+            title: 'Дата',
+        },
+        {
+            key: 'salary',
+            title: 'Зарплата11',
+        },
+    ]
+
+
+    //const columns: Array<IColumn<Data>> = [
+    //    {
+    //        key: 'id',
+    //        title: 'Идентификатор',
+    //    },
+    //    {
+    //        key: 'tamburContPrs',
+    //        title: 'Идентификатор в ПЛК',
+    //    },
+    //    {
+    //        key: 'createAt',
+    //        title: 'Время создания',
+    //    },
+    //];
 
     return (
          
@@ -151,7 +180,7 @@ export default function DataTables() {
                 <ComponentCard title="Все тамбура">
                     <>
                         <div>
-                            <Table data={tamburs} columns={columns} />
+                            <Table data={tableRowData} columns={columns} />
                         </div>
                       {/*  <DataTable />*/}
                     </>

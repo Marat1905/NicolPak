@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\icons\" />
+    <Folder Include="src\interface\Tables\" />
     <Folder Include="src\pages\Main\" />
     <Folder Include="src\pages\Prs\" />
   </ItemGroup>
