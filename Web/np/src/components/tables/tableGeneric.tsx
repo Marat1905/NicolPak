@@ -6,7 +6,6 @@ import { PencilIcon, TrashBinIcon } from "../../icons";
 import { genericSearch } from '../../utility/tables/genericSearch'
 import ISorter from "../../interface/Tables/ISorter";
 import { genericSort } from "../../utility/tables/genericSort";
-import { IData } from "../../interface/IData";
 
 
 
@@ -17,35 +16,35 @@ type TableRowsProps<T, K extends keyof T> = {
 
 
 type SortOrder = "asc" | "desc";
-type SortKey = "name";
+type SortKey = "id";
 
 const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [sortKey, setSortKey] = useState<SortKey>("name");
+    const [sortKey, setSortKey] = useState<SortKey>("id");
     const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeSorter, setActiveSorter] = useState<ISorter<IColumn<T,K>>>({
-        property: "key",
-        isDescending: true,
+
+    const s = columns.find((column) => column.key == sortKey)!.key
+
+    const [activeSorter, setActiveSorter] = useState<ISorter<T>>({
+        property: columns.find((column) => column.key == sortKey)!.key,
+        isDescending: false,
     });
 
-    const col = columns.filter((column) => column.filter).map(col => col.key);
 
     const filteredAndSortedData = useMemo(() => {
 
         return data
             .filter((item) => genericSearch(item, columns.filter((column) => column.filter).map(col => col.key), searchTerm))
-            //.sort((a, b) => genericSort(a, b, activeSorter))
             .sort((a, b) => {
-                    const reverse = sortOrder === "asc" ? 1 : -1;
-                    if(a[sortKey] <b[sortKey]) 
-                       return -1 * reverse;
-                    if(a[sortKey] > b[sortKey]) return 1 * reverse;
-                    return 0;              
-            });
-    }, [sortKey, sortOrder, searchTerm]);
+                const s = a;
+                const d = activeSorter;
+                return genericSort(a, b, activeSorter);
+            }
+            );
+    }, [data,sortKey, sortOrder, searchTerm]);
 
 
     
@@ -58,21 +57,20 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
         setCurrentPage(page);
     };
 
+
     const handleSort = (key: SortKey) => {
         if (sortKey === key) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+            setActiveSorter({
+                property: columns.find((column) => column.key == key)!.key,
+                isDescending: sortOrder === "asc" ? true : false
+            }     
+            )
         } else {
             setSortKey(key);
             setSortOrder("asc");
         }
     };
-    //const handleSort = (column: IColumn<T, K>, isDescending: boolean) => {
-    //    var c = column.key
-    //    setActiveSorter({
-    //        property: Object.keys(column).map((key =>c)),
-    //        isDescending
-    //    })
-    //};
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
@@ -154,7 +152,7 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
                         <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
                             <TableRow>
                                 {
-                                    columns.map((column, index) => {
+                                    columns.map((column) => {
                                         return (
                                             <TableCell key={column.key.toString()}
                                                 isHeader
@@ -220,7 +218,7 @@ const TableRows = <T, K extends keyof T>({ data, columns }: TableRowsProps<T, K>
                                     return (
                                         <TableRow key={index}>
                                             
-                                                {columns.map((column, index2) => {
+                                                {columns.map((column) => {
                                                     const value = column.render
                                                         ? column.render(column)
                                                         : (row[column.key as keyof typeof row] as string);

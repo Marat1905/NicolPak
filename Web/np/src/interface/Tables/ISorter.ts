@@ -1,5 +1,5 @@
 
 export default interface ISorter<T> {
-    property: Extract<keyof T, string | number | Date>;
+    property: keyof T;
     isDescending: boolean;
 }
