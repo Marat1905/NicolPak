@@ -12,7 +12,7 @@ import { IData } from "../../interface/IData";
 
 
 export default function DataTables() {
-    //const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
+    const { data: tamburs, loading, setData: setUser, error } = TamburHook(true);
 
     const tableRowData: IData[] = [
         {
