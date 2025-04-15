@@ -11,12 +11,17 @@ export default function DowntimeByServices() {
             />
 
             <PageBreadcrumb pageTitle="Простои по службам" />
-
-            <div className="grid grid-cols-12 gap-2 md:gap-6">
-                <div className="col-span-12">
+            <div className="col-span-12 xl:col-span-7">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <TopChannel />
+                    <TopChannel />
+                    <TopChannel />
+                    <TopChannel />
+                    <TopChannel />
                     <TopChannel />
                 </div>
             </div>
+           
 
         </>
     );
