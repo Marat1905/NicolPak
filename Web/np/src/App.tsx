@@ -4,6 +4,7 @@ import AppLayout from "./layout/AppLayout";
 import Home from "./pages/Main/Home"
 import './index.css'
 import AllTamburs from '../src/pages/Prs/AllTamburs'
+import DowntimeByServices from "./pages/Main/DowntimeByServices";
 
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
                 <Routes>
                     <Route element={<AppLayout />}>
                         <Route index path="/" element={<Home />} />
+                        <Route index path="/DowntimeByServices" element={<DowntimeByServices />} />
                         <Route path="/AllTamburs" element={<AllTamburs />} />
                     </Route>
 
