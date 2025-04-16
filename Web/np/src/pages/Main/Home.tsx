@@ -12,6 +12,7 @@ export default function Home() {
 
             <PageBreadcrumb pageTitle="Главная" />
            
+
             <div className="grid grid-cols-12 gap-2 md:gap-6">
                 <div className="col-span-12">
                     <AnalyticsMetrics />

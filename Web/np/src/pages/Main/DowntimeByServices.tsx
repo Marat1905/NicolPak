@@ -14,11 +14,6 @@ export default function DowntimeByServices() {
             <div className="col-span-12 xl:col-span-7">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                     <TopChannel />
-                    <TopChannel />
-                    <TopChannel />
-                    <TopChannel />
-                    <TopChannel />
-                    <TopChannel />
                 </div>
             </div>
            

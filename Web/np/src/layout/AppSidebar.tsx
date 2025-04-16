@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
         subItems: [
             { name: "Главная страница", path: "/"},
             { name: "Простои по службам", path: "/DowntimeByServices" },
-            { name: "Анализ работы смен", path: "/marketing" },
+            { name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
             { name: "График работы сменного персонала", path: "/crm" },
             { name: "Дни рождения сотрудников", path: "/stocks" },
         ],
