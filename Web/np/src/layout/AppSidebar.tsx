@@ -38,6 +38,7 @@ const navItems: NavItem[] = [
             { name: "Главная страница", path: "/"},
             { name: "Простои по службам", path: "/DowntimeByServices" },
             { name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
+            { name: "План производства", path: "/ProductionPlan" },
             { name: "График работы сменного персонала", path: "/WorkSchedule" },
             { name: "Дни рождения сотрудников", path: "/stocks" },
         ],
