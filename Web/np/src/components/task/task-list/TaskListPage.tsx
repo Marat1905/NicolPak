@@ -5,7 +5,7 @@ import TaskLane from "./TaskLane";
 const initialTasks: Task[] = [
     {
         id: "1",
-        title: "FC_1101900 NP_Fluting Standart 110 (1900) FS",
+        title: "FS_1101900 NP_Fluting Standart 110 (1900) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",
@@ -15,7 +15,7 @@ const initialTasks: Task[] = [
     },
     {
         id: "2",
-        title: "FC_1101900 NP_Fluting Standart 110 (1900) FS",
+        title: "FS_1101900 NP_Fluting Standart 110 (1900) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",
@@ -25,7 +25,7 @@ const initialTasks: Task[] = [
     },
     {
         id: "3",
-        title: "FC_1102100 NP_Fluting Standart 110 (2100) FS",
+        title: "FS_1102100 NP_Fluting Standart 110 (2100) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",
@@ -35,7 +35,7 @@ const initialTasks: Task[] = [
     },
     {
         id: "4",
-        title: "FC_1101700 NP_Fluting Standart 110 (1700) FS",
+        title: "FS_1101700 NP_Fluting Standart 110 (1700) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",
@@ -45,7 +45,7 @@ const initialTasks: Task[] = [
     },
     {
         id: "5",
-        title: "FC_1102200 NP_Fluting Standart 110 (2200) FS",
+        title: "FS_1102200 NP_Fluting Standart 110 (2200) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",
@@ -55,7 +55,7 @@ const initialTasks: Task[] = [
     },
     {
         id: "6",
-        title: "FC_1102100 NP_Fluting Standart 110 (2100) FS",
+        title: "FS_1102100 NP_Fluting Standart 110 (2100) FS",
         isChecked: false,
         dueDate: "16.04.2025",
         comment: "ЮЖУК",

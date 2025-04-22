@@ -8,6 +8,7 @@ import DowntimeByServices from "./pages/Main/DowntimeByServices";
 import ShiftWorkAnalysis from "./pages/Main/ShiftWorkAnalysis";
 import WorkSchedule from "./pages/Main/WorkSchedule";
 import ProductionPlan from "./pages/Main/ProductionPlan";
+import DowntimeByServicesYear from "./pages/Reports/DowntimeByServicesYear";
 
 
 export default function App() {
@@ -23,6 +24,8 @@ export default function App() {
                         <Route index path="/WorkSchedule" element={<WorkSchedule />} />
                         <Route index path="/ProductionPlan" element={<ProductionPlan />} />
                         <Route path="/AllTamburs" element={<AllTamburs />} />
+
+                        <Route index path="/DowntimeByServicesYear" element={<DowntimeByServicesYear />} />
                     </Route>
 
                 </Routes>

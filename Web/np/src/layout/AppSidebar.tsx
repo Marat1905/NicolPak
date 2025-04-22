@@ -2,24 +2,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
+import { useSidebar } from "../context/SidebarContext";
 import {
     BoxCubeIcon,
     CalenderIcon,
     ChatIcon,
     ChevronDownIcon,
-    DocsIcon,
     GridIcon,
     HorizontaLDots,
     ListIcon,
-    MailIcon,
-    PageIcon,
     PieChartIcon,
-    PlugInIcon,
     TableIcon,
     TaskIcon,
-    UserCircleIcon,
+    UserCircleIcon
 } from "../icons";
-import { useSidebar } from "../context/SidebarContext";
 
 type SubItem = { name: string; path: string; pro?: boolean; new?: boolean, subChildren?: SubItem[] }
 
@@ -29,6 +25,7 @@ type NavItem = {
     path?: string;
     subItems?: SubItem[];
 };
+
 
 const navItems: NavItem[] = [
     {
@@ -48,7 +45,13 @@ const navItems: NavItem[] = [
         name: "Энергоучет",
         path: "/calendar",
         subItems: [
-            { name: "Вода", path: "/water"},
+            {
+                name: "Вода", path: "/water",
+                subChildren: [
+                    { name: "Воздух", path: "/wat" },
+                    { name: "Земля", path: "/y" }
+                ]
+            },
             { name: "Котлы", path: "/analytics"},
             { name: "Пар", path: "/marketing"},
             { name: "Отопление", path: "/crm"},
@@ -77,6 +80,7 @@ const navItems: NavItem[] = [
         name: "Отчеты",
         icon: <ListIcon />,
         subItems: [
+            { name: "Простои по службам", path: "/DowntimeByServicesYear" },
             { name: "Отчеты БДМ", path: "/form-elements"},
             { name: "Отчеты котельная", path: "/form-layout"},
             { name: "Отчеты ОС", path: "/form-layout" },
@@ -239,6 +243,7 @@ const AppSidebar: React.FC = () => {
                                 />
                             )}
                         </button>
+
                     ) : (
                         nav.path && (
                             <Link
@@ -307,6 +312,44 @@ const AppSidebar: React.FC = () => {
                                                 )}
                                             </span>
                                         </Link>
+                                        {/*<ul className="mt-2 space-y-1 ml-9">*/}
+                                        {/*    {subItem.subChildren?.map((chil) => (*/}
+                                        {/*        <li key={chil.name}>*/}
+                                        {/*            <Link*/}
+                                        {/*                to={chil.path}*/}
+                                        {/*                className={`menu-dropdown-item ${isActive(chil.path)*/}
+                                        {/*                    ? "menu-dropdown-item-active"*/}
+                                        {/*                    : "menu-dropdown-item-inactive"*/}
+                                        {/*                    }`}*/}
+                                        {/*            >*/}
+                                        {/*                {chil.name}*/}
+                                        {/*                <span className="flex items-center gap-1 ml-auto">*/}
+                                        {/*                    {chil.new && (*/}
+                                        {/*                        <span*/}
+                                        {/*                            className={`ml-auto ${isActive(chil.path)*/}
+                                        {/*                                ? "menu-dropdown-badge-active"*/}
+                                        {/*                                : "menu-dropdown-badge-inactive"*/}
+                                        {/*                                } menu-dropdown-badge`}*/}
+                                        {/*                        >*/}
+                                        {/*                            new*/}
+                                        {/*                        </span>*/}
+                                        {/*                    )}*/}
+                                        {/*                    {chil.pro && (*/}
+                                        {/*                        <span*/}
+                                        {/*                            className={`ml-auto ${isActive(chil.path)*/}
+                                        {/*                                ? "menu-dropdown-badge-active"*/}
+                                        {/*                                : "menu-dropdown-badge-inactive"*/}
+                                        {/*                                } menu-dropdown-badge`}*/}
+                                        {/*                        >*/}
+                                        {/*                            pro*/}
+                                        {/*                        </span>*/}
+                                        {/*                    )}*/}
+                                        {/*                </span>*/}
+                                        {/*            </Link>*/}
+                                        {/*        </li>*/}
+
+                                        {/*    ))}*/}
+                                        {/*</ul>*/}
                                     </li>
                                 ))}
                             </ul>
