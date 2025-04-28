@@ -81,7 +81,8 @@ const navItems: NavItem[] = [
         icon: <ListIcon />,
         subItems: [
             { name: "Простои по службам", path: "/DowntimeByServicesYear" },
-            { name: "Отчеты БДМ", path: "/form-elements"},
+            { name: "Выпуск ГП", path: "/ReportProduction" },
+            { name: "Отчеты БДМ", path: "/ReportBDM"},
             { name: "Отчеты котельная", path: "/form-layout"},
             { name: "Отчеты ОС", path: "/form-layout" },
             { name: "Отчеты по электроэнергии", path: "/form-layout"},
