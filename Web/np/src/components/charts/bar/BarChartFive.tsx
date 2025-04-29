@@ -1,7 +1,7 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-export default function BarChartFour() {
+export default function BarChartFive() {
     const options: ApexOptions = {
         colors: ["#ff2676"],
         chart: {
@@ -21,7 +21,7 @@ export default function BarChartFour() {
             },
         },
         dataLabels: {
-            enabled: false,
+            enabled: true,
         },
         stroke: {
             show: true,
