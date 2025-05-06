@@ -11,6 +11,7 @@ import ProductionPlan from "./pages/Main/ProductionPlan";
 import DowntimeByServicesYear from "./pages/Reports/DowntimeByServicesYear";
 import ReportBDM from "./pages/Reports/ReportBDM";
 import ReportProduction from "./pages/Reports/ReportProduction";
+import ReportProd from "./pages/Reports/ReportProd";
 
 
 export default function App() {
@@ -29,7 +30,8 @@ export default function App() {
 
                         <Route index path="/DowntimeByServicesYear" element={<DowntimeByServicesYear />} />
                         <Route index path="/ReportBDM" element={<ReportBDM />} />
-                        \<Route index path="/ReportProduction" element={<ReportProduction />} />
+                        <Route index path="/ReportProduction" element={<ReportProduction />} />
+                        <Route index path="/ReportProd" element={<ReportProd />} />
                     </Route>
 
                 </Routes>
