@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSidebar } from "../context/SidebarContext";
 import {
     BoxCubeIcon,
@@ -13,10 +13,8 @@ import {
     TaskIcon,
     UserCircleIcon
 } from "../icons";
-import { useLocation } from "react-router";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
-// Унифицированный тип для пунктов меню
 type MenuItem = {
     name: string;
     icon?: React.ReactNode;
@@ -24,125 +22,139 @@ type MenuItem = {
     pro?: boolean;
     new?: boolean;
     children?: MenuItem[];
+    key: string; // Добавляем уникальный ключ
 };
 
-// Данные меню
+// Генератор ключей для пунктов меню
+const generateKey = (prefix: string, index: number, parentKey?: string) => {
+    return parentKey ? `${parentKey}-${prefix}-${index}` : `${prefix}-${index}`;
+};
+
+// Данные меню с уникальными ключами
 const navItems: MenuItem[] = [
     {
+        key: "home",
         icon: <GridIcon />,
         name: "Домашняя",
         children: [
-            { name: "Главная страница", path: "/" },
-            { name: "Простои по службам", path: "/DowntimeByServices" },
-            { name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
-            { name: "План производства", path: "/ProductionPlan" },
-            { name: "График работы сменного персонала", path: "/WorkSchedule" },
-            { name: "Дни рождения сотрудников", path: "/stocks" },
+            { key: "home-main", name: "Главная страница", path: "/" },
+            { key: "home-downtime", name: "Простои по службам", path: "/DowntimeByServices" },
+            { key: "home-shift", name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
+            { key: "home-production", name: "План производства", path: "/ProductionPlan" },
+            { key: "home-schedule", name: "График работы сменного персонала", path: "/WorkSchedule" },
+            { key: "home-birthdays", name: "Дни рождения сотрудников", path: "/stocks" },
         ],
     },
     {
+        key: "EnergyAccounting",
         icon: <CalenderIcon />,
         name: "Энергоучет",
         path: "/calendar",
         children: [
             {
-                name: "Вода",
-                path: "/water",
+                key: "EnergyAccounting-water",
+                name: "Вода", path: "/water",
                 children: [
-                    { name: "Воздух", path: "/wat" },
-                    { name: "Земля", path: "/y" }
+                    { key: "EnergyAccounting-water-wat", name: "Воздух", path: "/wat" },
+                    { key: "EnergyAccounting-water-y", name: "Земля", path: "/y" }
                 ]
             },
-            { name: "Котлы", path: "/analytics" },
-            { name: "Пар", path: "/marketing" },
-            { name: "Отопление", path: "/crm" },
-            { name: "Очистные сооружения", path: "/stocks" },
-            { name: "Отчеты", path: "/stocks" },
+            { key: "EnergyAccounting-water-analytics", name: "Котлы", path: "/analytics" },
+            { key: "EnergyAccounting-water-marketing", name: "Пар", path: "/marketing" },
+            { key: "EnergyAccounting-water-crm", name: "Отопление", path: "/crm" },
+            { key: "EnergyAccounting-water-stocks", name: "Очистные сооружения", path: "/stocks" },
+            { key: "EnergyAccounting-water-stocks1", name: "Отчеты", path: "/stocks" },
         ],
     },
     {
+        key: "askue",
         icon: <UserCircleIcon />,
         name: "АСКУЭ",
         children: [
-            { name: "Мощность", path: "/wat" },
-            { name: "Энергия", path: "/analytics" },
+            { key: "askue-wat", name: "Мощность", path: "/wat" },
+            { key: "askue-analytics", name: "Энергия", path: "/analytics" },
         ],
     },
     {
+        key: "journal",
         name: "Журналы",
         icon: <TaskIcon />,
         children: [
-            { name: "Журнал технологов", path: "/task-list" },
-            { name: "Журнал РПО", path: "/task-kanban" },
-            { name: "Журнал лаборатория", path: "/task-kanban" },
+            { key: "journal-task-list", name: "Журнал технологов", path: "/task-list" },
+            { key: "journal-task-kanban", name: "Журнал РПО", path: "/task-kanban" },
+            { key: "journal-task-kanban1", name: "Журнал лаборатория", path: "/task-kanban" },
         ],
     },
     {
+        key: "reports",
         name: "Отчеты",
         icon: <ListIcon />,
         children: [
-            { name: "Простои по службам", path: "/DowntimeByServicesYear" },
-            { name: "Выпуск ГП", path: "/ReportProduction" },
-            { name: "Выпуск продукции", path: "/ReportProd" },
-            { name: "Отчеты БДМ", path: "/ReportBDM" },
-            { name: "Отчеты котельная", path: "/form-layout" },
-            { name: "Отчеты ОС", path: "/form-layout" },
-            { name: "Отчеты по электроэнергии", path: "/form-layout" },
+            { key: "reports-downtimeByServicesYear", name: "Простои по службам", path: "/DowntimeByServicesYear" },
+            { key: "reports-reportProduction", name: "Выпуск ГП", path: "/ReportProduction" },
+            { key: "reports-reportProd", name: "Выпуск продукции", path: "/ReportProd" },
+            { key: "reports-reportBDM", name: "Отчеты БДМ", path: "/ReportBDM" },
+            { key: "reports-form-layout", name: "Отчеты котельная", path: "/form-layout" },
+            { key: "reports-form-layout1", name: "Отчеты ОС", path: "/form-layout" },
+            { key: "reports-form-layout2", name: "Отчеты по электроэнергии", path: "/form-layout" },
         ],
     },
     {
+        key: "servicesWork",
         name: "Работы по службам",
         icon: <TableIcon />,
         children: [
-            { name: "Электрослужба", path: "/basic-tables" },
-            { name: "Мехслужба", path: "/data-tables" },
-            { name: "Энергослужба", path: "/data-tables" },
-            { name: "служба ОС", path: "/data-tables" },
+            { key: "servicesWork-basicTables", name: "Электрослужба", path: "/basic-tables" },
+            { key: "servicesWork-dataTables", name: "Мехслужба", path: "/data-tables" },
+            { key: "servicesWork-dataTables1", name: "Энергослужба", path: "/data-tables" },
+            { key: "servicesWork-dataTables2", name: "служба ОС", path: "/data-tables" },
         ],
     },
-];
+    // Остальные пункты меню с уникальными ключами...
+].map((item, index) => ({ ...item, key: item.key || generateKey("nav", index) }));
 
 const othersItems: MenuItem[] = [
     {
+        key: "production",
         icon: <PieChartIcon />,
         name: "Производство",
         children: [
-            { name: "План производства", path: "/line-chart", pro: true },
-            { name: "Выпущенная продукция", path: "/bar-chart", pro: true },
-            { name: "Затраты энергоресурсов", path: "/pie-chart", pro: true },
+            { key: "prod-plan", name: "План производства", path: "/line-chart", pro: true },
+            { key: "prod-output", name: "Выпущенная продукция", path: "/bar-chart", pro: true },
+            { key: "prod-costs", name: "Затраты энергоресурсов", path: "/pie-chart", pro: true },
         ],
     },
     {
+        key: "prs",
         name: "ПРС",
         icon: <BoxCubeIcon />,
         children: [
-            { name: "Тамбура", path: "/AllTamburs" },
-            { name: "Выпущенная продукция", path: "/AllRolls" },
+            { key: "prs-tamburs", name: "Тамбура", path: "/AllTamburs" },
+            { key: "prs-rolls", name: "Выпущенная продукция", path: "/AllRolls" },
         ],
     },
-];
+].map((item, index) => ({ ...item, key: item.key || generateKey("other", index) }));
 
 const supportItems: MenuItem[] = [
     {
+        key: "chat",
         icon: <ChatIcon />,
         name: "Chat",
         path: "/chat",
     }
-];
+].map((item, index) => ({ ...item, key: item.key || generateKey("support", index) }));
+
+type MenuType = "main" | "support" | "others";
 
 const AppSidebar: React.FC = () => {
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
     const location = useLocation();
 
-    // Состояние для отслеживания открытых путей
-    const [openPaths, setOpenPaths] = useState<{
-        main: string[];
-        support: string[];
-        others: string[];
-    }>({
-        main: [],
-        support: [],
-        others: [],
+    // Состояние для отслеживания открытых ключей меню
+    const [openKeys, setOpenKeys] = useState<Record<MenuType, Set<string>>>({
+        main: new Set(),
+        support: new Set(),
+        others: new Set(),
     });
 
     // Проверка активности пункта меню
@@ -151,66 +163,97 @@ const AppSidebar: React.FC = () => {
         [location.pathname]
     );
 
-    // Проверка активности родительского пункта
-    const isParentActive = useCallback(
-        (item: MenuItem): boolean => {
-            if (item.path && isActive(item.path)) return true;
-            if (item.children) {
-                return item.children.some(child => isParentActive(child));
-            }
-            return false;
-        },
-        [isActive]
-    );
+    // Рекурсивная проверка активности родителя
+    const isParentActive = useCallback((item: MenuItem): boolean => {
+        if (item.path && isActive(item.path)) return true;
+        if (item.children) {
+            return item.children.some(child => isParentActive(child));
+        }
+        return false;
+    }, [isActive]);
 
-    // Переключение подменю
-    const toggleSubmenu = (
-        path: string,
-        menuType: "main" | "support" | "others"
-    ) => {
-        setOpenPaths(prev => {
-            const currentPaths = [...prev[menuType]];
-            const pathIndex = currentPaths.indexOf(path);
+    // Переключение подменю с автоматическим закрытием
+    const toggleSubmenu = (key: string, menuType: MenuType) => {
+        setOpenKeys(prev => {
+            const newSet = new Set(prev[menuType]);
 
-            if (pathIndex > -1) {
-                // Удаляем путь и все его дочерние пути
-                currentPaths.splice(pathIndex);
+            if (newSet.has(key)) {
+                // Закрываем текущее меню и все его дочерние
+                newSet.delete(key);
+                const keysToRemove = Array.from(newSet).filter(k => k.startsWith(`${key}-`));
+                keysToRemove.forEach(k => newSet.delete(k));
             } else {
-                // Добавляем новый путь, удаляя предыдущие на том же уровне
-                const parentPath = path.split('/').slice(0, -1).join('/');
-                const parentIndex = currentPaths.findIndex(p => p === parentPath);
+                // Закрываем все меню того же уровня
+                const parentKey = key.includes('-') ? key.substring(0, key.lastIndexOf('-')) : null;
+                const sameLevelKeys = Array.from(newSet).filter(k => {
+                    const kParent = k.includes('-') ? k.substring(0, k.lastIndexOf('-')) : null;
+                    return kParent === parentKey;
+                });
 
-                if (parentIndex > -1) {
-                    currentPaths.splice(parentIndex + 1);
-                }
-                currentPaths.push(path);
+                sameLevelKeys.forEach(k => newSet.delete(k));
+                // Открываем новое меню
+                newSet.add(key);
             }
 
-            return { ...prev, [menuType]: currentPaths };
+            return { ...prev, [menuType]: newSet };
         });
     };
+
+    // Инициализация открытых меню при загрузке
+    useEffect(() => {
+        const findActiveKeys = (items: MenuItem[], menuType: MenuType, parentKey?: string): string[] => {
+            let activeKeys: string[] = [];
+
+            for (const item of items) {
+                const fullKey = parentKey ? `${parentKey}-${item.key}` : item.key;
+
+                if (item.path && isActive(item.path)) {
+                    activeKeys.push(fullKey);
+                    // Добавляем всех родителей
+                    if (parentKey) {
+                        activeKeys = [...activeKeys, ...parentKey.split('-')];
+                    }
+                }
+
+                if (item.children) {
+                    const childKeys = findActiveKeys(item.children, menuType, fullKey);
+                    if (childKeys.length > 0) {
+                        activeKeys = [...activeKeys, fullKey, ...childKeys];
+                    }
+                }
+            }
+            return activeKeys;
+        };
+
+        const newOpenKeys = { ...openKeys };
+        newOpenKeys.main = new Set(findActiveKeys(navItems, "main"));
+        newOpenKeys.support = new Set(findActiveKeys(supportItems, "support"));
+        newOpenKeys.others = new Set(findActiveKeys(othersItems, "others"));
+
+        setOpenKeys(newOpenKeys);
+    }, [location.pathname]);
 
     // Рекурсивный рендеринг пунктов меню
     const renderMenuItems = (
         items: MenuItem[],
-        menuType: "main" | "support" | "others",
-        parentPath = "",
+        menuType: MenuType,
+        parentKey?: string,
         level = 0
     ) => {
         return (
             <ul className="flex flex-col gap-4">
-                {items.map((item, index) => {
-                    const pathKey = parentPath ? `${parentPath}/${index}` : `${index}`;
+                {items.map((item) => {
+                    const fullKey = parentKey ? `${parentKey}-${item.key}` : item.key;
                     const hasChildren = !!item.children?.length;
-                    const isOpen = openPaths[menuType].includes(pathKey);
-                    const isActive = isParentActive(item);
+                    const isOpen = openKeys[menuType].has(fullKey);
+                    const isActiveItem = isParentActive(item);
 
                     return (
-                        <li key={`${menuType}-${pathKey}`}>
+                        <li key={fullKey}>
                             {hasChildren ? (
                                 <button
-                                    onClick={() => toggleSubmenu(pathKey, menuType)}
-                                    className={`menu-item group ${isActive
+                                    onClick={() => toggleSubmenu(fullKey, menuType)}
+                                    className={`menu-item group ${isActiveItem
                                             ? "menu-item-active"
                                             : "menu-item-inactive"
                                         } cursor-pointer ${!isExpanded && !isHovered
@@ -220,7 +263,7 @@ const AppSidebar: React.FC = () => {
                                     style={{ paddingLeft: `${level * 16}px` }}
                                 >
                                     <span
-                                        className={`menu-item-icon-size ${isActive
+                                        className={`menu-item-icon-size ${isActiveItem
                                                 ? "menu-item-icon-active"
                                                 : "menu-item-icon-inactive"
                                             }`}
@@ -241,14 +284,14 @@ const AppSidebar: React.FC = () => {
                                 item.path && (
                                     <Link
                                         to={item.path}
-                                        className={`menu-item group ${isActive
+                                        className={`menu-item group ${isActive(item.path)
                                                 ? "menu-item-active"
                                                 : "menu-item-inactive"
                                             }`}
                                         style={{ paddingLeft: `${level * 16}px` }}
                                     >
                                         <span
-                                            className={`menu-item-icon-size ${isActive
+                                            className={`menu-item-icon-size ${isActive(item.path)
                                                     ? "menu-item-icon-active"
                                                     : "menu-item-icon-inactive"
                                                 }`}
@@ -270,7 +313,7 @@ const AppSidebar: React.FC = () => {
                                     {renderMenuItems(
                                         item.children!,
                                         menuType,
-                                        pathKey,
+                                        fullKey,
                                         level + 1
                                     )}
                                 </div>
@@ -296,6 +339,7 @@ const AppSidebar: React.FC = () => {
             onMouseEnter={() => !isExpanded && setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
+            {/* Логотип и остальной код без изменений */}
             <div
                 className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
                     }`}
@@ -338,6 +382,7 @@ const AppSidebar: React.FC = () => {
                     )}
                 </Link>
             </div>
+
             <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
                 <nav className="mb-6">
                     <div className="flex flex-col gap-4">
@@ -356,6 +401,7 @@ const AppSidebar: React.FC = () => {
                             </h2>
                             {renderMenuItems(navItems, "main")}
                         </div>
+
                         <div className="">
                             <h2
                                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
@@ -371,6 +417,7 @@ const AppSidebar: React.FC = () => {
                             </h2>
                             {renderMenuItems(supportItems, "support")}
                         </div>
+
                         <div className="">
                             <h2
                                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
