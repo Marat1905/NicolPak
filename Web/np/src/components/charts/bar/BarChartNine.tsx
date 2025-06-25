@@ -66,7 +66,7 @@ export default function BarChartNine() {
         },
     ];
     const options: ApexOptions = {
-        colors: ["#465fff", "#ff2676", "#26ff55", "#ff26f8", "#fcba03", "#bafc03", "#bafc03", "#0373fc", "#8403fc", "#8403fc", "#e703fc","#fc03b5"],
+        colors: ["#465fff", "#ff2676", "#26ff55", "#ff26f8", "#fcba03", "#bafa03", "#bafb03", "#0373fc", "#8403fc", "#8403fc", "#e703fc","#fc03b5"],
         chart: {
             fontFamily: "Outfit, sans-serif",
             type: "bar",

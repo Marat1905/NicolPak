@@ -12,6 +12,7 @@ import DowntimeByServicesYear from "./pages/Reports/DowntimeByServicesYear";
 import ReportBDM from "./pages/Reports/ReportBDM";
 import ReportProduction from "./pages/Reports/ReportProduction";
 import ReportProd from "./pages/Reports/ReportProd";
+import Water from "./pages/EnergyAccounting/Water";
 
 
 export default function App() {
@@ -32,6 +33,8 @@ export default function App() {
                         <Route index path="/ReportBDM" element={<ReportBDM />} />
                         <Route index path="/ReportProduction" element={<ReportProduction />} />
                         <Route index path="/ReportProd" element={<ReportProd />} />
+
+                        <Route index path="/water" element={<Water />} />
                     </Route>
 
                 </Routes>

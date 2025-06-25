@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
-
-// Assume these icons are imported from an icon library
 import { useSidebar } from "../context/SidebarContext";
 import {
     BoxCubeIcon,
@@ -16,23 +13,26 @@ import {
     TaskIcon,
     UserCircleIcon
 } from "../icons";
+import { useLocation } from "react-router";
+import { Link } from "react-router";
 
-type SubItem = { name: string; path: string; pro?: boolean; new?: boolean, subChildren?: SubItem[] }
-
-type NavItem = {
+// Унифицированный тип для пунктов меню
+type MenuItem = {
     name: string;
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
     path?: string;
-    subItems?: SubItem[];
+    pro?: boolean;
+    new?: boolean;
+    children?: MenuItem[];
 };
 
-
-const navItems: NavItem[] = [
+// Данные меню
+const navItems: MenuItem[] = [
     {
         icon: <GridIcon />,
         name: "Домашняя",
-        subItems: [
-            { name: "Главная страница", path: "/"},
+        children: [
+            { name: "Главная страница", path: "/" },
             { name: "Простои по службам", path: "/DowntimeByServices" },
             { name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
             { name: "План производства", path: "/ProductionPlan" },
@@ -44,17 +44,18 @@ const navItems: NavItem[] = [
         icon: <CalenderIcon />,
         name: "Энергоучет",
         path: "/calendar",
-        subItems: [
+        children: [
             {
-                name: "Вода", path: "/water",
-                subChildren: [
+                name: "Вода",
+                path: "/water",
+                children: [
                     { name: "Воздух", path: "/wat" },
                     { name: "Земля", path: "/y" }
                 ]
             },
-            { name: "Котлы", path: "/analytics"},
-            { name: "Пар", path: "/marketing"},
-            { name: "Отопление", path: "/crm"},
+            { name: "Котлы", path: "/analytics" },
+            { name: "Пар", path: "/marketing" },
+            { name: "Отопление", path: "/crm" },
             { name: "Очистные сооружения", path: "/stocks" },
             { name: "Отчеты", path: "/stocks" },
         ],
@@ -62,7 +63,7 @@ const navItems: NavItem[] = [
     {
         icon: <UserCircleIcon />,
         name: "АСКУЭ",
-        subItems: [
+        children: [
             { name: "Мощность", path: "/wat" },
             { name: "Энергия", path: "/analytics" },
         ],
@@ -70,43 +71,42 @@ const navItems: NavItem[] = [
     {
         name: "Журналы",
         icon: <TaskIcon />,
-        subItems: [
-            { name: "Журнал технологов", path: "/task-list"},
-            { name: "Журнал РПО", path: "/task-kanban"},
+        children: [
+            { name: "Журнал технологов", path: "/task-list" },
+            { name: "Журнал РПО", path: "/task-kanban" },
             { name: "Журнал лаборатория", path: "/task-kanban" },
         ],
     },
     {
         name: "Отчеты",
         icon: <ListIcon />,
-        subItems: [
+        children: [
             { name: "Простои по службам", path: "/DowntimeByServicesYear" },
             { name: "Выпуск ГП", path: "/ReportProduction" },
             { name: "Выпуск продукции", path: "/ReportProd" },
-            { name: "Отчеты БДМ", path: "/ReportBDM"},
-            { name: "Отчеты котельная", path: "/form-layout"},
+            { name: "Отчеты БДМ", path: "/ReportBDM" },
+            { name: "Отчеты котельная", path: "/form-layout" },
             { name: "Отчеты ОС", path: "/form-layout" },
-            { name: "Отчеты по электроэнергии", path: "/form-layout"},
+            { name: "Отчеты по электроэнергии", path: "/form-layout" },
         ],
     },
     {
         name: "Работы по службам",
         icon: <TableIcon />,
-        subItems: [
+        children: [
             { name: "Электрослужба", path: "/basic-tables" },
             { name: "Мехслужба", path: "/data-tables" },
             { name: "Энергослужба", path: "/data-tables" },
             { name: "служба ОС", path: "/data-tables" },
         ],
     },
-    
 ];
 
-const othersItems: NavItem[] = [
+const othersItems: MenuItem[] = [
     {
         icon: <PieChartIcon />,
         name: "Производство",
-        subItems: [
+        children: [
             { name: "План производства", path: "/line-chart", pro: true },
             { name: "Выпущенная продукция", path: "/bar-chart", pro: true },
             { name: "Затраты энергоресурсов", path: "/pie-chart", pro: true },
@@ -115,14 +115,14 @@ const othersItems: NavItem[] = [
     {
         name: "ПРС",
         icon: <BoxCubeIcon />,
-        subItems: [
+        children: [
             { name: "Тамбура", path: "/AllTamburs" },
             { name: "Выпущенная продукция", path: "/AllRolls" },
         ],
     },
 ];
 
-const supportItems: NavItem[] = [
+const supportItems: MenuItem[] = [
     {
         icon: <ChatIcon />,
         name: "Chat",
@@ -134,233 +134,153 @@ const AppSidebar: React.FC = () => {
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
     const location = useLocation();
 
-    const [openSubmenu, setOpenSubmenu] = useState<{
-        type: "main" | "support" | "others";
-        index: number;
-    } | null>(null);
-    const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
-        {}
-    );
-    const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    // Состояние для отслеживания открытых путей
+    const [openPaths, setOpenPaths] = useState<{
+        main: string[];
+        support: string[];
+        others: string[];
+    }>({
+        main: [],
+        support: [],
+        others: [],
+    });
 
-    // const isActive = (path: string) => location.pathname === path;
+    // Проверка активности пункта меню
     const isActive = useCallback(
-        (path: string) => location.pathname === path,
+        (path?: string) => path && location.pathname === path,
         [location.pathname]
     );
 
-    useEffect(() => {
-        let submenuMatched = false;
-        ["main", "support", "others"].forEach((menuType) => {
-            const items =
-                menuType === "main"
-                    ? navItems
-                    : menuType === "support"
-                        ? supportItems
-                        : othersItems;
-            items.forEach((nav, index) => {
-                if (nav.subItems) {
-                    nav.subItems.forEach((subItem) => {
-                        if (isActive(subItem.path)) {
-                            setOpenSubmenu({
-                                type: menuType as "main" | "support" | "others",
-                                index,
-                            });
-                            submenuMatched = true;
-                        }
-                    });
-                }
-            });
-        });
-
-        if (!submenuMatched) {
-            setOpenSubmenu(null);
-        }
-    }, [location, isActive]);
-
-    useEffect(() => {
-        if (openSubmenu !== null) {
-            const key = `${openSubmenu.type}-${openSubmenu.index}`;
-            if (subMenuRefs.current[key]) {
-                setSubMenuHeight((prevHeights) => ({
-                    ...prevHeights,
-                    [key]: subMenuRefs.current[key]?.scrollHeight || 0,
-                }));
+    // Проверка активности родительского пункта
+    const isParentActive = useCallback(
+        (item: MenuItem): boolean => {
+            if (item.path && isActive(item.path)) return true;
+            if (item.children) {
+                return item.children.some(child => isParentActive(child));
             }
-        }
-    }, [openSubmenu]);
+            return false;
+        },
+        [isActive]
+    );
 
-    const handleSubmenuToggle = (
-        index: number,
+    // Переключение подменю
+    const toggleSubmenu = (
+        path: string,
         menuType: "main" | "support" | "others"
     ) => {
-        setOpenSubmenu((prevOpenSubmenu) => {
-            if (
-                prevOpenSubmenu &&
-                prevOpenSubmenu.type === menuType &&
-                prevOpenSubmenu.index === index
-            ) {
-                return null;
+        setOpenPaths(prev => {
+            const currentPaths = [...prev[menuType]];
+            const pathIndex = currentPaths.indexOf(path);
+
+            if (pathIndex > -1) {
+                // Удаляем путь и все его дочерние пути
+                currentPaths.splice(pathIndex);
+            } else {
+                // Добавляем новый путь, удаляя предыдущие на том же уровне
+                const parentPath = path.split('/').slice(0, -1).join('/');
+                const parentIndex = currentPaths.findIndex(p => p === parentPath);
+
+                if (parentIndex > -1) {
+                    currentPaths.splice(parentIndex + 1);
+                }
+                currentPaths.push(path);
             }
-            return { type: menuType, index };
+
+            return { ...prev, [menuType]: currentPaths };
         });
     };
 
+    // Рекурсивный рендеринг пунктов меню
     const renderMenuItems = (
-        items: NavItem[],
-        menuType: "main" | "support" | "others"
-    ) => (
-        <ul className="flex flex-col gap-4">
-            {items.map((nav, index) => (
-                <li key={nav.name}>
-                    {nav.subItems ? (
-                        <button
-                            onClick={() => handleSubmenuToggle(index, menuType)}
-                            className={`menu-item group ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                                    ? "menu-item-active"
-                                    : "menu-item-inactive"
-                                } cursor-pointer ${!isExpanded && !isHovered
-                                    ? "lg:justify-center"
-                                    : "lg:justify-start"
-                                }`}
-                        >
-                            <span
-                                className={`menu-item-icon-size  ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                                        ? "menu-item-icon-active"
-                                        : "menu-item-icon-inactive"
-                                    }`}
-                            >
-                                {nav.icon}
-                            </span>
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <span className="menu-item-text">{nav.name}</span>
-                            )}
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <ChevronDownIcon
-                                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
-                                            openSubmenu?.index === index
-                                            ? "rotate-180 text-brand-500"
-                                            : ""
-                                        }`}
-                                />
-                            )}
-                        </button>
+        items: MenuItem[],
+        menuType: "main" | "support" | "others",
+        parentPath = "",
+        level = 0
+    ) => {
+        return (
+            <ul className="flex flex-col gap-4">
+                {items.map((item, index) => {
+                    const pathKey = parentPath ? `${parentPath}/${index}` : `${index}`;
+                    const hasChildren = !!item.children?.length;
+                    const isOpen = openPaths[menuType].includes(pathKey);
+                    const isActive = isParentActive(item);
 
-                    ) : (
-                        nav.path && (
-                            <Link
-                                to={nav.path}
-                                className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-                                    }`}
-                            >
-                                <span
-                                    className={`menu-item-icon-size ${isActive(nav.path)
-                                            ? "menu-item-icon-active"
-                                            : "menu-item-icon-inactive"
+                    return (
+                        <li key={`${menuType}-${pathKey}`}>
+                            {hasChildren ? (
+                                <button
+                                    onClick={() => toggleSubmenu(pathKey, menuType)}
+                                    className={`menu-item group ${isActive
+                                            ? "menu-item-active"
+                                            : "menu-item-inactive"
+                                        } cursor-pointer ${!isExpanded && !isHovered
+                                            ? "lg:justify-center"
+                                            : "lg:justify-start"
                                         }`}
+                                    style={{ paddingLeft: `${level * 16}px` }}
                                 >
-                                    {nav.icon}
-                                </span>
-                                {(isExpanded || isHovered || isMobileOpen) && (
-                                    <span className="menu-item-text">{nav.name}</span>
-                                )}
-                            </Link>
-                        )
-                    )}
-                    {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-                        <div
-                            ref={(el) => {
-                                subMenuRefs.current[`${menuType}-${index}`] = el;
-                            }}
-                            className="overflow-hidden transition-all duration-300"
-                            style={{
-                                height:
-                                    openSubmenu?.type === menuType && openSubmenu?.index === index
-                                        ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                                        : "0px",
-                            }}
-                        >
-                            <ul className="mt-2 space-y-1 ml-9">
-                                {nav.subItems.map((subItem) => (
-                                    <li key={subItem.name}>
-                                        <Link
-                                            to={subItem.path}
-                                            className={`menu-dropdown-item ${isActive(subItem.path)
-                                                    ? "menu-dropdown-item-active"
-                                                    : "menu-dropdown-item-inactive"
+                                    <span
+                                        className={`menu-item-icon-size ${isActive
+                                                ? "menu-item-icon-active"
+                                                : "menu-item-icon-inactive"
+                                            }`}
+                                    >
+                                        {item.icon}
+                                    </span>
+                                    {(isExpanded || isHovered || isMobileOpen) && (
+                                        <span className="menu-item-text">{item.name}</span>
+                                    )}
+                                    {(isExpanded || isHovered || isMobileOpen) && hasChildren && (
+                                        <ChevronDownIcon
+                                            className={`ml-auto w-5 h-5 transition-transform duration-200 ${isOpen ? "rotate-180 text-brand-500" : ""
+                                                }`}
+                                        />
+                                    )}
+                                </button>
+                            ) : (
+                                item.path && (
+                                    <Link
+                                        to={item.path}
+                                        className={`menu-item group ${isActive
+                                                ? "menu-item-active"
+                                                : "menu-item-inactive"
+                                            }`}
+                                        style={{ paddingLeft: `${level * 16}px` }}
+                                    >
+                                        <span
+                                            className={`menu-item-icon-size ${isActive
+                                                    ? "menu-item-icon-active"
+                                                    : "menu-item-icon-inactive"
                                                 }`}
                                         >
-                                            {subItem.name}
-                                            <span className="flex items-center gap-1 ml-auto">
-                                                {subItem.new && (
-                                                    <span
-                                                        className={`ml-auto ${isActive(subItem.path)
-                                                                ? "menu-dropdown-badge-active"
-                                                                : "menu-dropdown-badge-inactive"
-                                                            } menu-dropdown-badge`}
-                                                    >
-                                                        new
-                                                    </span>
-                                                )}
-                                                {subItem.pro && (
-                                                    <span
-                                                        className={`ml-auto ${isActive(subItem.path)
-                                                                ? "menu-dropdown-badge-active"
-                                                                : "menu-dropdown-badge-inactive"
-                                                            } menu-dropdown-badge`}
-                                                    >
-                                                        pro
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </Link>
-                                        {/*<ul className="mt-2 space-y-1 ml-9">*/}
-                                        {/*    {subItem.subChildren?.map((chil) => (*/}
-                                        {/*        <li key={chil.name}>*/}
-                                        {/*            <Link*/}
-                                        {/*                to={chil.path}*/}
-                                        {/*                className={`menu-dropdown-item ${isActive(chil.path)*/}
-                                        {/*                    ? "menu-dropdown-item-active"*/}
-                                        {/*                    : "menu-dropdown-item-inactive"*/}
-                                        {/*                    }`}*/}
-                                        {/*            >*/}
-                                        {/*                {chil.name}*/}
-                                        {/*                <span className="flex items-center gap-1 ml-auto">*/}
-                                        {/*                    {chil.new && (*/}
-                                        {/*                        <span*/}
-                                        {/*                            className={`ml-auto ${isActive(chil.path)*/}
-                                        {/*                                ? "menu-dropdown-badge-active"*/}
-                                        {/*                                : "menu-dropdown-badge-inactive"*/}
-                                        {/*                                } menu-dropdown-badge`}*/}
-                                        {/*                        >*/}
-                                        {/*                            new*/}
-                                        {/*                        </span>*/}
-                                        {/*                    )}*/}
-                                        {/*                    {chil.pro && (*/}
-                                        {/*                        <span*/}
-                                        {/*                            className={`ml-auto ${isActive(chil.path)*/}
-                                        {/*                                ? "menu-dropdown-badge-active"*/}
-                                        {/*                                : "menu-dropdown-badge-inactive"*/}
-                                        {/*                                } menu-dropdown-badge`}*/}
-                                        {/*                        >*/}
-                                        {/*                            pro*/}
-                                        {/*                        </span>*/}
-                                        {/*                    )}*/}
-                                        {/*                </span>*/}
-                                        {/*            </Link>*/}
-                                        {/*        </li>*/}
+                                            {item.icon}
+                                        </span>
+                                        {(isExpanded || isHovered || isMobileOpen) && (
+                                            <span className="menu-item-text">{item.name}</span>
+                                        )}
+                                    </Link>
+                                )
+                            )}
 
-                                        {/*    ))}*/}
-                                        {/*</ul>*/}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </li>
-            ))}
-        </ul>
-    );
+                            {hasChildren && (isExpanded || isHovered || isMobileOpen) && (
+                                <div
+                                    className={`overflow-hidden transition-all duration-300 ${isOpen ? "block" : "hidden"
+                                        }`}
+                                >
+                                    {renderMenuItems(
+                                        item.children!,
+                                        menuType,
+                                        pathKey,
+                                        level + 1
+                                    )}
+                                </div>
+                            )}
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    };
 
     return (
         <aside
@@ -383,7 +303,6 @@ const AppSidebar: React.FC = () => {
                 <Link to="/">
                     {isExpanded || isHovered || isMobileOpen ? (
                         <>
-                            { /*когда светлая тема*/}
                             <img
                                 className="dark:hidden"
                                 src="/images/logo/logo.svg"
@@ -391,7 +310,6 @@ const AppSidebar: React.FC = () => {
                                 width={150}
                                 height={40}
                             />
-                            {/*когда темная тема*/}
                             <img
                                 className="hidden dark:block"
                                 src="/images/logo/logo-dark.svg"
@@ -401,26 +319,22 @@ const AppSidebar: React.FC = () => {
                             />
                         </>
                     ) : (
-                            <>
-                                {/*когда темная тема*/}
-                                <img
-                                    className="hidden dark:block"
-                                    src="/images/logo/logo-icon-dark.svg"
-                                    alt="Logo"
-                                    width={40}
-                                    height={40}
-                                />
-                                { /*когда светлая тема*/}
-                                <img
-                                    className="dark:hidden"
-                                    src="/images/logo/logo-icon.svg"
-                                    alt="Logo"
-                                    width={40}
-                                    height={40}
-                                />
+                        <>
+                            <img
+                                className="hidden dark:block"
+                                src="/images/logo/logo-icon-dark.svg"
+                                alt="Logo"
+                                width={40}
+                                height={40}
+                            />
+                            <img
+                                className="dark:hidden"
+                                src="/images/logo/logo-icon.svg"
+                                alt="Logo"
+                                width={40}
+                                height={40}
+                            />
                         </>
-                            
-
                     )}
                 </Link>
             </div>
@@ -474,7 +388,6 @@ const AppSidebar: React.FC = () => {
                         </div>
                     </div>
                 </nav>
-               
             </div>
         </aside>
     );
