@@ -6,13 +6,14 @@ import './index.css'
 import AllTamburs from '../src/pages/Prs/AllTamburs'
 import DowntimeByServices from "./pages/Main/DowntimeByServices";
 import ShiftWorkAnalysis from "./pages/Main/ShiftWorkAnalysis";
-import WorkSchedule from "./pages/Main/WorkSchedule";
 import ProductionPlan from "./pages/Main/ProductionPlan";
 import DowntimeByServicesYear from "./pages/Reports/DowntimeByServicesYear";
 import ReportBDM from "./pages/Reports/ReportBDM";
 import ReportProduction from "./pages/Reports/ReportProduction";
 import ReportProd from "./pages/Reports/ReportProd";
 import Water from "./pages/EnergyAccounting/Water";
+import WorkSchedule from "./pages/Main/WorkSchedule";
+
 
 
 export default function App() {
