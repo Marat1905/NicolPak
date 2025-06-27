@@ -12,6 +12,5 @@
     <Folder Include="src\icons\" />
     <Folder Include="src\interface\Tables\" />
     <Folder Include="src\pages\Prs\" />
-    <Folder Include="src\pages\EnergyAccounting\" />
   </ItemGroup>
 </Project>

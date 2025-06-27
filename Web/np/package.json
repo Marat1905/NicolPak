@@ -22,7 +22,11 @@
 
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "chart.js": "^3.7.1",
+    "react-icons": "^4.12.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -42,6 +46,8 @@
     "postcss": "^8.5.2",
     "tailwindcss": "^4.0.0",
 
-    "@types/xlsx": "^0.0.36"
+    "@types/xlsx": "^0.0.36",
+
+    "@types/chart.js": "^2.9.37"
   }
 }
