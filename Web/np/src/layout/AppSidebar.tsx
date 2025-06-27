@@ -43,7 +43,7 @@ const navItems: MenuItem[] = [
             { key: "home-shift", name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
             { key: "home-production", name: "План производства", path: "/ProductionPlan" },
             { key: "home-schedule", name: "График работы сменного персонала", path: "/WorkSchedule" },
-            { key: "home-birthdays", name: "Дни рождения сотрудников", path: "/stocks" },
+            { key: "home-birthday", name: "Дни рождения сотрудников", path: "/Birthday" },
         ],
     },
     {

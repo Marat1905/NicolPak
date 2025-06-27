@@ -13,6 +13,7 @@ import ReportProduction from "./pages/Reports/ReportProduction";
 import ReportProd from "./pages/Reports/ReportProd";
 import Water from "./pages/EnergyAccounting/Water";
 import WorkSchedule from "./pages/Main/WorkSchedule";
+import Birthday from "./pages/Main/Birthday";
 
 
 
@@ -28,6 +29,9 @@ export default function App() {
                         <Route index path="/ShiftWorkAnalysis" element={<ShiftWorkAnalysis />} />
                         <Route index path="/WorkSchedule" element={<WorkSchedule />} />
                         <Route index path="/ProductionPlan" element={<ProductionPlan />} />
+                        <Route index path="/Birthday" element={<Birthday />} />
+
+
                         <Route path="/AllTamburs" element={<AllTamburs />} />
 
                         <Route index path="/DowntimeByServicesYear" element={<DowntimeByServicesYear />} />
