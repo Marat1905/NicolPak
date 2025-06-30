@@ -16,6 +16,7 @@ import WorkSchedule from "./pages/Main/WorkSchedule";
 
 import WaterPage from "./pages/EnergyAccounting/WaterPage";
 import BirthdayPage from "./pages/Main/BirthdayPage";
+import WaterNodesReport from "./pages/EnergyAccounting/WaterNodesReport";
 
 
 
@@ -34,7 +35,7 @@ export default function App() {
                         <Route index path="/Birthday" element={<BirthdayPage />} />
 
                         <Route index path="/Water" element={<WaterPage />} />
-
+                        <Route index path="/WaterNodesReport" element={<WaterNodesReport />} />
 
                         <Route path="/AllTamburs" element={<AllTamburs />} />
 

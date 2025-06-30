@@ -56,8 +56,8 @@ const navItems: MenuItem[] = [
                 key: "water",
                 name: "Вода",
                 children: [
-                    { key: "air", name: "Показание с приборов", path: "/Water", },
-                    { key: "earth", name: "Сменный отчет по воде", path: "/earth" }
+                    { key: "waterDevices", name: "Показание с приборов", path: "/Water", },
+                    { key: "WaterNodesReport", name: "Сменный отчет по воде", path: "/WaterNodesReport" }
                 ]
             },
             { key: "boilers", name: "Котлы", path: "/boilers" },
