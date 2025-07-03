@@ -50,17 +50,23 @@ const navItems: MenuItem[] = [
         key: "energy",
         icon: <CalenderIcon />,
         name: "Энергоучет",
-        path: "/calendar",
         children: [
             {
                 key: "water",
                 name: "Вода",
                 children: [
                     { key: "waterDevices", name: "Показание с приборов", path: "/Water", },
-                    { key: "WaterNodesReport", name: "Сменный отчет по воде", path: "/WaterNodesReport" }
+                    { key: "WaterNodesReport", name: "Сменный отчет по воде", path: "/WaterNodesReport" },
+                    { key: "WaterPeriodReport", name: "Отчет по воде за период", path: "/WaterPeriodReport" }
                 ]
             },
-            { key: "boilers", name: "Котлы", path: "/boilers" },
+            {
+                key: "boilers",
+                name: "Котлы",
+                children: [
+                    { key: "boilersDevices", name: "Показание с приборов", path: "/BoilerReport", },
+                ]
+            },
             { key: "steam", name: "Пар", path: "/steam" },
             { key: "heating", name: "Отопление", path: "/heating" },
             { key: "treatment", name: "Очистные сооружения", path: "/treatment" },

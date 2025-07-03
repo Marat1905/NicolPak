@@ -29,8 +29,9 @@ import {
     startOfMonth,
     endOfMonth
 } from 'date-fns';
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import PageMeta from "../../components/common/PageMeta";
+import PageMeta from '../../../components/common/PageMeta';
+import PageBreadcrumb from '../../../components/common/PageBreadCrumb';
+
 
 Chart.register(...registerables);
 

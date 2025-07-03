@@ -14,9 +14,11 @@ import ReportProd from "./pages/Reports/ReportProd";
 
 import WorkSchedule from "./pages/Main/WorkSchedule";
 
-import WaterPage from "./pages/EnergyAccounting/WaterPage";
+import WaterPage from "./pages/EnergyAccounting/Water/WaterPage";
 import BirthdayPage from "./pages/Main/BirthdayPage";
-import WaterNodesReport from "./pages/EnergyAccounting/WaterNodesReport";
+import WaterNodesReport from "./pages/EnergyAccounting/Water/WaterNodesReport";
+import WaterPeriodReport from "./pages/EnergyAccounting/Water/WaterPeriodReport";
+import BoilerReport from "./pages/EnergyAccounting/Boiler/BoilerReport";
 
 
 
@@ -36,6 +38,10 @@ export default function App() {
 
                         <Route index path="/Water" element={<WaterPage />} />
                         <Route index path="/WaterNodesReport" element={<WaterNodesReport />} />
+                        <Route index path="/WaterPeriodReport" element={<WaterPeriodReport />} />
+
+                        <Route index path="/BoilerReport" element={<BoilerReport />} />
+
 
                         <Route path="/AllTamburs" element={<AllTamburs />} />
 
