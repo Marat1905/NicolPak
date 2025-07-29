@@ -13,5 +13,6 @@
     <Folder Include="src\interface\Tables\" />
     <Folder Include="src\pages\EnergyAccounting\Boiler\" />
     <Folder Include="src\pages\Prs\" />
+    <Folder Include="src\pages\ASKUE\" />
   </ItemGroup>
 </Project>

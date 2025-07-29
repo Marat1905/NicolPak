@@ -19,6 +19,7 @@ import BirthdayPage from "./pages/Main/BirthdayPage";
 import WaterNodesReport from "./pages/EnergyAccounting/Water/WaterNodesReport";
 import WaterPeriodReport from "./pages/EnergyAccounting/Water/WaterPeriodReport";
 import BoilerReport from "./pages/EnergyAccounting/Boiler/BoilerReport";
+import ASKUEReport from "./pages/ASKUE/ASKUEReport";
 
 
 
@@ -41,6 +42,8 @@ export default function App() {
                         <Route index path="/WaterPeriodReport" element={<WaterPeriodReport />} />
 
                         <Route index path="/BoilerReport" element={<BoilerReport />} />
+
+                        <Route index path="/ASKUEReport" element={<ASKUEReport />} />
 
 
                         <Route path="/AllTamburs" element={<AllTamburs />} />

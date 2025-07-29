@@ -78,7 +78,7 @@ const navItems: MenuItem[] = [
         icon: <UserCircleIcon />,
         name: "АСКУЭ",
         children: [
-            { key: "power", name: "Мощность", path: "/power" },
+            { key: "ASKUEReport", name: "Мощность", path: "/ASKUEReport" },
             { key: "energy", name: "Энергия", path: "/energy" },
         ],
     },

@@ -281,27 +281,28 @@ const BoilerReport = () => {
     };
 
     const TrendModal = ({ title, onClose, children }: {
-        title: string;
-        onClose: () => void;
-        children: React.ReactNode;
-    }) => (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-auto">
-                <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4">
-                    <h3 className="text-xl font-semibold">{title}</h3>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                    >
-                        <FiX size={24} />
-                    </button>
-                </div>
-                <div className="p-4">
-                    {children}
-                </div>
-            </div>
-        </div>
-    );
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) => (
+  <div className="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center z-50 p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-auto border border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-4">
+        <h3 className="text-xl font-semibold">{title}</h3>
+        <button 
+          onClick={onClose}
+          className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          aria-label="Закрыть"
+        >
+          <FiX size={24} />
+        </button>
+      </div>
+      <div className="p-4">
+        {children}
+      </div>
+    </div>
+  </div>
+);
 
     const totalInstantFlow = boilersData.slice(0, 4).reduce((sum, boiler) => sum + boiler.instantFlow, 0);
     const totalDayTotal = boilersData.slice(0, 4).reduce((sum, boiler) => sum + boiler.dayTotal, 0);
