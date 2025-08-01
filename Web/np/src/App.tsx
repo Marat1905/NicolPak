@@ -20,6 +20,8 @@ import WaterNodesReport from "./pages/EnergyAccounting/Water/WaterNodesReport";
 import WaterPeriodReport from "./pages/EnergyAccounting/Water/WaterPeriodReport";
 import BoilerReport from "./pages/EnergyAccounting/Boiler/BoilerReport";
 import ASKUEReport from "./pages/ASKUE/ASKUEReport";
+import MonthlyReport from "./pages/Reports/MonthlyReport";
+import VibrationTemperatureMonitoring from "./pages/Reports/VibrationTemperatureMonitoring";
 
 
 
@@ -50,8 +52,11 @@ export default function App() {
 
                         <Route index path="/DowntimeByServicesYear" element={<DowntimeByServicesYear />} />
                         <Route index path="/ReportBDM" element={<ReportBDM />} />
+                        <Route index path="/MonthlyReport" element={<MonthlyReport />} />
                         <Route index path="/ReportProduction" element={<ReportProduction />} />
                         <Route index path="/ReportProd" element={<ReportProd />} />
+                        VibrationTemperatureMonitoring
+                        <Route index path="/VibrationTemperatureMonitoring" element={<VibrationTemperatureMonitoring />} />
 
                     </Route>
 

@@ -101,9 +101,11 @@ const navItems: MenuItem[] = [
             { key: "gp-production", name: "Выпуск ГП", path: "/ReportProduction" },
             { key: "products", name: "Выпуск продукции", path: "/ReportProd" },
             { key: "bdm", name: "Отчеты БДМ", path: "/ReportBDM" },
+            { key: "MonthlyReport", name: "Отчеты БДМ за месяц", path: "/MonthlyReport" },
             { key: "boiler", name: "Отчеты котельная", path: "/boiler-reports" },
             { key: "os", name: "Отчеты ОС", path: "/os-reports" },
             { key: "electricity", name: "Отчеты по электроэнергии", path: "/electricity-reports" },
+            { key: "VibrationTemperatureMonitoring", name: "Отчет по оборудованию", path: "/VibrationTemperatureMonitoring" },
         ],
     },
     {
