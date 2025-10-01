@@ -36,7 +36,8 @@
     "antd": "^5.0.0",
     "@ant-design/icons": "^5.0.0",
     "dayjs": "^1.11.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "@heroicons/react": "^2.0.18"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
