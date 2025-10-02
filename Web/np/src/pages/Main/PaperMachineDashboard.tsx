@@ -106,7 +106,7 @@ const PaperMachineDashboard = () => {
             electricity: 2380,
             steam: 3050
         },
-        productType: "125г/м² ширина 3600",
+        productType: "125г/м² ширина 3800",
         previousShiftProductType: "125г/м² ширина 3800"
     });
 
@@ -280,7 +280,7 @@ const PaperMachineDashboard = () => {
                                 <StatusIndicator status={currentMetrics.status} />
                             </div>
                             <p className="text-gray-600 dark:text-gray-400">
-                                Бумагоделательная машина №1 - Мониторинг в реальном времени
+                                Бумагоделательная машина - Мониторинг в реальном времени
                             </p>
                             <p className="text-gray-500 dark:text-gray-500 text-sm mt-1">
                                 Тип продукции: {currentMetrics.productType}
