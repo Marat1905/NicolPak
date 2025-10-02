@@ -39,6 +39,7 @@ const navItems: MenuItem[] = [
         name: "Домашняя",
         children: [
             { key: "home-main", name: "Главная страница", path: "/" },
+            { key: "home-PaperMachineDashboard", name: "Тест", path: "/PaperMachineDashboard" },
             { key: "home-downtime", name: "Простои по службам", path: "/DowntimeByServices" },
             { key: "home-shift", name: "Анализ работы смен", path: "/ShiftWorkAnalysis" },
             { key: "home-production", name: "План производства", path: "/ProductionPlan" },

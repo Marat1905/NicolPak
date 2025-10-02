@@ -22,6 +22,7 @@ import BoilerReport from "./pages/EnergyAccounting/Boiler/BoilerReport";
 import ASKUEReport from "./pages/ASKUE/ASKUEReport";
 import MonthlyReport from "./pages/Reports/MonthlyReport";
 import VibrationTemperatureMonitoring from "./pages/Reports/VibrationTemperatureMonitoring";
+import PaperMachineDashboard from "./pages/Main/PaperMachineDashboard";
 
 
 
@@ -33,6 +34,7 @@ export default function App() {
                 <Routes>
                     <Route element={<AppLayout />}>
                         <Route index path="/" element={<Home />} />
+                        <Route index path="/PaperMachineDashboard" element={<PaperMachineDashboard />} />
                         <Route index path="/DowntimeByServices" element={<DowntimeByServices />} />
                         <Route index path="/ShiftWorkAnalysis" element={<ShiftWorkAnalysis />} />
                         <Route index path="/WorkSchedule" element={<WorkSchedule />} />
