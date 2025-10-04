@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import {
     FiActivity,
     FiTarget,
@@ -64,6 +64,12 @@ interface MachineMetrics {
     previousShiftAvgSpeed: number;
     previousShiftPlan: number;
     previousShiftCompleted: number;
+    availability: number;
+    performance: number;
+    quality: number;
+    previousShiftAvailability: number;
+    previousShiftPerformance: number;
+    previousShiftQuality: number;
     resources: {
         water: number;
         electricity: number;
@@ -76,6 +82,7 @@ interface MachineMetrics {
     };
     productType: string;
     previousShiftProductType: string;
+    shiftStartTime: string;
 }
 
 interface MonthlyData {
@@ -134,6 +141,12 @@ const PaperMachineDashboard = () => {
         previousShiftAvgSpeed: 575.8,
         previousShiftPlan: 14800,
         previousShiftCompleted: 14200,
+        availability: 94.2,
+        performance: 92.8,
+        quality: 98.5,
+        previousShiftAvailability: 93.0,
+        previousShiftPerformance: 90.7,
+        previousShiftQuality: 97.7,
         resources: {
             water: 12500,
             electricity: 2450,
@@ -145,7 +158,8 @@ const PaperMachineDashboard = () => {
             steam: 3050
         },
         productType: "125г/м² ширина 3800",
-        previousShiftProductType: "125г/м² ширина 3800"
+        previousShiftProductType: "125г/м² ширина 3800",
+        shiftStartTime: new Date().toISOString().slice(0, 10) + 'T08:00:00'
     });
 
     const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
@@ -226,7 +240,7 @@ const PaperMachineDashboard = () => {
         setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
     };
 
-    // Анимированный круговой индикатор
+    // Анимированный круговой индикатор с градиентом
     const CircularProgress: React.FC<{
         value: number;
         max: number;
@@ -234,15 +248,16 @@ const PaperMachineDashboard = () => {
         strokeWidth?: number;
         label: string;
         unit: string;
-        color?: string;
-    }> = ({ value, max, size = 100, strokeWidth = 8, label, unit, color }) => {
+        gradient?: { from: string; to: string };
+    }> = ({ value, max, size = 100, strokeWidth = 8, label, unit, gradient }) => {
         const radius = (size - strokeWidth) / 2;
         const circumference = radius * 2 * Math.PI;
         const progress = (value / max) * circumference;
         const percentage = (value / max) * 100;
+        const gradientId = useId();
 
         const getColor = (percent: number) => {
-            if (color) return color;
+            if (gradient) return `url(#${gradientId})`;
             if (percent >= 90) return '#10B981';
             if (percent >= 70) return '#F59E0B';
             return '#EF4444';
@@ -254,6 +269,14 @@ const PaperMachineDashboard = () => {
             <div className="flex flex-col items-center group">
                 <div className="relative" style={{ width: size, height: size }}>
                     <svg width={size} height={size} className="transform -rotate-90">
+                        {gradient && (
+                            <defs>
+                                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor={gradient.from} />
+                                    <stop offset="100%" stopColor={gradient.to} />
+                                </linearGradient>
+                            </defs>
+                        )}
                         <circle
                             cx={size / 2}
                             cy={size / 2}
@@ -275,7 +298,7 @@ const PaperMachineDashboard = () => {
                             strokeLinecap="round"
                             className="transition-all duration-1000 ease-out group-hover:stroke-width-[12px]"
                             style={{
-                                filter: `drop-shadow(0 0 8px ${progressColor}40)`
+                                filter: `drop-shadow(0 0 8px ${gradient ? '#3b82f640' : progressColor + '40'})`
                             }}
                         />
                     </svg>
@@ -359,8 +382,8 @@ const PaperMachineDashboard = () => {
 
         return (
             <div className={`flex items-center text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 cursor-pointer ${isPositive
-                    ? 'text-green-600 dark:text-green-400 bg-green-500/20 hover:bg-green-500/30 hover:shadow-lg'
-                    : 'text-red-600 dark:text-red-400 bg-red-500/20 hover:bg-red-500/30 hover:shadow-lg'
+                ? 'text-green-600 dark:text-green-400 bg-green-500/20 hover:bg-green-500/30 hover:shadow-lg'
+                : 'text-red-600 dark:text-red-400 bg-red-500/20 hover:bg-red-500/30 hover:shadow-lg'
                 }`}>
                 {isPositive ? <FiArrowUp className="w-3 h-3 mr-1" /> : <FiArrowDown className="w-3 h-3 mr-1" />}
                 <span>{Math.abs(trend).toFixed(1)}{unit} ({percentage.toFixed(1)}%)</span>
@@ -405,8 +428,8 @@ const PaperMachineDashboard = () => {
                         </div>
                     </div>
                     <div className={`text-xs font-medium px-3 py-1 rounded-full transition-all duration-300 hover:scale-110 ${Math.abs(deviation) < 1 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200' :
-                            Math.abs(deviation) < 3 ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-200' :
-                                'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 hover:bg-red-200'
+                        Math.abs(deviation) < 3 ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-200' :
+                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 hover:bg-red-200'
                         }`}>
                         {deviation > 0 ? '+' : ''}{deviation.toFixed(1)}%
                     </div>
@@ -441,7 +464,7 @@ const PaperMachineDashboard = () => {
         );
     };
 
-    // Карточка выполнения плана с интерактивностью
+    // Карточка выполнения плана смены с интерактивностью
     const PlanProgressCard: React.FC<{
         title: string;
         completed: number;
@@ -450,8 +473,39 @@ const PaperMachineDashboard = () => {
         gradient: string;
         icon: React.ReactNode;
         timeText: string;
-    }> = ({ title, completed, total, unit, gradient, icon, timeText }) => {
+        breaks?: number;
+        previousBreaks?: number;
+        shiftStartTime?: string;
+        currentShiftBreaks?: number;
+    }> = ({ title, completed, total, unit, gradient, icon, timeText, breaks, previousBreaks, shiftStartTime, currentShiftBreaks }) => {
         const percentage = (completed / total) * 100;
+
+        const calculateTimeMetrics = () => {
+            if (!shiftStartTime) return null;
+
+            const now = new Date();
+            const startTime = new Date(shiftStartTime);
+            const totalShiftTime = (now.getTime() - startTime.getTime()) / (1000 * 60);
+
+            const breakTimePerIncident = 5;
+            const totalBreakTime = (currentShiftBreaks || 0) * breakTimePerIncident;
+
+            const uptime = totalShiftTime - totalBreakTime;
+
+            return {
+                totalShiftTime: Math.max(0, totalShiftTime),
+                totalBreakTime: Math.max(0, totalBreakTime),
+                uptime: Math.max(0, uptime)
+            };
+        };
+
+        const timeMetrics = calculateTimeMetrics();
+
+        const formatTime = (minutes: number) => {
+            const hours = Math.floor(minutes / 60);
+            const mins = Math.round(minutes % 60);
+            return `${hours}ч ${mins}м`;
+        };
 
         return (
             <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/80 shadow-lg hover:shadow-2xl transition-all duration-300 group backdrop-blur-sm hover:scale-105 hover:border-blue-300/50 dark:hover:border-blue-600/50">
@@ -492,6 +546,67 @@ const PaperMachineDashboard = () => {
                         </div>
                     </div>
 
+                    {breaks !== undefined && (
+                        <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center space-x-2">
+                                <FiAlertTriangle className="w-4 h-4 text-red-500" />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Обрывы за смену:</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <span className={`text-sm font-bold ${breaks > 5 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+                                    {breaks} шт
+                                </span>
+                                {previousBreaks !== undefined && (
+                                    <TrendIndicator current={breaks} previous={previousBreaks} unit="шт" />
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {timeMetrics && (
+                        <>
+                            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center space-x-2">
+                                    <FiClock className="w-4 h-4 text-red-500" />
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Время на обрывы:</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-sm font-bold text-red-600 dark:text-red-400">
+                                        {formatTime(timeMetrics.totalBreakTime)}
+                                    </span>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        ({currentShiftBreaks} × 5м)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center space-x-2">
+                                    <FiActivity className="w-4 h-4 text-green-500" />
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Работа без обрыва:</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                                        {formatTime(timeMetrics.uptime)}
+                                    </span>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        ({((timeMetrics.uptime / timeMetrics.totalShiftTime) * 100).toFixed(1)}%)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center space-x-2">
+                                    <FiClock className="w-4 h-4 text-blue-500" />
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Всего времени:</span>
+                                </div>
+                                <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                                    {formatTime(timeMetrics.totalShiftTime)}
+                                </span>
+                            </div>
+                        </>
+                    )}
+
                     <div className="flex justify-between text-xs">
                         <span className="text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300 transition-colors">
                             Осталось: {Math.max(total - completed, 0).toLocaleString('ru-RU')} {unit}
@@ -520,7 +635,7 @@ const PaperMachineDashboard = () => {
                             </div>
                             <div>
                                 <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-purple-700 transition-all">
-                                    Панель БДМ
+                                    Учалы БДМ
                                 </h1>
                                 <p className="text-gray-600 dark:text-gray-400 flex items-center group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse group-hover:scale-150 transition-transform"></span>
@@ -541,8 +656,8 @@ const PaperMachineDashboard = () => {
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id as any)}
                                         className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === tab.id
-                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-sm hover:from-blue-700 hover:to-purple-700'
-                                                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-sm hover:from-blue-700 hover:to-purple-700'
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
                                             }`}
                                     >
                                         <tab.icon className="w-4 h-4 mr-2" />
@@ -553,12 +668,6 @@ const PaperMachineDashboard = () => {
 
                             {/* Управление интерфейсом */}
                             <div className="flex space-x-2">
-                                <button
-                                    onClick={() => setDarkMode(!darkMode)}
-                                    className="p-3 bg-white/80 dark:bg-gray-800/80 rounded-xl backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-blue-300 dark:hover:border-blue-600"
-                                >
-                                    {darkMode ? <FiSun className="w-5 h-5 text-yellow-500" /> : <FiMoon className="w-5 h-5 text-blue-600" />}
-                                </button>
                                 <button
                                     onClick={refreshData}
                                     className={`p-3 bg-white/80 dark:bg-gray-800/80 rounded-xl backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-blue-300 dark:hover:border-blue-600 ${isLoading ? 'animate-spin' : ''
@@ -587,8 +696,8 @@ const PaperMachineDashboard = () => {
                             <button
                                 onClick={() => setActiveShift('current')}
                                 className={`flex items-center px-5 py-3 rounded-xl transition-all duration-300 font-medium hover:scale-105 ${activeShift === 'current'
-                                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700'
-                                        : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 shadow-sm hover:shadow-md backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400'
+                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700'
+                                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 shadow-sm hover:shadow-md backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400'
                                     }`}
                             >
                                 <FiSun className="w-5 h-5 mr-2" />
@@ -597,8 +706,8 @@ const PaperMachineDashboard = () => {
                             <button
                                 onClick={() => setActiveShift('previous')}
                                 className={`flex items-center px-5 py-3 rounded-xl transition-all duration-300 font-medium hover:scale-105 ${activeShift === 'previous'
-                                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700'
-                                        : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 shadow-sm hover:shadow-md backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400'
+                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700'
+                                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 shadow-sm hover:shadow-md backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400'
                                     }`}
                             >
                                 <FiMoon className="w-5 h-5 mr-2" />
@@ -654,7 +763,7 @@ const PaperMachineDashboard = () => {
 
                 {/* Показатели эффективности и выполнения */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    {/* OEE */}
+                    {/* OEE - Обновленная карточка как на изображении */}
                     <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/80 shadow-lg hover:shadow-2xl transition-all duration-300 group backdrop-blur-sm hover:scale-105 hover:border-blue-300/50 dark:hover:border-blue-600/50">
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center space-x-3">
@@ -666,22 +775,75 @@ const PaperMachineDashboard = () => {
                                     <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">Общая эффективность</p>
                                 </div>
                             </div>
-                            <TrendIndicator
-                                current={activeShift === 'current' ? currentMetrics.efficiency : currentMetrics.previousShiftEfficiency}
-                                previous={activeShift === 'current' ? currentMetrics.previousShiftEfficiency : 82.1}
-                                unit="%"
-                            />
                         </div>
-                        <div className="flex justify-center">
-                            <CircularProgress
-                                value={activeShift === 'current' ? currentMetrics.efficiency : currentMetrics.previousShiftEfficiency}
-                                max={100}
-                                size={120}
-                                strokeWidth={10}
-                                label={activeShift === 'current' ? 'Текущая смена' : 'Предыдущая смена'}
-                                unit="%"
-                                color="#10B981"
-                            />
+
+                        <div className="flex items-center justify-between mb-6">
+                            {/* Круговой индикатор OEE с градиентом */}
+                            <div className="flex-1 flex justify-center">
+                                <CircularProgress
+                                    value={activeShift === 'current' ? currentMetrics.efficiency : currentMetrics.previousShiftEfficiency}
+                                    max={100}
+                                    size={120}
+                                    strokeWidth={10}
+                                    label={activeShift === 'current' ? 'Текущая смена' : 'Предыдущая смена'}
+                                    unit="%"
+                                    gradient={{ from: '#3b82f6', to: '#8b5cf6' }}
+                                />
+                            </div>
+
+                            {/* Блок с трендом */}
+                            <div className="flex-1 flex justify-end">
+                                <TrendIndicator
+                                    current={activeShift === 'current' ? currentMetrics.efficiency : currentMetrics.previousShiftEfficiency}
+                                    previous={activeShift === 'current' ? currentMetrics.previousShiftEfficiency : 82.1}
+                                    unit="%"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Компоненты OEE */}
+                        <div className="space-y-3">
+                            {/* Доступность */}
+                            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50/80 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-all duration-300 cursor-pointer group hover:scale-105 hover:shadow-md">
+                                <div className="flex items-center space-x-3">
+                                    <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 text-white group-hover:scale-110 transition-transform">
+                                        <FiActivity className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Доступность</div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                        {activeShift === 'current' ? currentMetrics.availability : currentMetrics.previousShiftAvailability}%
+                                    </div>
+                                    <div className="flex items-center text-xs text-green-600 dark:text-green-400 mt-1">
+                                        <FiArrowUp className="w-3 h-3 mr-1" />
+                                        <span>+{Math.abs((activeShift === 'current' ? currentMetrics.availability : currentMetrics.previousShiftAvailability) - (activeShift === 'current' ? currentMetrics.previousShiftAvailability : 92.0)).toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Производительность */}
+                            <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50/80 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition-all duration-300 cursor-pointer group hover:scale-105 hover:shadow-md">
+                                <div className="flex items-center space-x-3">
+                                    <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white group-hover:scale-110 transition-transform">
+                                        <FiZap className="w-4 h-4" />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Производительность</div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-sm font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                        {activeShift === 'current' ? currentMetrics.performance : currentMetrics.previousShiftPerformance}%
+                                    </div>
+                                    <div className="flex items-center text-xs text-green-600 dark:text-green-400 mt-1">
+                                        <FiArrowUp className="w-3 h-3 mr-1" />
+                                        <span>+{Math.abs((activeShift === 'current' ? currentMetrics.performance : currentMetrics.previousShiftPerformance) - (activeShift === 'current' ? currentMetrics.previousShiftPerformance : 89.5)).toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -694,23 +856,23 @@ const PaperMachineDashboard = () => {
                         gradient="from-blue-500 to-purple-500"
                         icon={<FiPackage className="w-6 h-6" />}
                         timeText={activeShift === 'current' ? 'Текущая смена' : 'Предыдущая смена'}
+                        breaks={activeShift === 'current' ? currentMetrics.currentShiftBreaks : currentMetrics.previousShiftBreaks}
+                        previousBreaks={activeShift === 'current' ? currentMetrics.previousShiftBreaks : 5}
+                        shiftStartTime={activeShift === 'current' ? currentMetrics.shiftStartTime : undefined}
+                        currentShiftBreaks={activeShift === 'current' ? currentMetrics.currentShiftBreaks : undefined}
                     />
 
-                    {/* Обрывы и ресурсы */}
+                    {/* Ресурсы */}
                     <div className="bg-white/80 dark:bg-gray-800/80 rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/80 shadow-lg hover:shadow-2xl transition-all duration-300 group backdrop-blur-sm hover:scale-105 hover:border-blue-300/50 dark:hover:border-blue-600/50">
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center space-x-3">
-                                <div className="p-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl">
-                                    <FiAlertTriangle className="w-6 h-6" />
+                                <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl">
+                                    <FiDatabase className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Обрывы</h3>
+                                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">Ресурсы</h3>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">За смену</p>
                                 </div>
-                            </div>
-                            <div className={`text-lg font-bold transition-all duration-300 hover:scale-110 ${(activeShift === 'current' ? currentMetrics.currentShiftBreaks : currentMetrics.previousShiftBreaks) > 5 ?
-                                'text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300' : 'text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300'}`}>
-                                {activeShift === 'current' ? currentMetrics.currentShiftBreaks : currentMetrics.previousShiftBreaks} шт
                             </div>
                         </div>
 
@@ -839,8 +1001,8 @@ const PaperMachineDashboard = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:scale-110 ${day.totalBreaks > 8 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 hover:bg-red-200' :
-                                                    day.totalBreaks > 4 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 hover:bg-yellow-200' :
-                                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200'
+                                                day.totalBreaks > 4 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 hover:bg-yellow-200' :
+                                                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200'
                                                 }`}>
                                                 {day.totalBreaks} шт
                                             </span>
@@ -850,7 +1012,7 @@ const PaperMachineDashboard = () => {
                                                 <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3 overflow-hidden group-hover:bg-gray-300 dark:group-hover:bg-gray-600 transition-colors">
                                                     <div
                                                         className={`h-2 rounded-full transition-all duration-500 group-hover:shadow-lg ${day.avgEfficiency > 85 ? 'bg-green-500' :
-                                                                day.avgEfficiency > 75 ? 'bg-yellow-500' : 'bg-red-500'
+                                                            day.avgEfficiency > 75 ? 'bg-yellow-500' : 'bg-red-500'
                                                             }`}
                                                         style={{ width: `${day.avgEfficiency}%` }}
                                                     ></div>
@@ -860,8 +1022,8 @@ const PaperMachineDashboard = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap font-medium">
                                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs transition-all duration-300 hover:scale-110 ${day.downtime > 2 ?
-                                                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 hover:bg-red-200' :
-                                                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200'
+                                                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 hover:bg-red-200' :
+                                                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 hover:bg-green-200'
                                                 }`}>
                                                 {day.downtime.toFixed(1)} ч
                                             </span>
