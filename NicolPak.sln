@@ -75,6 +75,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{06BA5083-046
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "np", "web\np\np.esproj", "{E93D0D7E-E738-46AD-AB1D-0DB5201DBE58}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{754FC069-D67B-A9D7-50A1-8D1CA196D8F1}"
+	ProjectSection(SolutionItems) = preProject
+		SetupK8s.ps1 = SetupK8s.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
