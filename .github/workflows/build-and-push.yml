@@ -1,0 +1,63 @@
+name: Build and Push Multi-Images
+
+on:
+  push:
+    branches: [ "master", "main" ]
+
+env:
+  REGISTRY: ghcr.io
+  # Имя пользователя/организации в нижнем регистре
+  OWNER: marat1905 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 1. WEB CLIENT
+      - name: Build Web GUI
+        uses: docker/build-push-action@v6
+        with:
+          context: Uchaly/Uchaly.GUI/Web/uchaly.gui.web
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/uchaly-gui-web:latest
+
+      # 2. IDENTITY API (context: .)
+      - name: Build Identity API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Uchaly/Uchaly.Identity/Uchaly.Identity.API/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/uchaly-identity-api:latest
+
+      # 3. VIBRATION MONITORING API (context: .)
+      - name: Build Vibration API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Uchaly/Uchaly.VibrationMonitoring/Uchaly.VibrationMonitoring.API/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/uchaly-vibrationmonitoring-api:latest
+
+      # 4. API GATEWAY (context: .)
+      - name: Build Gateway
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Uchaly/Uchaly.APIgateway/Uchaly.APIgateway/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/uchaly-apigateway:latest
